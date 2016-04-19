@@ -4,6 +4,7 @@
 #include "Graphics.h"
 #include "Sprite.h"
 #include "Chunk.h"
+#include "Input.h"
 
 Game::Game() : running(false), score(42)
 {   
@@ -17,6 +18,8 @@ Game::Game() : running(false), score(42)
 void Game::run()
 {
     running = true;
+
+    Input in = Input();
     UI ui = UI(this);
     GD.ClearColorRGB(BLACK);
 
@@ -26,22 +29,23 @@ void Game::run()
 
     short angle = 0;
     float x = 0,y = 0; //position
-    float vx = 0.1, vy = 0.1; //velocity
+    float vx = 0.1, vy = .1; //velocity
     float ax = 0, ay = 0; //acceleration
     
-    int aax = 0, aay = 0, aaz = 0;
+    float aax = 0, aay = 0;
     
     Sprite sprite = Sprite(1,128,128,1);
 
     while (running){
 
+    	in.pull();
         GD.Clear();
         
         score++;
-        angle += 200;
+        angle += in.getRotation();
         
-        ax = aax / 100;
-        ay = aay / 100;
+        ax = aax;
+        ay = aay;
         
         vx += ax;
         vy += ay;
