@@ -1,4 +1,4 @@
-#include "Acceleration.h"
+#include "Accelerometer.h"
 
 static void getAcceleration(int& X, int& Y){
   int x, y, z;
