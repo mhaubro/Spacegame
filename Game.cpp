@@ -7,8 +7,8 @@
 
 Game::Game() : running(false), score(42)
 {   
-    maxHealth = 100;
-    maxEnergy = 100;
+    maxHealth = 1000;
+    maxEnergy = 1000;
     
     health = maxHealth;
     energy = maxEnergy;
