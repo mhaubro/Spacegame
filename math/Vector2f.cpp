@@ -38,34 +38,27 @@ Vector2f& Vector2f::operator=(const Vector2f& arg)
 	return *this;
 }
 
-Vector2f& Vector2f::operator+(const Vector2f& v){
-
+Vector2f& Vector2f::operator+=(const Vector2f& arg){
+	this->x += arg.x;
+	this->y += arg.y;
+	return *this;
 }
 
-Vector2f& Vector2f::operator-(const Vector2f& v){
-
+Vector2f& Vector2f::operator-=(const Vector2f& arg){
+	this->x -= arg.x;
+	this->y -= arg.y;
+	return *this;
 }
 
-Vector2f& Vector2f::operator+=(const Vector2f& v){
-
+Vector2f& Vector2f::operator*=(const Vector2f& arg){
+	this->x *= arg.x;
+	this->y *= arg.y;
+	return *this;
 }
 
-Vector2f& Vector2f::operator-=(const Vector2f& v){
+Vector2f& Vector2f::operator*=(const float arg){
 
-}
-
-Vector2f& Vector2f::operator*(const float a){
-
-}
-
-Vector2f& Vector2f::operator/(const float a){
-
-}
-
-Vector2f& Vector2f::operator*=(const float a){
-
-}
-
-Vector2f& Vector2f::operator/=(const float a){
-
+	this->x *= arg;
+	this->y *= arg;
+	return *this;
 }

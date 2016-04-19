@@ -59,18 +59,19 @@ void Game::run()
             vx = -vx;
             x = SCREEN_UNIT_BORDER_X;
         }
-        if (y < -SCREEN_UNIT_BORDER_Y)
+        if (y < 0)
         {
             vy = -vy;
-            y = -SCREEN_UNIT_BORDER_Y;
+            y = 0;
         }
-        if (y > SCREEN_UNIT_BORDER_Y)
+        if (y > SCREEN_UNIT_BORDER_Y*2)
         {
             vy = -vy;
-            y = SCREEN_UNIT_BORDER_Y;
+            y = SCREEN_UNIT_BORDER_Y*2;
         }
 
-        cam.moveTo(x,y);
+        cam.moveTo(Vector2f(x,y));
+        cam.translate(Vector2f(10,0));
 
         chunk.render();
         GD.RestoreContext();

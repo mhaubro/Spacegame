@@ -18,16 +18,13 @@ public:
 	float length();
 	float angle();
 
-	Vector2f& operator=(const Vector2f& v);
-	Vector2f& operator+(const Vector2f& v);
-	Vector2f& operator-(const Vector2f& v);
-	Vector2f& operator+=(const Vector2f& v);
-	Vector2f& operator-=(const Vector2f& v);
+	Vector2f& operator=(const Vector2f& arg);
+	Vector2f& operator+=(const Vector2f& arg);
+	Vector2f& operator-=(const Vector2f& arg);
+	Vector2f& operator*=(const Vector2f& arg);
 
-	Vector2f& operator*(const float a);
-	Vector2f& operator/(const float a);
-	Vector2f& operator*=(const float a);
-	Vector2f& operator/=(const float a);
+	Vector2f& operator*=(const float arg);
+
 };
 
 #endif /* SRC_MATH_VECTOR2F_H_ */

@@ -9,6 +9,8 @@ int main() {
     GD.begin();    
     LOAD_ASSETS();
 
+    resetGraphics();
+
     Cam cam;
 
     while (true){
