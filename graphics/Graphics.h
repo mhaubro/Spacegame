@@ -2,6 +2,7 @@
 
 #include "mbed.h"
 #include "GD2.h"
+#include "Vector2f.h"
 
 #define UNIT (float) 16
 #define UNIT16 (float) 16 * UNIT
@@ -28,12 +29,12 @@
 class Cam
 {
 protected:
-	float _x, _y;
+	Vector2f pos;
 
 public:
 	Cam();
-	void translate(float dx, float dy);
-	void moveTo(float x, float y);
+	void translate(Vector2f arg);
+	void moveTo(Vector2f arg);
 	short getX();
 	short getY();
 	void Vertex2f(float x, float y);
@@ -41,3 +42,5 @@ public:
 };
 
 extern Cam cam;
+
+void resetGraphics();

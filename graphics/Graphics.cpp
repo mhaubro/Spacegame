@@ -3,34 +3,37 @@
 Cam cam;
 
 Cam::Cam()
-: _x(0), _y(0)
+: pos()
 {
 }
 
-void Cam::translate(float dx, float dy)
+void Cam::translate(Vector2f arg)
 {
-	_x+=dx;
-	_y+=dy;
+	pos += arg;
 }
 
-void Cam::moveTo(float x, float y)
+void Cam::moveTo(Vector2f arg)
 {
-	_x = x;
-	_y = y;
+	pos = arg;
 }
 
 short Cam::getX()
 {
-	return _x;
+	return pos.x;
 }
 
 short Cam::getY()
 {
-	return _y;
+	return pos.y;
 }
 
 void Cam::Vertex2f(float x, float y)
 {
-	GD.Vertex2f(UNIT16 * (x - _x) + CAM_X_OFFSET16, UNIT16 * (-y + _y) + CAM_Y_OFFSET16);
+	GD.Vertex2f(UNIT16 * (x - pos.x) + CAM_X_OFFSET16, UNIT16 * (-y + pos.y) + CAM_Y_OFFSET16);
+}
+
+void resetGraphics()
+{
+	// TODO reset all graphics settings to something normal
 }
 
