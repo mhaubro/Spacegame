@@ -25,15 +25,13 @@ void Game::run()
 
     GD.SaveContext();
 
-    Chunk chunk = Chunk(1);
+    Chunk chunk0 = Chunk(0);
+
+    //chunk0.rewrite(1);
 
     short angle = 0;
-    float x = 0,y = 0; //position
-    float vx = 0.1, vy = .1; //velocity
-    float ax = 0, ay = 0; //acceleration
-    
-    float aax = 0, aay = 0;
-    
+    float x = 0,y = 4; //position
+
     Sprite sprite = Sprite(1,128,128,1);
 
     while (running){
@@ -43,45 +41,14 @@ void Game::run()
         
         score++;
         angle += in.getRotation();
-        
-        ax = aax;
-        ay = aay;
-        
-        vx += ax;
-        vy += ay;
-        
-        x += vx;
-        y += vy;
-        
-        if (x < -SCREEN_UNIT_BORDER_X)
-        {
-            vx = -vx;
-            x = -SCREEN_UNIT_BORDER_X;
-        }
-        if (x > SCREEN_UNIT_BORDER_X)
-        {
-            vx = -vx;
-            x = SCREEN_UNIT_BORDER_X;
-        }
-        if (y < 0)
-        {
-            vy = -vy;
-            y = 0;
-        }
-        if (y > SCREEN_UNIT_BORDER_Y*2)
-        {
-            vy = -vy;
-            y = SCREEN_UNIT_BORDER_Y*2;
-        }
 
         cam.moveTo(Vector2f(x,y));
         cam.translate(Vector2f(10,0));
 
-        chunk.render();
+        chunk0.render();
         GD.RestoreContext();
 
         GD.Begin(BITMAPS);
-        sprite.render(0,0,angle,1,0);
         sprite.render(x, y, angle, .5, 0);
         GD.RestoreContext();
         

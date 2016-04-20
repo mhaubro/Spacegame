@@ -10,6 +10,11 @@
 #define SCREEN_WIDTH 480
 #define SCREEN_HEIGHT 272
 
+#define SCREEN_MIN_X -40
+#define SCREEN_MIN_Y -20
+#define SCREEN_MAX_X 40
+#define SCREEN_MAX_Y 20
+
 #define SCREEN_UNIT_BORDER_X (float) SCREEN_WIDTH / (2 * UNIT)
 #define SCREEN_UNIT_BORDER_Y (float) SCREEN_HEIGHT / (2 * UNIT)
 
@@ -18,7 +23,8 @@
 #define RED 0xff0000
 #define GREEN 0x00ff00
 #define BLUE 0x0000ff
-#define GREY 0x444444
+#define GREY 0x888888
+#define BROWN 0xB07A45
 #define COLOR_ENERGY 0xffff22
 #define COLOR_HEALTH 0xff0000
 #define COLOR_SHIELD 0x22aaff
