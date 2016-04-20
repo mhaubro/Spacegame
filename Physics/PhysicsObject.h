@@ -17,5 +17,5 @@ public:
 	bool checkCollision(PhysicsObject& ph);
 	float findDistMidpoint(PhysicsObject& ph);
 	float findDist(PhysicsObject& ph);
-
+	void editCollission(PhysicsObject& ph);
 };
