@@ -1,5 +1,6 @@
 #include "PhysicsObject.h"
 #include "PhysicsConstants.h"
+#include ""
 
 void PhysicsObject::applyAcceleration(Vector2f acc, float time){//Acceleration has been applied for a given time
 	//Change position
@@ -29,10 +30,16 @@ float PhysicsObject::findDist(PhysicsObject& ph){
 	return findDistMidpoint-(radius+ph.radius);
 }
 
-void editCollission(PhysicsObject& ph){
+void PhysicsObject::editCollission(PhysicsObject& ph){
 	//Changes velocity of two physicsobjects if they collided
-	Vector2f momsum = Vector2f();
-
+	Vector2f v1subv2 = Vector2f();
+	Vector2f x1subx2 = Vector2f();
+	Vector2f v2subv1 = Vector2f();
+	Vector2f x2subx1 = Vector2f();
+	Vector2f velocp = Vector2f(velocity.x, velocity.y);
+	Vector2f velophcp = Vector2f(velocity.x, velocity.y);
+//https://en.wikipedia.org/wiki/Elastic_collision
+	veloctiy.x =
 
 
 }
