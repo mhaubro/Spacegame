@@ -60,19 +60,23 @@ void Game::run() {
 
 		if (pos.y < 0) {
 			pos.y = 0;
-			vel.y *= -0.5;
+			vel.x *= .5;
+			vel.y *= -.5;
 		}
 		if (pos.y > 50) {
 			pos.y = 50;
-			vel.y *= -0.5;
+			vel.x *= .5;
+			vel.y *= -.5;
 		}
 		if (pos.x < 0) {
 			pos.x = 0;
 			vel.x *= -0.5;
+			vel.y *= .5;
 		}
 		if (pos.x > 64) {
 			pos.x = 64;
 			vel.x *= -0.5;
+			vel.y *= .5;
 		}
 
 		cam.moveTo(pos);
