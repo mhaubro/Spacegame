@@ -7,17 +7,13 @@
 
 int main() {
 
-	GD.reset();
+	GD.begin();
+	LOAD_ASSETS();
 
-    GD.begin();    
-    LOAD_ASSETS();
+	resetGraphics();
 
-    resetGraphics();
-
-    Cam cam;
-
-    while (true){
-    	Physicstest physicstest = Physicstest();
-    	physicstest.run();
-    }
+	while (true) {
+		Game game = Game();
+		game.run();
+	}
 }
