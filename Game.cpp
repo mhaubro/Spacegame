@@ -54,27 +54,6 @@ void Game::run() {
 
 		p.pos += p.vel;
 
-<<<<<<< HEAD
-		if (pos.y < 0) {
-			pos.y = 0;
-			vel.x *= .5;
-			vel.y *= -.5;
-		}
-		if (pos.y > 50) {
-			pos.y = 50;
-			vel.x *= .5;
-			vel.y *= -.5;
-		}
-		if (pos.x < 0) {
-			pos.x = 0;
-			vel.x *= -0.5;
-			vel.y *= .5;
-		}
-		if (pos.x > 64) {
-			pos.x = 64;
-			vel.x *= -0.5;
-			vel.y *= .5;
-=======
 		if (p.pos.y < 0) {
 			p.pos.y = 0;
 			p.vel.x *= .5;
@@ -94,7 +73,6 @@ void Game::run() {
 			p.pos.x = 64;
 			p.vel.x *= -0.5;
 			p.vel.y *= .5;
->>>>>>> refs/remotes/origin/UI1
 		}
 
 		cam.moveTo(p.pos);
