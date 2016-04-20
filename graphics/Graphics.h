@@ -38,7 +38,7 @@ public:
 	short getX();
 	short getY();
 	void Vertex2f(float x, float y);
-
+	void Vertex2f(Vector2f arg);
 };
 
 extern Cam cam;
