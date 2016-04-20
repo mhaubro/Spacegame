@@ -29,7 +29,12 @@ short Cam::getY()
 
 void Cam::Vertex2f(float x, float y)
 {
-	GD.Vertex2f(UNIT16 * (x - pos.x) + CAM_X_OFFSET16, UNIT16 * (-y + pos.y) + CAM_Y_OFFSET16);
+	float X = (x - pos.x);
+	float Y = (-y + pos.y);
+	if (X < SCREEN_MIN_X || X > SCREEN_MAX_X || Y < SCREEN_MIN_Y || Y > SCREEN_MAX_Y){
+		return;
+	}
+	GD.Vertex2f(UNIT16 * X + CAM_X_OFFSET16, UNIT16 * Y + CAM_Y_OFFSET16);
 }
 
 void resetGraphics()
