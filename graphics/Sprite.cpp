@@ -19,14 +19,14 @@ Sprite::~Sprite()
     
 }
 
-void Sprite::render(const float x, const float y, const unsigned short angle, const float scale, const unsigned char cell)
+void Sprite::render(const float x, const float y, const float angle, const float scale, const unsigned char cell)
 {
     GD.BitmapHandle(id);
     GD.Cell(cell);
     GD.BitmapSize(BILINEAR,BORDER,BORDER,scale*width*SQRT2,scale*height*SQRT2);
     GD.cmd_loadidentity();
     GD.cmd_translate(F16(scale*width*SQRT2/2),F16(scale*height*SQRT2/2));
-    GD.cmd_rotate(angle);
+    GD.cmd_rotate(FURMANS(angle));
     GD.cmd_translate(F16(-scale*width/2),F16(-scale*height/2));
     GD.cmd_scale(F16(scale),F16(scale));
     GD.cmd_setmatrix();
