@@ -7,12 +7,12 @@
 #include "Input.h"
 
 Game::Game() :
-		running(false), score(42) {
+		running(false), score(42), p() {
 	maxHealth = 1000;
 	maxEnergy = 1000;
 
-	health = maxHealth;
-	energy = maxEnergy;
+	health = maxHealth/3;
+	energy = maxEnergy/2;
 }
 
 void Game::run() {
@@ -31,10 +31,6 @@ void Game::run() {
 
 	//chunk0.rewrite(1);
 
-	float angle = 0;
-	Vector2f pos = Vector2f();
-	Vector2f vel = Vector2f();
-
 	Sprite sprite = Sprite(1, 128, 128, 1);
 
 	while (running) {
@@ -43,21 +39,22 @@ void Game::run() {
 		GD.Clear();
 
 		score++;
-		angle += in.getRotation() * 0.001;
+		p.angle += in.getRotation() * 0.001;
 
-		while (angle > PI2)
-			angle -= PI2;
-		while (angle < 0)
-			angle += PI2;
+		while (p.angle > PI2)
+			p.angle -= PI2;
+		while (p.angle < 0)
+			p.angle += PI2;
 
 		if (in.getThrodle()) {
-			vel += FromAngle(0.01, angle);
+			p.vel += FromAngle(0.01, p.angle);
 		}
 
-		vel += Vector2f(0, -0.001);
+		p.vel += Vector2f(0, -0.001);
 
-		pos += vel;
+		p.pos += p.vel;
 
+<<<<<<< HEAD
 		if (pos.y < 0) {
 			pos.y = 0;
 			vel.x *= .5;
@@ -77,9 +74,30 @@ void Game::run() {
 			pos.x = 64;
 			vel.x *= -0.5;
 			vel.y *= .5;
+=======
+		if (p.pos.y < 0) {
+			p.pos.y = 0;
+			p.vel.x *= .5;
+			p.vel.y *= -.5;
+		}
+		if (p.pos.y > 50) {
+			p.pos.y = 50;
+			p.vel.x *= .5;
+			p.vel.y *= -.5;
+		}
+		if (p.pos.x < 0) {
+			p.pos.x = 0;
+			p.vel.x *= -0.5;
+			p.vel.y *= .5;
+		}
+		if (p.pos.x > 64) {
+			p.pos.x = 64;
+			p.vel.x *= -0.5;
+			p.vel.y *= .5;
+>>>>>>> refs/remotes/origin/UI1
 		}
 
-		cam.moveTo(pos);
+		cam.moveTo(p.pos);
 		cam.translate(Vector2f(10, 0));
 
 		chunk0.render();
@@ -89,7 +107,7 @@ void Game::run() {
 		GD.RestoreContext();
 
 		GD.Begin(BITMAPS);
-		sprite.render(pos.x, pos.y, angle + PI / 2, .5, 0);
+		sprite.render(p.pos.x, p.pos.y, p.angle + PI / 2, .5, 0);
 		GD.RestoreContext();
 
 		ui.render();
