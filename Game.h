@@ -3,6 +3,8 @@
 #include "GD2.h"
 #include "mbed.h"
 
+#include "Player.h"
+
 #include "myassets.h"
 
 class Game
@@ -14,6 +16,8 @@ public:
     Game();
     void run();
     
+    Player p;
+
     unsigned int score;
     
     unsigned short health;

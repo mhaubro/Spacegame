@@ -27,6 +27,7 @@
 #define GREEN 0x00ff00
 #define BLUE 0x0000ff
 #define GREY 0x888888
+#define DARK_GREY 0x444444
 #define BROWN 0xB07A45
 #define COLOR_ENERGY 0xffff22
 #define COLOR_HEALTH 0xff0000
