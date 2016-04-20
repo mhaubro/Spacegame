@@ -17,6 +17,7 @@ public:
 
 	float length();
 	float angle();
+	float dotProduct(Vector2f extv);
 
 	Vector2f& operator=(const Vector2f& arg);
 	Vector2f& operator+=(const Vector2f& arg);

@@ -22,6 +22,9 @@ Vector2f::~Vector2f() {
 Vector2f FromAngle(float length, float angle) {
 	return Vector2f(length * cosf(angle), -(length * sinf(angle)));
 }
+float Vector2f::dotProduct(Vector2f extv){
+	return x*extv.x + y*extv.y;
+}
 
 float Vector2f::length() {
 	return sqrtf((x * x) + (y * y));
