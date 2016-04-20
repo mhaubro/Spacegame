@@ -20,10 +20,12 @@ void Input::pull() {
 }
 
 bool Input::getThrodle() {
-	// TODO implement button
+	if (GD.inputs.x != -32768){
+		return true;
+	}
 	return false;
 }
 
 float Input::getRotation() {
-	return (float)ax * 10;
+	return (float)ax;
 }

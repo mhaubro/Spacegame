@@ -7,6 +7,9 @@
 #define UNIT (float) 16
 #define UNIT16 (float) 16 * UNIT
 
+#define PI2 ((float)PI*2)
+#define FURMANS(n) (uint16_t)((65536UL * (n/PI2)))
+
 #define SCREEN_WIDTH 480
 #define SCREEN_HEIGHT 272
 
