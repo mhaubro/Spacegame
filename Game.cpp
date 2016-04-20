@@ -51,10 +51,10 @@ void Game::run() {
 			angle += PI2;
 
 		if (in.getThrodle()) {
-			vel += FromAngle(0.05, angle);
+			vel += FromAngle(0.01, angle);
 		}
 
-		vel += Vector2f(0, -0.01);
+		vel += Vector2f(0, -0.001);
 
 		pos += vel;
 
