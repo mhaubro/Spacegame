@@ -3,8 +3,11 @@
 #include "Graphics.h"
 
 #include "myassets.h"
+#include "Physicstest.h"
 
 int main() {
+
+	GD.reset();
 
     GD.begin();    
     LOAD_ASSETS();
@@ -14,7 +17,7 @@ int main() {
     Cam cam;
 
     while (true){
-        Game game = Game();
-        game.run();
+    	Physicstest physicstest = Physicstest();
+    	physicstest.run();
     }
 }
