@@ -9,6 +9,7 @@
 #include "GD2.h"
 #include "Graphics.h"
 #include "Random.h"
+#include "PerlinNoise.h"
 
 Chunk::Chunk(int _index) :
 		index(_index) {
@@ -40,8 +41,10 @@ void Chunk::render() {
 
 void Chunk::rewrite(int _index) {
 	index = _index;
+
+	static PerlinNoise pn = PerlinNoise();
 	for (int var = 0; var < VERTEX_NUMBER; ++var) {
-		heightMap[var] = ran.randomF(var*VERTEX_SEPERATION + index * CHUNK_SIZE);
+		heightMap[var] = pn.noise(var*VERTEX_SEPERATION + index * CHUNK_SIZE);
 	}
 }
 

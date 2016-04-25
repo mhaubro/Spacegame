@@ -10,6 +10,8 @@
 
 #include "Chunk.h"
 
+#define WORLD_SIZE 16
+
 class World {
 protected:
 
