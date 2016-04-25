@@ -6,54 +6,90 @@
 #include "Chunk.h"
 #include "Input.h"
 
-Game::Game() : running(false), score(42)
-{   
-    maxHealth = 1000;
-    maxEnergy = 1000;
-    
-    health = maxHealth;
-    energy = maxEnergy;
+Game::Game() :
+		running(false), score(42), p() {
+	maxHealth = 1000;
+	maxEnergy = 1000;
+
+	health = maxHealth/3;
+	energy = maxEnergy/2;
 }
 
-void Game::run()
-{
-    running = true;
+void Game::run() {
+	running = true;
 
-    Input in = Input();
-    UI ui = UI(this);
-    GD.ClearColorRGB(BLACK);
+	Input in = Input();
+	UI ui = UI(this);
+	GD.ClearColorRGB(BLACK);
 
-    GD.SaveContext();
+	GD.SaveContext();
 
-    Chunk chunk0 = Chunk(0);
+	Chunk chunk0 = Chunk(0);
+	Chunk chunk1 = Chunk(1);
+	Chunk chunk2 = Chunk(2);
+	Chunk chunk3 = Chunk(3);
 
-    //chunk0.rewrite(1);
+	//chunk0.rewrite(1);
 
-    short angle = 0;
-    float x = 0,y = 4; //position
+	Sprite sprite = Sprite(1, 128, 128, 1);
 
-    Sprite sprite = Sprite(1,128,128,1);
+	while (running) {
 
-    while (running){
+		in.pull();
+		GD.Clear();
 
-    	in.pull();
-        GD.Clear();
-        
-        score++;
-        angle += in.getRotation();
+		score++;
+		p.angle += in.getRotation() * 0.001;
 
-        cam.moveTo(Vector2f(x,y));
-        cam.translate(Vector2f(10,0));
+		while (p.angle > PI2)
+			p.angle -= PI2;
+		while (p.angle < 0)
+			p.angle += PI2;
 
-        chunk0.render();
-        GD.RestoreContext();
+		if (in.getThrodle()) {
+			p.vel += FromAngle(0.01, p.angle);
+		}
 
-        GD.Begin(BITMAPS);
-        sprite.render(x, y, angle, .5, 0);
-        GD.RestoreContext();
-        
-        ui.render();
-        
-        GD.swap();
-    }
+		p.vel += Vector2f(0, -0.001);
+
+		p.pos += p.vel;
+
+		if (p.pos.y < 0) {
+			p.pos.y = 0;
+			p.vel.x *= .5;
+			p.vel.y *= -.5;
+		}
+		if (p.pos.y > 50) {
+			p.pos.y = 50;
+			p.vel.x *= .5;
+			p.vel.y *= -.5;
+		}
+		if (p.pos.x < 0) {
+			p.pos.x = 0;
+			p.vel.x *= -0.5;
+			p.vel.y *= .5;
+		}
+		if (p.pos.x > 64) {
+			p.pos.x = 64;
+			p.vel.x *= -0.5;
+			p.vel.y *= .5;
+		}
+
+		cam.moveTo(p.pos);
+		cam.translate(Vector2f(10, 0));
+
+		chunk0.render();
+		chunk1.render();
+		chunk2.render();
+		chunk3.render();
+		GD.RestoreContext();
+
+		GD.Begin(BITMAPS);
+		sprite.render(p.pos.x, p.pos.y, p.angle + PI / 2, .5, 0);
+		GD.RestoreContext();
+
+		ui.render();
+
+		GD.swap();
+	}
 }

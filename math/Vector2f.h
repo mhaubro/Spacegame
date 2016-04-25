@@ -17,6 +17,7 @@ public:
 
 	float length();
 	float angle();
+	float dotProduct(Vector2f extv);
 
 	Vector2f& operator=(const Vector2f& arg);
 	Vector2f& operator+=(const Vector2f& arg);
@@ -26,5 +27,7 @@ public:
 	Vector2f& operator*=(const float arg);
 
 };
+
+extern Vector2f FromAngle(float length, float angle);
 
 #endif /* SRC_MATH_VECTOR2F_H_ */

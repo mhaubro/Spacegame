@@ -36,6 +36,10 @@ void Cam::Vertex2f(float x, float y)
 	}
 	GD.Vertex2f(UNIT16 * X + CAM_X_OFFSET16, UNIT16 * Y + CAM_Y_OFFSET16);
 }
+void Cam::Vertex2f(Vector2f arg)
+{
+	Vertex2f(arg.x, arg.y);
+}
 
 void resetGraphics()
 {

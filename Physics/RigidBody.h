@@ -1,10 +1,19 @@
-class RigidBody{
+#include "Vector2f.h"
+#include "PhysicsObject.h"
+
+class RigidBody : public PhysicsObject{
 
 protected:
-Vector2f position, velocity;
+
+	float angle;//Angle of unit, radians.
+	float angularAcc;
+	//Collection of stuff that makes up the rigid body
+	bool checkCollision();
+
 public:
-	Vector2f getPosition();
-	Vector2f getVelocity();
-	void ApplyAcceleration(Vector2f acc, float time);//Acceleration has been applied for a given time
-	void ApplyAccelerationNG(Vector2f acc, float time);//Acceleration without gravity
+	void applyForces(Vector2f forces, float dt);
+
+
+	RigidBody();
+
 };

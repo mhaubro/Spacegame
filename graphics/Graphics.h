@@ -7,6 +7,9 @@
 #define UNIT (float) 16
 #define UNIT16 (float) 16 * UNIT
 
+#define PI2 ((float)PI*2)
+#define FURMANS(n) (uint16_t)((65536UL * (n/PI2)))
+
 #define SCREEN_WIDTH 480
 #define SCREEN_HEIGHT 272
 
@@ -24,6 +27,7 @@
 #define GREEN 0x00ff00
 #define BLUE 0x0000ff
 #define GREY 0x888888
+#define DARK_GREY 0x444444
 #define BROWN 0xB07A45
 #define COLOR_ENERGY 0xffff22
 #define COLOR_HEALTH 0xff0000
@@ -44,7 +48,7 @@ public:
 	short getX();
 	short getY();
 	void Vertex2f(float x, float y);
-
+	void Vertex2f(Vector2f arg);
 };
 
 extern Cam cam;
