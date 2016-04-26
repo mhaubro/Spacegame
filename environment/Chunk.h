@@ -25,6 +25,8 @@ public:
 	void render();
 	void rewrite(int index);
 
+	float getHeight(float x);
+
 };
 
 #endif /* SRC_ENVIRONMENT_CHUNK_H_ */

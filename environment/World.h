@@ -10,6 +10,8 @@
 
 #include "Chunk.h"
 
+#define WORLD_SIZE 16
+
 class World {
 protected:
 
@@ -18,6 +20,8 @@ public:
 	virtual ~World();
 
 	void render();
+
+	float getHeight(float x);
 };
 
 #endif /* SRC_WORLD_H_ */

@@ -11,6 +11,8 @@ public:
 	Vector2f pos;
 	Vector2f vel;
 
+	float height;
+
 	Player();
 
 	void update(float t);

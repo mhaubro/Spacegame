@@ -5,6 +5,7 @@
 #include "Sprite.h"
 #include "Chunk.h"
 #include "Input.h"
+#include "World.h"
 
 Game::Game() :
 		running(false), score(42), p() {
@@ -24,12 +25,8 @@ void Game::run() {
 
 	GD.SaveContext();
 
-	Chunk chunk0 = Chunk(0);
-	Chunk chunk1 = Chunk(1);
-	Chunk chunk2 = Chunk(2);
-	Chunk chunk3 = Chunk(3);
 
-	//chunk0.rewrite(1);
+	World world = World();
 
 	Sprite sprite = Sprite(1, 128, 128, 1);
 
@@ -54,8 +51,10 @@ void Game::run() {
 
 		p.pos += p.vel;
 
-		if (p.pos.y < 0) {
-			p.pos.y = 0;
+		float groundHeight = world.getHeight(p.pos.x);
+
+		if (p.pos.y < groundHeight) {
+			p.pos.y = groundHeight;
 			p.vel.x *= .5;
 			p.vel.y *= -.5;
 		}
@@ -75,13 +74,19 @@ void Game::run() {
 			p.vel.y *= .5;
 		}
 
+		p.height = p.pos.y - groundHeight;
+
 		cam.moveTo(p.pos);
 		cam.translate(Vector2f(10, 0));
 
-		chunk0.render();
-		chunk1.render();
-		chunk2.render();
-		chunk3.render();
+
+		world.render();
+
+		GD.Begin(POINTS);
+		GD.PointSize(16*4);
+		GD.ColorRGB(RED);
+		cam.Vertex2f(p.pos.x,groundHeight);
+
 		GD.RestoreContext();
 
 		GD.Begin(BITMAPS);
