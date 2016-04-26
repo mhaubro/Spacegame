@@ -20,6 +20,8 @@ public:
 	virtual ~World();
 
 	void render();
+
+	float getHeight(float x);
 };
 
 #endif /* SRC_WORLD_H_ */

@@ -69,9 +69,9 @@ void UI::render()
     GD.cmd_text( SCREEN_WIDTH-4, SCREEN_HEIGHT - 26 , 16, OPT_RIGHTX, "Energy");
     GD.cmd_number(SCREEN_WIDTH-4, SCREEN_HEIGHT - 16, 16, OPT_RIGHTX+4, game->energy);
     
-    // prints the score in the upper right corner.
+    // prints the height in the lower middle.
     GD.cmd_text(SCREEN_WIDTH/2-4, SCREEN_HEIGHT - 26 , 16, OPT_CENTERX, "Height");
-    GD.cmd_number(SCREEN_WIDTH/2-4, SCREEN_HEIGHT - 16, 16, OPT_CENTERX + 4, game->p.pos.y);
+    GD.cmd_number(SCREEN_WIDTH/2-4, SCREEN_HEIGHT - 16, 16, OPT_CENTERX + 4, game->p.height);
 
     GD.RestoreContext();
 }

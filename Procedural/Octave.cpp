@@ -26,7 +26,10 @@ float Octave::interpolate(float x) {
 	float y1 = randomFloat(x1);
 	float y2 = randomFloat(x1+1);
 
-	return y1 + (y2-y1) * ((x-a)/(b-a));
+	float v = (x-a) / (b-a);
+	v = (v*v*(3-2*v));
+
+	return (y2*v)+(y1*(1-v));
 }
 
 float Octave::randomFloat(int x) {
