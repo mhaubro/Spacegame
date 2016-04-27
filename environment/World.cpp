@@ -11,6 +11,7 @@
 #define NUMBER_OF_CHUNKS_LOADED 4
 
 Chunk **chunks;
+int index = 0;
 
 World::World() {
 	chunks = new Chunk*[NUMBER_OF_CHUNKS_LOADED];
@@ -26,16 +27,20 @@ World::~World() {
 	delete[] chunks;
 }
 
-void World::render(){
+void World::update(float x) {
+
+}
+
+void World::render() {
 	for (int var = 0; var < NUMBER_OF_CHUNKS_LOADED; ++var) {
 		chunks[var]->render();
 	}
 }
 
-float World::getHeight(float x){
+float World::getHeight(float x) {
 
-	int i = ((int)(x/CHUNK_SIZE))%NUMBER_OF_CHUNKS_LOADED;
+	int i = ((int) (x / CHUNK_SIZE)) % NUMBER_OF_CHUNKS_LOADED;
 
-	return chunks[i]->getHeight((x-i*CHUNK_SIZE));
+	return chunks[i]->getHeight((x - i * CHUNK_SIZE));
 }
 

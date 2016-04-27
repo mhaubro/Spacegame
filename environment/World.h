@@ -19,6 +19,7 @@ public:
 	World();
 	virtual ~World();
 
+	void update(float x);
 	void render();
 
 	float getHeight(float x);

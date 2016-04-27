@@ -42,6 +42,8 @@ void UI::render()
     // prints gameinfo in upper left corner
     GD.ColorRGB(WHITE);
     GD.cmd_text(4,4,16,OPT_SIGNED, "SPACE GAME");
+    GD.cmd_number(4, 4 + 12, 16, OPT_SIGNED, game->p.pos.x);
+    GD.cmd_number(4, 4 + 24, 16, OPT_SIGNED, game->p.pos.y);
     
     // prints the score in the upper right corner.
     GD.cmd_text(SCREEN_WIDTH-4, 4 , 16, OPT_RIGHTX, "SCORE");

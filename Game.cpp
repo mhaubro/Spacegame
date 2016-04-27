@@ -63,17 +63,8 @@ void Game::run() {
 			p.vel.x *= .5;
 			p.vel.y *= -.5;
 		}
-		if (p.pos.x < 0) {
-			p.pos.x = 0;
-			p.vel.x *= -0.5;
-			p.vel.y *= .5;
-		}
-		if (p.pos.x > 64) {
-			p.pos.x = 64;
-			p.vel.x *= -0.5;
-			p.vel.y *= .5;
-		}
 
+		world.update(p.pos.x);
 		p.height = p.pos.y - groundHeight;
 
 		cam.moveTo(p.pos);
