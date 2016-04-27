@@ -37,8 +37,8 @@ void Game::run() {
 
 	GD.SaveContext();
 
-
 	World world = World();
+	Vector2f groundNormal = Vector2f();
 
 	Sprite sprite = Sprite(1, 128, 128, 1);
 
@@ -87,16 +87,19 @@ void Game::run() {
 		world.update(ph.position.x);
 		p.height = ph.position.y - groundHeight;
 
-		cam.moveTo(ph.position);
-		cam.translate(Vector2f(10, 0));
-
+		cam.follow(p.pos,p.vel);
 
 		world.render();
 
+		world.getNormal(p.pos.x, groundNormal);
+		renderVector2f(groundNormal, p.pos.x, groundHeight, 1.5);
+
 		GD.Begin(POINTS);
-		GD.PointSize(16*4);
+		GD.PointSize(16 * 4);
 		GD.ColorRGB(RED);
+
 		cam.Vertex2f(ph.position.x,groundHeight);
+
 
 		GD.RestoreContext();
 

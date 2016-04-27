@@ -8,10 +8,8 @@
 #include "World.h"
 #include "Chunk.h"
 
-#define NUMBER_OF_CHUNKS_LOADED 4
-
-Chunk **chunks;
-int index = 0;
+#define CHUNKS_FROM_CENTER 1
+#define NUMBER_OF_CHUNKS_LOADED (1 + CHUNKS_FROM_CENTER*2)
 
 World::World() {
 	chunks = new Chunk*[NUMBER_OF_CHUNKS_LOADED];
@@ -38,9 +36,20 @@ void World::render() {
 }
 
 float World::getHeight(float x) {
-
 	int i = ((int) (x / CHUNK_SIZE)) % NUMBER_OF_CHUNKS_LOADED;
-
 	return chunks[i]->getHeight((x - i * CHUNK_SIZE));
+}
+
+Vector2f& World::getNormal(float x, Vector2f &vec) {
+	int i = ((int) (x / CHUNK_SIZE)) % NUMBER_OF_CHUNKS_LOADED;
+	return chunks[i]->getNormal((x - i * CHUNK_SIZE),vec);
+}
+
+void World::incrementIndex() {
+	index = ((index + 1) % WORLD_SIZE);
+}
+
+void World::decrementIndex() {
+	index = ((index - 1) % WORLD_SIZE);
 }
 

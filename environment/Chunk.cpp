@@ -53,13 +53,23 @@ void Chunk::rewrite(int _index) {
 
 float Chunk::getHeight(float x) {
 
-	int i = (int) ((x * (VERTEX_NUMBER-1)) / CHUNK_SIZE);
+	int i = (int) ((x * (VERTEX_NUMBER - 1)) / CHUNK_SIZE);
 	float y1 = heightMap[i];
 	float y2 = heightMap[i + 1];
 	float x1 = i * VERTEX_SEPERATION;
 	float v = (x - x1) / VERTEX_SEPERATION;
 
-	return (y1*(1-v)) + (y2*v);
+	return (y1 * (1 - v)) + (y2 * v);
 
+}
+
+Vector2f& Chunk::getNormal(float x, Vector2f &vec) {
+	int i = (int) ((x * (VERTEX_NUMBER - 1)) / CHUNK_SIZE);
+	float dy = heightMap[i + 1] - heightMap[i];
+
+	float angle = atan2f(VERTEX_SEPERATION,dy) + PI;
+	vec = FromAngle(1,angle);
+
+	return vec;
 }
 
