@@ -16,6 +16,7 @@ public:
     Game();
     void run();
     
+    PhysicsObject ph;
     Player p;
 
     unsigned int score;

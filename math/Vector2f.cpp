@@ -60,6 +60,12 @@ Vector2f& Vector2f::operator*=(const Vector2f& arg) {
 	return *this;
 }
 
+Vector2f& Vector2f::operator=(const float arg) {
+	this->x = arg;
+	this->y = arg;
+	return *this;
+}
+
 Vector2f& Vector2f::operator+=(const float arg) {
 	this->x += arg;
 	this->y += arg;

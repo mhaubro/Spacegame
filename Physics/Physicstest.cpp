@@ -2,8 +2,8 @@
 
 void Physicstest::run(){
 	int pointsize = UNIT*16;
-	float m1 = 1;
-	float m2 = 2;
+	float m1 = 500;
+	float m2 = 5;
 	Vector2f position1 = Vector2f(UNIT*50+pointsize,UNIT*(272-30)-pointsize);
 	Vector2f velocity1 = Vector2f(48*UNIT,-36*UNIT);
 	Vector2f position2 = Vector2f(UNIT*(480-50)-pointsize,UNIT*(272-30)-pointsize);
@@ -30,12 +30,14 @@ void Physicstest::run(){
 
 	Button button = Button(A5);
 	//Button button2 = Button(D6);
+	Vector2f force = Vector2f(25*UNIT, -25*UNIT);
+
 	while(1){
-		runloop(in, t, &lasttime, &currtime, str, &ph1, &ph2, button);
+		runloop(in, t, &lasttime, &currtime, str, &ph1, &ph2, button, force);
 	}
 }
 
-void Physicstest::runloop(Input in, Timer t, float *lasttime, float *currtime, char str[], PhysicsObject *ph1, PhysicsObject *ph2, Button button){
+void Physicstest::runloop(Input in, Timer t, float *lasttime, float *currtime, char str[], PhysicsObject *ph1, PhysicsObject *ph2, Button button, Vector2f force){
 	//GDINIT
 	in.pull();
 	GD.Clear();
@@ -53,10 +55,14 @@ void Physicstest::runloop(Input in, Timer t, float *lasttime, float *currtime, c
 	//	dt = 0;
 	//}
 
-	ph1->applyG(dt);
+	ph1->addForce(force);
+	ph1->changeState(dt);
 	ph1->checkBounds();
-	ph2->applyG(dt);
+	ph2->addForce(force);
+	ph2->changeState(dt);
 	ph2->checkBounds();
+
+
 
 	if ((ph1)->checkCollision(*ph2)){
 		//GD.cmd_text(40,60,16,OPT_SIGNED, "COLLISSION");

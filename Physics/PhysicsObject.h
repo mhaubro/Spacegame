@@ -1,6 +1,8 @@
 #include "PhysicsConstants.h"
 #include "Vector2f.h"
 
+#ifndef PHYSICSOBJECT_H
+#define PHYSICSOBJECT_H
 class PhysicsObject {
 
 public:
@@ -34,3 +36,4 @@ public:
 	void editCollission(PhysicsObject& ph);//Edits for both
 	void editCollissionthis(PhysicsObject& ph);//Edits data for this object with collision from ph.
 };
+#endif

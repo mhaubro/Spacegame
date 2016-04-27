@@ -16,7 +16,7 @@ class Physicstest{
 
 public:
 	void run();
-	void runloop(Input in, Timer t, float *lasttime, float *currtime, char str[], PhysicsObject* ph1, PhysicsObject* ph2, Button button);
+	void runloop(Input in, Timer t, float *lasttime, float *currtime, char str[], PhysicsObject* ph1, PhysicsObject* ph2, Button button, Vector2f force);
 	Physicstest();
 	void drawText(char str[], Timer t);
 

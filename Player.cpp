@@ -1,7 +1,7 @@
 #include "Player.h"
 
 Player::Player()
-: pos(), vel(), angle(0)
+:  angle(0)
 {
 }
 

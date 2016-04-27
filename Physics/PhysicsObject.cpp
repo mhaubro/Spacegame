@@ -8,6 +8,8 @@ void PhysicsObject::changeState(float dt){
 	accelerations += forces*(1/mass);
 	velocity += accelerations*dt;
 	position += velocity*dt;
+	accelerations = 0;
+	forces = 0;
 }
 
 void PhysicsObject::addForce(Vector2f v){

@@ -19,7 +19,7 @@ void Input::pull() {
 	getAcceleration(ax,ay);
 }
 
-bool Input::getThrodle() {
+bool Input::getThrottle() {
 	if (GD.inputs.x != -32768){
 		return true;
 	}

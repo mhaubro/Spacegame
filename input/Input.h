@@ -22,7 +22,7 @@ public:
 
 	void pull();
 
-	bool getThrodle();
+	bool getThrottle();
 	float getRotation();
 
 };
