@@ -15,6 +15,12 @@
 class World {
 protected:
 
+	Chunk **chunks;
+	unsigned int index = 0;
+
+	void decrementIndex();
+	void incrementIndex();
+
 public:
 	World();
 	virtual ~World();
@@ -23,6 +29,7 @@ public:
 	void render();
 
 	float getHeight(float x);
+	Vector2f& getNormal(float x, Vector2f &vec);
 };
 
 #endif /* SRC_WORLD_H_ */

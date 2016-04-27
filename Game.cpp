@@ -12,8 +12,8 @@ Game::Game() :
 	maxHealth = 1000;
 	maxEnergy = 1000;
 
-	health = maxHealth/3;
-	energy = maxEnergy/2;
+	health = maxHealth / 3;
+	energy = maxEnergy / 2;
 }
 
 void Game::run() {
@@ -25,8 +25,8 @@ void Game::run() {
 
 	GD.SaveContext();
 
-
 	World world = World();
+	Vector2f groundNormal = Vector2f();
 
 	Sprite sprite = Sprite(1, 128, 128, 1);
 
@@ -67,16 +67,17 @@ void Game::run() {
 		world.update(p.pos.x);
 		p.height = p.pos.y - groundHeight;
 
-		cam.moveTo(p.pos);
-		cam.translate(Vector2f(10, 0));
-
+		cam.follow(p.pos,p.vel);
 
 		world.render();
 
+		world.getNormal(p.pos.x, groundNormal);
+		renderVector2f(groundNormal, p.pos.x, groundHeight, 1.5);
+
 		GD.Begin(POINTS);
-		GD.PointSize(16*4);
+		GD.PointSize(16 * 4);
 		GD.ColorRGB(RED);
-		cam.Vertex2f(p.pos.x,groundHeight);
+		cam.Vertex2f(p.pos.x, groundHeight);
 
 		GD.RestoreContext();
 

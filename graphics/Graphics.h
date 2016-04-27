@@ -40,11 +40,13 @@ class Cam
 {
 protected:
 	Vector2f pos;
+	Vector2f offset;
 
 public:
 	Cam();
 	void translate(Vector2f arg);
 	void moveTo(Vector2f arg);
+	void follow(Vector2f pos, Vector2f vel);
 	short getX();
 	short getY();
 	void Vertex2f(float x, float y);
@@ -52,5 +54,7 @@ public:
 };
 
 extern Cam cam;
+
+void renderVector2f(Vector2f &arg, float x, float y, float scale);
 
 void resetGraphics();

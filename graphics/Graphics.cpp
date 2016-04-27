@@ -17,6 +17,12 @@ void Cam::moveTo(Vector2f arg)
 	pos = arg;
 }
 
+void Cam::follow(Vector2f position, Vector2f velocity){
+	pos = position;
+	offset = velocity;
+	pos += offset;
+}
+
 short Cam::getX()
 {
 	return pos.x;
@@ -39,6 +45,19 @@ void Cam::Vertex2f(float x, float y)
 void Cam::Vertex2f(Vector2f arg)
 {
 	Vertex2f(arg.x, arg.y);
+}
+
+void renderVector2f(Vector2f &arg, float x, float y, float scale){
+
+	GD.PointSize(16 * 2);
+	GD.Begin(POINTS);
+	cam.Vertex2f(x,y);
+
+	GD.LineWidth(16 * 1);
+	GD.Begin(LINES);
+	cam.Vertex2f(x,y);
+	cam.Vertex2f(x+arg.x*scale,y+arg.y*scale);
+
 }
 
 void resetGraphics()
