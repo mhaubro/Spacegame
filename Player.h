@@ -1,16 +1,21 @@
 #pragma once
 
-class Player
-{
+#include "Vector2f.h"
+
+class Player {
 protected:
-    float x,y;
-    float angle;
-    
+
 public:
-    Player(float x, float y);
-    
-    void update(float t);
-    void render();
-    
-  
+
+	float angle;
+	Vector2f pos;
+	Vector2f vel;
+
+	float height;
+
+	Player();
+
+	void update(float t);
+	void render();
+
 };
