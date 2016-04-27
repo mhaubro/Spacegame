@@ -87,12 +87,12 @@ void Game::run() {
 		world.update(ph.position.x);
 		p.height = ph.position.y - groundHeight;
 
-		cam.follow(p.pos,p.vel);
+		cam.follow(ph.position,ph.velocity);
 
 		world.render();
 
-		world.getNormal(p.pos.x, groundNormal);
-		renderVector2f(groundNormal, p.pos.x, groundHeight, 1.5);
+		world.getNormal(ph.position.x, groundNormal);
+		renderVector2f(groundNormal, ph.position.x, groundHeight, 1.5);
 
 		GD.Begin(POINTS);
 		GD.PointSize(16 * 4);

@@ -56,7 +56,7 @@ float PhysicsObject::findDist(PhysicsObject& ph){
 	return findDistMidpoint(ph)-(radius+ph.radius);
 }
 
-void PhysicsObject::editCollission(PhysicsObject& ph){//ph er object 2, this er obj1.
+void PhysicsObject::applyCollission(PhysicsObject& ph){//ph er object 2, this er obj1.
 	//Changes velocity of two physicsobjects if they collided
 	//https://en.wikipedia.org/wiki/Elastic_collision
 	Vector2f v1subv2 = Vector2f(this->velocity - ph.velocity);
@@ -77,7 +77,7 @@ void PhysicsObject::editCollission(PhysicsObject& ph){//ph er object 2, this er 
 	//this->velocity -= x1subx2*((float)(2*ph.mass*v1subv2.dotProduct(x1subx2)/(this->mass+ph.mass)/(powf(x1subx2.length(),2))));
 
 }
-void PhysicsObject::editCollissionthis(PhysicsObject& ph){//ph er object 2, this er obj1.
+void PhysicsObject::applyCollissionthis(PhysicsObject& ph){//ph er object 2, this er obj1.
 	//Changes velocity of two physicsobjects if they collided
 	//https://en.wikipedia.org/wiki/Elastic_collision
 	Vector2f v1subv2 = Vector2f(this->velocity - ph.velocity);

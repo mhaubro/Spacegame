@@ -33,7 +33,7 @@ public:
 	bool checkCollision(PhysicsObject& ph);
 	float findDistMidpoint(PhysicsObject& ph);
 	float findDist(PhysicsObject& ph);
-	void editCollission(PhysicsObject& ph);//Edits for both
-	void editCollissionthis(PhysicsObject& ph);//Edits data for this object with collision from ph.
+	void applyCollission(PhysicsObject& ph);//Edits for both
+	void applyCollissionthis(PhysicsObject& ph);//Edits data for this object with collision from ph.
 };
 #endif

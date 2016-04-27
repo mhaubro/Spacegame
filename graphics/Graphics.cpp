@@ -3,7 +3,7 @@
 Cam cam;
 
 Cam::Cam()
-: pos()
+: pos(), offset()
 {
 }
 
@@ -18,9 +18,9 @@ void Cam::moveTo(Vector2f arg)
 }
 
 void Cam::follow(Vector2f position, Vector2f velocity){
-	pos = position;
-	offset = velocity;
-	pos += offset;
+	offset.x = (10*offset.x + velocity.x * 0.4)/11;
+	offset.y = (10*offset.y - velocity.y * 0.2)/11;
+	pos = position + offset;
 }
 
 short Cam::getX()
