@@ -1,25 +1,49 @@
 #include "PhysicsObject.h"
 #include "PhysicsConstants.h"
 #include "math.h"
+#include "GD2.h"
+#include "graphics.h"
+
+void PhysicsObject::changeState(float dt){
+	accelerations += forces*(1/mass);
+	velocity += accelerations*dt;
+	position += velocity*dt;
+}
+
+void PhysicsObject::addForce(Vector2f v){
+	forces += v;
+}
+
+void PhysicsObject::addAcceleration(Vector2f v){
+	accelerations += v;
+}
 
 void PhysicsObject::applyAcceleration(Vector2f acc, float time){//Acceleration has been applied for a given time
 	//Change position
-	position.x += velocity.x*time;
-	position.y += velocity.y*time;
+	position += velocity*time;
+	velocity += acc*time;
 	//Change velocity
 	//velocity += acc*time;
-	velocity.y += (-GRAVITY)*time;//OBS: Om det skal være - eller +, idet det er ift. tidligere coordinater -> y stiger negativt
+	velocity.y += (GRAVITY)*time;//OBS: Om det skal være - eller +, idet det er ift. tidligere coordinater -> y stiger negativt
 }
 void PhysicsObject::applyAccelerationNG(Vector2f acc, float time){	//Acceleration without gravity
 	//Som ovenstående, men ingen GRAVITY. GRAVITY er defineret i Physicsconstants.h
-	position.x += velocity.x*time;
-	position.y += velocity.y*time;
-	//velocity += acc*time;
+	position += velocity*time;
+	velocity += acc*time;
 
 }
 
+void PhysicsObject::applyG(float time){//Acceleration has been applied for a given time
+	//Change position
+	position.x += (velocity.x*time);
+	position.y += (velocity.y*time);
+	//Change velocity
+	//velocity += acc*time;
+	velocity.y += (GRAVITY)*time;//OBS: Om det skal være - eller +, idet det er ift. tidligere coordinater -> y stiger negativt
+}
+
 bool PhysicsObject::checkCollision(PhysicsObject& ph){
-	return (findDist(ph) > 0);
+	return (findDist(ph) < 0);
 }
 
 float PhysicsObject::findDistMidpoint(PhysicsObject& ph){
@@ -30,17 +54,58 @@ float PhysicsObject::findDist(PhysicsObject& ph){
 	return findDistMidpoint(ph)-(radius+ph.radius);
 }
 
-void PhysicsObject::editCollission(PhysicsObject& ph){
+void PhysicsObject::editCollission(PhysicsObject& ph){//ph er object 2, this er obj1.
 	//Changes velocity of two physicsobjects if they collided
-	Vector2f v1subv2 = Vector2f();
-	Vector2f x1subx2 = Vector2f();
-	Vector2f v2subv1 = Vector2f();
-	Vector2f x2subx1 = Vector2f();
-	Vector2f velocp = Vector2f(velocity.x, velocity.y);
-	Vector2f velophcp = Vector2f(velocity.x, velocity.y);
-//https://en.wikipedia.org/wiki/Elastic_collision
-//	veloctiy.x =
+	//https://en.wikipedia.org/wiki/Elastic_collision
+	Vector2f v1subv2 = Vector2f(this->velocity - ph.velocity);
+	Vector2f x1subx2 = Vector2f(this->position - ph.position);
+	Vector2f v2subv1 = Vector2f(ph.velocity - this->velocity);
+	Vector2f x2subx1 = Vector2f(ph.position - this->position);
+
+	Vector2f v = velocity - x1subx2*((float)(2*ph.mass*v1subv2.dotProduct(x1subx2)/(this->mass+ph.mass)/(powf(x1subx2.length(),2))));
+	Vector2f phv =  ph.velocity - x2subx1*((float)(2*this->mass*v2subv1.dotProduct(x2subx1)/(this->mass+ph.mass)/(powf(x2subx1.length(),2))));
+
+	GD.cmd_number(40,70,16,OPT_SIGNED, v.x);
+
+	velocity.x = v.x;
+	velocity.y = v.y;
+	ph.velocity.x = phv.x;
+	ph.velocity.y = phv.y;
+
+	//this->velocity -= x1subx2*((float)(2*ph.mass*v1subv2.dotProduct(x1subx2)/(this->mass+ph.mass)/(powf(x1subx2.length(),2))));
+
+}
+void PhysicsObject::editCollissionthis(PhysicsObject& ph){//ph er object 2, this er obj1.
+	//Changes velocity of two physicsobjects if they collided
+	//https://en.wikipedia.org/wiki/Elastic_collision
+	Vector2f v1subv2 = Vector2f(this->velocity - ph.velocity);
+	Vector2f x1subx2 = Vector2f(this->position - ph.position);
+	//Vector2f v2subv1 = Vector2f(ph.velocity - this->velocity);
+	Vector2f x2subx1 = Vector2f(ph.position - this->position);
 
 
+	this->velocity -= x1subx2*((float)(2*ph.mass*v1subv2.dotProduct(x1subx2)/(this->mass+ph.mass)/(powf(x1subx2.length(),2))));
+
+}
+void PhysicsObject::draw(){
+	GD.PointSize(radius);
+	GD.Vertex2f(position.x, position.y);
+}
+
+PhysicsObject::PhysicsObject(float mass, float radius, Vector2f& position, Vector2f& velocity) :
+	mass(mass), radius(radius), position(position), velocity(velocity)
+{}
+
+void PhysicsObject::checkBounds(){
+	if (position.x < 0 + radius && velocity.x < 0){
+		velocity.x = -velocity.x;
+	} else if (position.x + radius > SCREEN_WIDTH*UNIT && (velocity.x > 0)){
+		velocity.x = -velocity.x;
+	}
+	if (position.y < 0 + radius && (velocity.y < 0)){
+		velocity.y = -velocity.y;
+	} else if (position.y + radius > SCREEN_HEIGHT*UNIT && (velocity.y > 0)){
+		velocity.y = -velocity.y;
+	}
 }
 

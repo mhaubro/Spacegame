@@ -24,7 +24,18 @@ public:
 	Vector2f& operator-=(const Vector2f& arg);
 	Vector2f& operator*=(const Vector2f& arg);
 
+	Vector2f& operator+=(const float arg);
+	Vector2f& operator-=(const float arg);
 	Vector2f& operator*=(const float arg);
+
+	Vector2f operator*(const Vector2f& arg);
+	Vector2f operator+(const Vector2f& arg);
+	Vector2f operator-(const Vector2f& arg);
+	Vector2f operator*(const float arg);
+	Vector2f operator+(const float arg);
+	Vector2f operator-(const float arg);
+
+
 
 };
 

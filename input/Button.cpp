@@ -3,7 +3,9 @@
 Button::Button(const PinName pin)
 {
     input = new DigitalIn(pin);
+    //input->mode(PullUp);
 }
+
 
 Button::~Button()
 {
@@ -13,6 +15,6 @@ Button::~Button()
 
 bool Button::isPressed()
 {
-    return (*input == 1);
+    return (input->read() == 1);
 }
 

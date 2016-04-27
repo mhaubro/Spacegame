@@ -8,7 +8,7 @@ protected:
     DigitalIn* input;
     
 public:
-    Button(const PinName pin);
+    Button(const PinName pinIn);
     virtual ~Button();
     bool isPressed();
 

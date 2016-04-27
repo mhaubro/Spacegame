@@ -1,16 +1,16 @@
 #include "Physicstest.h"
-#include "Graphics.h"
-#include <time.h>
-#include <string.h>
-#include "Input.h"
-#include "PhysicsConstants.h"
 
 void Physicstest::run(){
 	int pointsize = UNIT*16;
-	Vector2f position = Vector2f(UNIT*0+pointsize,UNIT*272-pointsize);
-	Vector2f velocity = Vector2f(36*UNIT,-36*UNIT);
-	Vector2f acceleration = Vector2f(0*UNIT, GRAVITY*UNIT);
+	float m1 = 1;
+	float m2 = 2;
+	Vector2f position1 = Vector2f(UNIT*50+pointsize,UNIT*(272-30)-pointsize);
+	Vector2f velocity1 = Vector2f(48*UNIT,-36*UNIT);
+	Vector2f position2 = Vector2f(UNIT*(480-50)-pointsize,UNIT*(272-30)-pointsize);
+	Vector2f velocity2 = Vector2f(56*UNIT,-30*UNIT);
+
 	//cam.Vertex2f()
+
 	set_time(0);
 
 	GD.ClearColorRGB(BLACK);
@@ -19,45 +19,81 @@ void Physicstest::run(){
 	Timer t;
 	t.start();
 	float lasttime = t.read();
-	float currtime;
+	float currtime = 0;
+	PhysicsObject ph1 = PhysicsObject(m1, pointsize, position1, velocity1);
+	PhysicsObject ph2 = PhysicsObject(m2, pointsize, position2, velocity2);
+
+	//DigitalOut D3 = DigitalOut(D3);
+	//DigitalOut D7 = DigitalOut(D7);
+
+	//D7.write(1);
+
+	Button button = Button(A5);
+	//Button button2 = Button(D6);
 	while(1){
-		//GDINIT
-		in.pull();
-		GD.Clear();
-		GD.SaveContext();
+		runloop(in, t, &lasttime, &currtime, str, &ph1, &ph2, button);
+	}
+}
 
-		//DOSTUFF
-		GD.ColorRGB(0xffffff);
-		GD.PointSize(pointsize);
-		GD.Begin(POINTS);
-		GD.Vertex2f(position.x, position.y);
-		currtime = t.read();
-		float dt = currtime - lasttime;
-		if (dt > 1 or dt < -1){//Since it may overflow
-			dt = 0;
-		}
-		checkCollision(position, velocity, pointsize);
-		position.x += (velocity.x*dt);
-		position.y += (velocity.y*dt);
-		velocity.x += (acceleration.x*dt);
-		velocity.y += (acceleration.y*dt);
-		lasttime = currtime;
+void Physicstest::runloop(Input in, Timer t, float *lasttime, float *currtime, char str[], PhysicsObject *ph1, PhysicsObject *ph2, Button button){
+	//GDINIT
+	in.pull();
+	GD.Clear();
+	GD.SaveContext();
 
-		GD.ColorRGB(WHITE);
+	//DOSTUFF
+	GD.ColorRGB(WHITE);
+	GD.Begin(POINTS);
+	ph1->draw();
+	ph2->draw();
+
+	*currtime = t.read();
+	float dt = *currtime - *lasttime;
+	//if (dt > 1 or dt < -1){//Since it may overflow
+	//	dt = 0;
+	//}
+
+	ph1->applyG(dt);
+	ph1->checkBounds();
+	ph2->applyG(dt);
+	ph2->checkBounds();
+
+	if ((ph1)->checkCollision(*ph2)){
+		//GD.cmd_text(40,60,16,OPT_SIGNED, "COLLISSION");
+		(ph1)->editCollission(*ph2);
+	}
+
+	if (button.isPressed()){
+		ph1->velocity.x += 50*UNIT*dt;
+		ph1->velocity.y += 50*UNIT*dt;
+		ph2->velocity += 5*UNIT*dt;
+		//sprintf(str, "%f", dt);
+		GD.cmd_text(40,50,16,OPT_SIGNED, "Lower button, Speed up");
+	}
+/*	if (button2.isPressed()){
+		ph1->velocity -= 5*UNIT*dt;
+		ph2->velocity -= 5*UNIT*dt;
+		//sprintf(str, "%f", dt);
+		GD.cmd_text(40,60,16,OPT_SIGNED, "Upper button, Speed down");
+	}
+*/
+	*lasttime = *currtime;
+//	drawText(str, t);
+	sprintf(str, "%f", dt);
+	GD.cmd_text(40,50,16,OPT_SIGNED, str);
+
+	GD.swap();
+}
+
+void Physicstest::drawText(char str[], Timer t){
 		sprintf(str, "%f", t.read());
 		GD.cmd_text(40,40,16,OPT_SIGNED, str);
 		//Acceleration without gravity
-
 		//GDFINISH
 		GD.RestoreContext();
-		GD.swap();
-		//wait(0.1);
-
-	}
-
 }
 
-void Physicstest::checkCollision(Vector2f& position, Vector2f& velocity, int pointsize){
+/*void Physicstest::checkCollision(Vector2f& position, Vector2f& velocity, int pointsize){
 	if (position.x < 0 + pointsize && velocity.x < 0){
 		velocity.x = -velocity.x;
 	} else if (position.x + pointsize > SCREEN_WIDTH*UNIT && (velocity.x > 0)){
@@ -68,7 +104,7 @@ void Physicstest::checkCollision(Vector2f& position, Vector2f& velocity, int poi
 	} else if (position.y + pointsize > SCREEN_HEIGHT*UNIT && (velocity.y > 0)){
 		velocity.y = -velocity.y;
 	}
-}
+}*/
 
 Physicstest::Physicstest(){
 
