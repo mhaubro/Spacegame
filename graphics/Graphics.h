@@ -26,6 +26,9 @@
 #define RED 0xff0000
 #define GREEN 0x00ff00
 #define BLUE 0x0000ff
+#define YELLOW 0xffff00
+#define PURPLE 0xff00ff
+#define ORANGE 0xff7700
 #define GREY 0x888888
 #define DARK_GREY 0x444444
 #define BROWN 0xB07A45
