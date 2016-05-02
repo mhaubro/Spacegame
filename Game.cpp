@@ -40,7 +40,7 @@ void Game::run() {
 	World world = World();
 	Vector2f groundNormal = Vector2f();
 
-	Sprite sprite = Sprite(1, 128, 128, 1);
+	Sprite sprite = Sprite(SPACESHIP_HANDLE, 32, 32, 1);
 
 	while (running) {
 
@@ -114,7 +114,7 @@ void Game::run() {
 		GD.RestoreContext();
 
 		GD.Begin(BITMAPS);
-		sprite.render(ph.position.x, ph.position.y, p.angle + PI / 2, .5, 0);
+		sprite.render(ph.position.x, ph.position.y, p.angle + PI / 2, 1, 0);
 		GD.RestoreContext();
 
 		renderVector2f(ph.velocity, ph.position.x, ph.position.y, 1);
