@@ -30,10 +30,10 @@ public:
 	void changeState(float dt);
 
 	void checkBounds();
-	bool checkCollision(PhysicsObject& ph);
+	bool Collision(PhysicsObject& ph);
 	float findDistMidpoint(PhysicsObject& ph);
 	float findDist(PhysicsObject& ph);
-	void applyCollission(PhysicsObject& ph);//Edits for both
+	void applyCollission(PhysicsObject& ph1, PhysicsObject& ph2);//Edits for both
 	void applyCollissionthis(PhysicsObject& ph);//Edits data for this object with collision from ph.
 };
 #endif
