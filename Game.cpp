@@ -133,8 +133,10 @@ void Game::run() {
 		renderVector2f(ph.velocity, ph.position.x, ph.position.y, 1);
 
 		static Vector2f temp = Vector2f();
-		if (Polygon::Collide(poly,poly2) || Polygon::TerrainCollide(poly, world)){
+		if (Polygon::Collide(poly,poly2)){
 			GD.ColorRGB(RED);
+		}else if (Polygon::TerrainCollide(poly, world)){
+			GD.ColorRGB(BLUE);
 		}
 		poly.render();
 		poly2.render();
