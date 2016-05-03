@@ -91,7 +91,7 @@ Vector2f Vector2f::operator*(const Vector2f& arg) {
 }
 
 Vector2f Vector2f::operator+(const Vector2f& arg) {
-	Vector2f V = Vector2f(this->x+arg.x, this->y-arg.y);
+	Vector2f V = Vector2f(this->x+arg.x, this->y+arg.y);
 	return V;
 }
 
