@@ -9,6 +9,7 @@
 #define SRC_SHAPES_POLYGON_H_
 
 #include "Vector2f.h"
+#include "World.h"
 
 class Polygon {
 protected:
@@ -26,6 +27,7 @@ public:
 	void render();
 
 	static bool Collide(Polygon A, Polygon B);
+	static bool TerrainCollide(Polygon A, World& world);
 	static bool AxisSeparatePolygons(Vector2f& Axis, Polygon A, Polygon B);
 	static void CalculateInterval(Vector2f Axis, Polygon P, float& min, float& max);
 	static Vector2f FindMTD(Vector2f* PushVectors, int iNumVectors);

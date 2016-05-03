@@ -52,6 +52,9 @@ void Game::run() {
 
 	Sprite sprite = Sprite(SPACESHIP_HANDLE, 32, 32, 1);
 
+	ph.position.y = 10;
+	ph.position.x = 10;
+
 	while (running) {
 
 		in.pull();
@@ -130,9 +133,10 @@ void Game::run() {
 		renderVector2f(ph.velocity, ph.position.x, ph.position.y, 1);
 
 		static Vector2f temp = Vector2f();
-		if (Polygon::Collide(poly,poly2)){
+		if (Polygon::Collide(poly,poly2) || Polygon::TerrainCollide(poly, world)){
 			GD.ColorRGB(RED);
 		}
+		poly.render();
 		poly2.render();
 		GD.RestoreContext();
 
