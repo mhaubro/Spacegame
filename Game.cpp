@@ -8,6 +8,7 @@
 #include "World.h"
 #include "player.h"
 #include "PhysicsObject.h"
+#include "Polygon.h"
 
 Vector2f startpos = Vector2f();
 Vector2f startvel = Vector2f();
@@ -40,7 +41,19 @@ void Game::run() {
 	World world = World();
 	Vector2f groundNormal = Vector2f();
 
+	//
+	Vector2f shape[] = {Vector2f(-1,-.9),Vector2f(-1,.9),Vector2f(0,.9),Vector2f(1,0),Vector2f(0,-.9)};
+	Polygon poly = Polygon(ph.position,p.angle,5,shape);
+
+	float angle = 0;
+	Vector2f poly2Pos = Vector2f(20,10);
+	Vector2f shape2[] = {Vector2f(-1,-1),Vector2f(-1,1),Vector2f(0,2),Vector2f(1,1),Vector2f(1,-1)};
+	Polygon poly2 = Polygon(poly2Pos,angle,5, shape2);
+
 	Sprite sprite = Sprite(SPACESHIP_HANDLE, 32, 32, 1);
+
+	ph.position.y = 10;
+	ph.position.x = 10;
 
 	while (running) {
 
@@ -118,6 +131,16 @@ void Game::run() {
 		GD.RestoreContext();
 
 		renderVector2f(ph.velocity, ph.position.x, ph.position.y, 1);
+
+		static Vector2f temp = Vector2f();
+		if (Polygon::Collide(poly,poly2)){
+			GD.ColorRGB(RED);
+		}else if (Polygon::TerrainCollide(poly, world)){
+			GD.ColorRGB(BLUE);
+		}
+		poly.render();
+		poly2.render();
+		GD.RestoreContext();
 
 		ui.render();
 
