@@ -36,6 +36,11 @@ float Vector2f::angle() {
 	return atan2f(x, y);
 }
 
+Vector2f Vector2f::normalized(){
+	float length = this->length();
+	return Vector2f(x/length, y / length);
+}
+
 Vector2f& Vector2f::operator=(const Vector2f& arg) {
 	this->x = arg.x;
 	this->y = arg.y;
