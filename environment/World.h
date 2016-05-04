@@ -32,4 +32,6 @@ public:
 	Vector2f& getNormal(float x, Vector2f &vec);
 };
 
+extern World world;
+
 #endif /* SRC_WORLD_H_ */

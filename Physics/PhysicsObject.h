@@ -37,7 +37,7 @@ public:
 	float findDistMidpoint(PhysicsObject& ph);
 	float findDist(PhysicsObject& ph);
 	void applyCollission(PhysicsObject& ph1, PhysicsObject& ph2);//Edits for both
-	void applyCollissionthis(PhysicsObject& ph);//Edits data for this object with collision from ph.
+//	void applyCollissionthis(PhysicsObject& ph);//Edits data for this object with collision from ph.
 	void applyTerrainCoolision(World& world);
 };
 #endif

@@ -1,5 +1,5 @@
 #include "Game.h"
-
+#include "myassets.h"
 #include "UI.h"
 #include "Graphics.h"
 #include "Sprite.h"
@@ -8,6 +8,7 @@
 #include "World.h"
 #include "player.h"
 #include "PhysicsObject.h"
+#include "BackGround.h"
 
 Vector2f startpos = Vector2f();
 Vector2f startvel = Vector2f();
@@ -21,6 +22,8 @@ Game::Game() :
 
 	health = maxHealth / 3;
 	energy = maxEnergy / 2;
+
+
 	//ph = PhysicsObject(1, 1, vec, vec);
 }
 
@@ -29,7 +32,6 @@ void Game::run() {
 	Timer t;
 	t.start(); //HUSK AT STARTE TIMER
 	float currtime = t.read();
-	float lasttime = 0;
 	float dt = 0;
 	Input in = Input();
 	UI ui = UI(this);
@@ -37,7 +39,8 @@ void Game::run() {
 
 	GD.SaveContext();
 
-	World world = World();
+	BackGround Background = BackGround(&ph);
+	//World world = World();
 	Vector2f groundNormal = Vector2f();
 
 	Sprite sprite = Sprite(SPACESHIP_HANDLE, 32, 32, 1);
@@ -64,11 +67,10 @@ void Game::run() {
 		ph.addAcceleration(Vector2f(0, -GRAVITY));
 
 		//Time registering and change of state
-		currtime = t.read();
-		dt = currtime - lasttime;
+		dt = t.read();
+		t.reset();
 
 		ph.changeState(dt);
-		lasttime = currtime;
 		//End of time.
 
 		float groundHeight = world.getHeight(ph.position.x);
@@ -96,7 +98,10 @@ void Game::run() {
 
 		cam.follow(ph.position, ph.velocity);
 
+		Background.render();
+
 		world.render();
+
 
 		world.getNormal(ph.position.x, groundNormal);
 		GD.ColorRGB(PURPLE);
@@ -114,7 +119,10 @@ void Game::run() {
 		GD.RestoreContext();
 
 		GD.Begin(BITMAPS);
+
+		//Background.render();
 		sprite.render(ph.position.x, ph.position.y, p.angle + PI / 2, 1, 0);
+		//sky.render(6, 6, 0, 1, 0);
 		GD.RestoreContext();
 
 		renderVector2f(ph.velocity, ph.position.x, ph.position.y, 1);

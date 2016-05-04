@@ -37,6 +37,9 @@ void PhysicsObject::applyAccelerationNG(Vector2f acc, float time) {	//Accelerati
 
 void PhysicsObject::applyG(float time) {//Acceleration has been applied for a given time
 	//Change position
+	if (time < 0 or time > 0.05){//Allows for change as long as there's at least a stable 20 fps.
+		return;
+	}
 	position.x += (velocity.x * time);
 	position.y += (velocity.y * time);
 	//Change velocity
@@ -86,7 +89,7 @@ float PhysicsObject::findDist(PhysicsObject& ph) {
 	return findDistMidpoint(ph) - (radius + ph.radius);
 }
 
-
+/*
 void PhysicsObject::applyCollissionthis(PhysicsObject& ph) {//ph er object 2, this er obj1.
 	//Changes velocity of two physicsobjects if they collided
 	//https://en.wikipedia.org/wiki/Elastic_collision
@@ -99,7 +102,7 @@ void PhysicsObject::applyCollissionthis(PhysicsObject& ph) {//ph er object 2, th
 			* ((float) (2 * ph.mass * v1subv2.dotProduct(x1subx2)
 					/ (this->mass + ph.mass) / (powf(x1subx2.length(), 2))));
 
-}
+}*/
 
 void PhysicsObject::applyTerrainCoolision(World& world){
 	static Vector2f terrainNormal = Vector2f(); //vector terrain normal

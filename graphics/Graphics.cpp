@@ -1,5 +1,7 @@
 #include "Graphics.h"
 
+
+
 Cam cam;
 
 Cam::Cam()
@@ -18,9 +20,18 @@ void Cam::moveTo(Vector2f arg)
 }
 
 void Cam::follow(Vector2f position, Vector2f velocity){
-	offset.x = (10*offset.x + velocity.x * 0.4)/11;
-	offset.y = (10*offset.y - velocity.y * 0.2)/11;
+	float off = 0;
+	Vector2f downpull = Vector2f();//Styrer hvor meget, der "trækkes ned", så jorden ikke fylder 50 %
+	if (position.y < CAM_GROUND_OFFSET){
+		off = (position.y/CAM_GROUND_OFFSET);
+
+		off = (1-off)*CAM_GROUND_OFFSET;
+
+	}
+	offset.x = (15*offset.x + velocity.x * 1)/16;
+	offset.y = (15*offset.y - velocity.y * 0.5)/16;
 	pos = position + offset;
+	pos.y += off;
 }
 
 short Cam::getX()

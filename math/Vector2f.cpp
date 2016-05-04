@@ -36,6 +36,22 @@ float Vector2f::angle() {
 	return atan2f(x, y);
 }
 
+void Vector2f::wrap(Vector2f min, Vector2f max){
+	Vector2f d = max - min;
+	while (x > max.x){
+		x -= d.x;
+	}
+	while (x < min.x){
+		x += d.x;
+	}
+	while (y > max.y){
+		y -= d.y;
+	}
+	while (y < min.y){
+		y += d.y;
+	}
+}
+
 Vector2f& Vector2f::operator=(const Vector2f& arg) {
 	this->x = arg.x;
 	this->y = arg.y;
