@@ -26,7 +26,7 @@ public:
 
 	void render();
 
-	static bool Collide(Polygon A, Polygon B);
+	static bool Collide(Polygon A, Polygon B, Vector2f& MTD);
 	static bool TerrainCollide(Polygon A, World& world);
 	static bool AxisSeparatePolygons(Vector2f& Axis, Polygon A, Polygon B);
 	static void CalculateInterval(Vector2f Axis, Polygon P, float& min, float& max);

@@ -37,7 +37,10 @@ void Polygon::render() {
 	cam.Vertex2f(getVertexTransformed(0));
 }
 
-bool Polygon::Collide(Polygon A, Polygon B) {
+bool Polygon::Collide(Polygon A, Polygon B, Vector2f& MTD) {
+
+	Vector2f Axis[32];
+	int iNumAxis = 0;
 
 	//TODO Optimize with direction. no reason to test a normal, that points away.
 	//Vector2f dir = A.Position - B.Position;
@@ -48,6 +51,8 @@ bool Polygon::Collide(Polygon A, Polygon B) {
 
 		if (AxisSeparatePolygons(N, A, B))
 			return false;
+
+		Axis[iNumAxis++] = N;
 	}
 	for (int i = 0; i < B.numVertexs; i++) {
 		Vector2f E = B.getVertexTransformed((i + 1) % B.numVertexs)
@@ -56,7 +61,17 @@ bool Polygon::Collide(Polygon A, Polygon B) {
 
 		if (AxisSeparatePolygons(N, A, B))
 			return false;
+
+		Axis[iNumAxis++] = N;
 	}
+
+	// find the MTD among all the separation vectors
+	MTD = FindMTD(Axis, iNumAxis);
+
+	// makes sure the push vector is pushing A away from B
+	Vector2f D = A.Position - B.Position;
+	if (D.dotProduct(MTD) < 0.0f)
+		MTD = MTD * -1;
 
 	return true;
 }
@@ -86,6 +101,17 @@ bool Polygon::AxisSeparatePolygons(Vector2f& Axis, Polygon A, Polygon B) {
 	if (mina > maxb || minb > maxa)
 		return true;
 
+	// find the interval overlap
+	float d0 = maxa - minb;
+	float d1 = maxb - mina;
+	float depth = (d0 < d1) ? d0 : d1;
+
+	// convert the separation axis into a push vector (re-normalise
+	// the axis and multiply by interval overlap)
+	float axis_length_squared = Axis.x * Axis.x + Axis.y * Axis.y;
+
+	Axis *= depth / axis_length_squared;
+
 	return false;
 }
 
@@ -100,5 +126,18 @@ void Polygon::CalculateInterval(Vector2f Axis, Polygon P, float& min,
 		else if (d > max)
 			max = d;
 	}
+}
+
+Vector2f Polygon::FindMTD(Vector2f* PushVectors, int iNumVectors) {
+	Vector2f MTD = PushVectors[0];
+	float mind2 = PushVectors[0].dotProduct(PushVectors[0]);
+	for (int i = 1; i < iNumVectors; i++) {
+		float d2 = PushVectors[i].dotProduct(PushVectors[i]);
+		if (d2 < mind2) {
+			mind2 = d2;
+			MTD = PushVectors[i];
+		}
+	}
+	return MTD;
 }
 

@@ -42,13 +42,15 @@ void Game::run() {
 	Vector2f groundNormal = Vector2f();
 
 	//
-	Vector2f shape[] = {Vector2f(-1,-.9),Vector2f(-1,.9),Vector2f(0,.9),Vector2f(1,0),Vector2f(0,-.9)};
-	Polygon poly = Polygon(ph.position,p.angle,5,shape);
+	Vector2f shape[] = { Vector2f(-1, -.9), Vector2f(-1, .9), Vector2f(0, .9),
+			Vector2f(1, 0), Vector2f(0, -.9) };
+	Polygon poly = Polygon(ph.position, p.angle, 5, shape);
 
 	float angle = 0;
-	Vector2f poly2Pos = Vector2f(20,10);
-	Vector2f shape2[] = {Vector2f(-1,-1),Vector2f(-1,1),Vector2f(0,2),Vector2f(1,1),Vector2f(1,-1)};
-	Polygon poly2 = Polygon(poly2Pos,angle,5, shape2);
+	Vector2f poly2Pos = Vector2f(20, 10);
+	Vector2f shape2[] = { Vector2f(-1, -1), Vector2f(-1, 1), Vector2f(0, 2),
+			Vector2f(1, 1), Vector2f(1, -1) };
+	Polygon poly2 = Polygon(poly2Pos, angle, 5, shape2);
 
 	Sprite sprite = Sprite(SPACESHIP_HANDLE, 32, 32, 1);
 
@@ -114,7 +116,7 @@ void Game::run() {
 		world.getNormal(ph.position.x, groundNormal);
 		GD.ColorRGB(PURPLE);
 		renderVector2f(groundNormal, ph.position.x, groundHeight, 1.5);
-		Vector2f tangent = Vector2f(groundNormal.y,-groundNormal.x);
+		Vector2f tangent = Vector2f(groundNormal.y, -groundNormal.x);
 		GD.ColorRGB(ORANGE);
 		renderVector2f(tangent, ph.position.x, groundHeight, 1.5);
 
@@ -126,21 +128,29 @@ void Game::run() {
 
 		GD.RestoreContext();
 
-		GD.Begin(BITMAPS);
-		sprite.render(ph.position.x, ph.position.y, p.angle + PI / 2, 1, 0);
-		GD.RestoreContext();
-
-		renderVector2f(ph.velocity, ph.position.x, ph.position.y, 1);
-
 		static Vector2f temp = Vector2f();
-		if (Polygon::Collide(poly,poly2)){
-			GD.ColorRGB(RED);
-		}else if (Polygon::TerrainCollide(poly, world)){
+		if (Polygon::Collide(poly, poly2, temp)) {
+			Vector2f normal = temp.normalized();
+			Vector2f tangent = Vector2f(normal.y, -normal.x);
+
+				ph.velocity = ph.velocity - (normal * (ph.velocity.dotProduct(normal)*2));
+
+				ph.velocity *= .4;
+				//velocity = (velocity * terrainNormal * .4) + (velocity * terrainTangent*.99);
+
+				ph.position += temp;
+		} else if (Polygon::TerrainCollide(poly, world)) {
 			GD.ColorRGB(BLUE);
 		}
 		poly.render();
 		poly2.render();
 		GD.RestoreContext();
+
+		GD.Begin(BITMAPS);
+		sprite.render(ph.position.x, ph.position.y, p.angle + PI / 2, 1, 0);
+		GD.RestoreContext();
+
+		renderVector2f(ph.velocity, ph.position.x, ph.position.y, 1);
 
 		ui.render();
 
