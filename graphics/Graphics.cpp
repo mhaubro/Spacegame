@@ -29,7 +29,7 @@ void Cam::follow(Vector2f position, Vector2f velocity){
 
 	}
 	offset.x = (15*offset.x + velocity.x * 1)/16;
-	offset.y = (15*offset.y - velocity.y * 0.5)/16;
+	offset.y = (15*offset.y + velocity.y * 0.5)/16;
 	pos = position + offset;
 	pos.y += off;
 }

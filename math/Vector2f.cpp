@@ -51,6 +51,10 @@ void Vector2f::wrap(Vector2f min, Vector2f max){
 		y += d.y;
 	}
 }
+Vector2f Vector2f::normalized(){
+	float length = this->length();
+	return Vector2f(x/length, y / length);
+}
 
 Vector2f& Vector2f::operator=(const Vector2f& arg) {
 	this->x = arg.x;
@@ -107,7 +111,7 @@ Vector2f Vector2f::operator*(const Vector2f& arg) {
 }
 
 Vector2f Vector2f::operator+(const Vector2f& arg) {
-	Vector2f V = Vector2f(this->x+arg.x, this->y-arg.y);
+	Vector2f V = Vector2f(this->x+arg.x, this->y+arg.y);
 	return V;
 }
 
