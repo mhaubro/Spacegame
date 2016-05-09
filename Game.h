@@ -16,11 +16,11 @@ public:
     Game();
     void run();
     
-    PhysicsObject ph;
-    Player p;
-
     unsigned int score;
-    
+
+    Player p;
+    PhysicsObject ph;
+
     unsigned short health;
     unsigned short energy;
     

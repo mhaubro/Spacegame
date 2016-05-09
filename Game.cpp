@@ -10,13 +10,11 @@
 #include "PhysicsObject.h"
 #include "Polygon.h"
 
-Vector2f startpos = Vector2f();
-Vector2f startvel = Vector2f();
-
-Vector2f vec = Vector2f();
+Vector2f startpos = Vector2f(0, 10);
+Vector2f startvel = Vector2f(6, 4);
 
 Game::Game() :
-		running(false), score(42), p(), ph(1, 1, vec, vec) {
+		running(false), score(42), p(), ph(1, 1, startpos, startvel) {
 	maxHealth = 1000;
 	maxEnergy = 1000;
 
@@ -42,20 +40,19 @@ void Game::run() {
 	Vector2f groundNormal = Vector2f();
 
 	//
-	Vector2f shape[] = { Vector2f(-1, -.9), Vector2f(-1, .9), Vector2f(0, .9),
-			Vector2f(1, 0), Vector2f(0, -.9) };
-	Polygon poly = Polygon(ph.position, p.angle, 5, shape);
+	Vector2f shape1[] = { Vector2f(-.2,.4), Vector2f(1, .1), Vector2f(1, -.1), Vector2f(-.2, -.4) };
+	Vector2f shape2[] = { Vector2f(-.9, -.8), Vector2f(-.9, .8), Vector2f(-.1,
+			.8), Vector2f(-.1, -.8) };
+	Polygon poly1 = Polygon(ph.position, p.angle, 4, shape1);
+	Polygon poly2 = Polygon(ph.position, p.angle, 4, shape2);
 
 	float angle = 0;
 	Vector2f poly2Pos = Vector2f(20, 10);
-	Vector2f shape2[] = { Vector2f(-1, -1), Vector2f(-1, 1), Vector2f(0, 2),
+	Vector2f shape3[] = { Vector2f(-1, -1), Vector2f(-1, 1), Vector2f(0, 2),
 			Vector2f(1, 1), Vector2f(1, -1) };
-	Polygon poly2 = Polygon(poly2Pos, angle, 5, shape2);
+	Polygon poly3 = Polygon(poly2Pos, angle, 5, shape3);
 
 	Sprite sprite = Sprite(SPACESHIP_HANDLE, 32, 32, 1);
-
-	ph.position.y = 10;
-	ph.position.x = 10;
 
 	while (running) {
 
@@ -129,21 +126,62 @@ void Game::run() {
 		GD.RestoreContext();
 
 		static Vector2f temp = Vector2f();
-		if (Polygon::Collide(poly, poly2, temp)) {
+		if (Polygon::Collide(poly1, poly3, temp)
+				|| Polygon::Collide(poly2, poly3, temp)) {
 			Vector2f normal = temp.normalized();
 			Vector2f tangent = Vector2f(normal.y, -normal.x);
 
-				ph.velocity = ph.velocity - (normal * (ph.velocity.dotProduct(normal)*2));
+			ph.velocity = ph.velocity
+					- (normal * (ph.velocity.dotProduct(normal) * 2));
 
-				ph.velocity *= .4;
-				//velocity = (velocity * terrainNormal * .4) + (velocity * terrainTangent*.99);
+			ph.velocity *= .4;
+			//velocity = (velocity * terrainNormal * .4) + (velocity * terrainTangent*.99);
 
-				ph.position += temp;
-		} else if (Polygon::TerrainCollide(poly, world)) {
-			GD.ColorRGB(BLUE);
+			ph.position += temp;
+			GD.ColorRGB(RED);
+
+			poly1.render();
+			poly2.render();
+
 		}
-		poly.render();
-		poly2.render();
+		if (Polygon::TerrainCollide(poly1, world, temp)) {
+			GD.ColorRGB(BLUE);
+			static Vector2f terrainNormal = Vector2f(); //vector terrain normal
+			static Vector2f terrainTangent = Vector2f();
+
+			world.getNormal(ph.position.x, terrainNormal);
+			terrainTangent.x = terrainNormal.y;
+			terrainTangent.y = -terrainNormal.x;
+
+			ph.velocity = ph.velocity
+					- (terrainNormal
+							* (ph.velocity.dotProduct(terrainNormal) * 2));
+
+			ph.velocity *= .4;
+			//velocity = (velocity * terrainNormal * .4) + (velocity * terrainTangent*.99);
+
+			ph.position += temp;
+		}
+		if (Polygon::TerrainCollide(poly2, world, temp)) {
+			GD.ColorRGB(BLUE);
+			static Vector2f terrainNormal = Vector2f(); //vector terrain normal
+			static Vector2f terrainTangent = Vector2f();
+
+			world.getNormal(ph.position.x, terrainNormal);
+			terrainTangent.x = terrainNormal.y;
+			terrainTangent.y = -terrainNormal.x;
+
+			ph.velocity = ph.velocity
+					- (terrainNormal
+							* (ph.velocity.dotProduct(terrainNormal) * 2));
+
+			ph.velocity *= .4;
+			//velocity = (velocity * terrainNormal * .4) + (velocity * terrainTangent*.99);
+
+			ph.position += temp;
+		}
+
+		poly3.render();
 		GD.RestoreContext();
 
 		GD.Begin(BITMAPS);
