@@ -5,9 +5,9 @@
  *      Author: mathi
  */
 
-#ifndef SRC_MATH_MATHMATICS_H_
-#define SRC_MATH_MATHMATICS_H_
+#ifndef SRC_MATH_MATHEMATICS_H_
+#define SRC_MATH_MATHEMATICS_H_
 
 float clamp(float x, float min, float max);
 
-#endif /* SRC_MATH_MATHMATICS_H_ */
+#endif /* SRC_MATH_MATHEMATICS_H_ */

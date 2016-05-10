@@ -30,12 +30,11 @@ void Game::run() {
 	running = true;
 	Timer t;
 	t.start(); //HUSK AT STARTE TIMER
-	float currtime = t.read();
 	float dt = 0;
 	Input in = Input();
 	UI ui = UI(this);
-	GD.ClearColorRGB(BLACK);
-
+	//GD.ClearColorRGB(BLACK);
+	GD.ClearColorA(255);
 	GD.SaveContext();
 
 	BackGround Background = BackGround(&ph);
@@ -60,7 +59,9 @@ void Game::run() {
 	while (running) {
 
 		in.pull();
-		GD.Clear();
+		//.Clear();
+
+		Background.render();
 
 		score++;
 		p.angle += in.getRotation() * 0.001;
@@ -110,7 +111,7 @@ void Game::run() {
 
 		cam.follow(ph.position, ph.velocity);
 
-		Background.render();
+		//Background.render();
 
 		world.render();
 
