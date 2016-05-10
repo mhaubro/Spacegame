@@ -21,6 +21,8 @@ void BackGround::render(){
 	GD.Begin(BITMAPS);
 	GD.BitmapHandle(RANDOMDOTS_HANDLE);
 	GD.Cell(RANDOMDOTS_CELLS-1);
+	GD.Cell(RANDOMDOTS_CELLS - 1);
+	//GD.BitmapSize(BILINEAR,REPEAT,REPEAT,(2*64+SCREEN_WIDTH)/2,(2*64+SCREEN_HEIGHT)/2);
 	GD.BitmapSize(BILINEAR,REPEAT,REPEAT,(SCREEN_WIDTH),(SCREEN_HEIGHT));
 	GD.cmd_loadidentity();
 	GD.cmd_translate(F16(480*1.41/2-position.x),F16(272*1.41/2+position.y));
