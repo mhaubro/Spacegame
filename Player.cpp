@@ -1,5 +1,7 @@
 #include "Player.h"
 
+Player p;
+
 Player::Player()
 :  angle(0)
 {

@@ -16,9 +16,10 @@ public:
     Game();
     void run();
     
+    float getMaxThrottle();
+
     unsigned int score;
 
-    Player p;
     PhysicsObject ph;
 
     float health;
