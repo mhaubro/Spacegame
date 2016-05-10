@@ -10,7 +10,7 @@
 #include "Graphics.h"
 #include "Random.h"
 #include "PerlinNoise.h"
-#include "Mathmatics.h"
+#include "Mathematics.h"
 
 Chunk::Chunk(int _index) :
 		index(_index) {
@@ -31,7 +31,7 @@ void Chunk::render() {
 	//GD.BlendFunc(ONE, ONE);
 	//renders the main color of the chunk
 	GD.Begin(EDGE_STRIP_B);
-	GD.ColorRGB(BROWN);
+	GD.ColorRGB(0xD4772A);
 	for (int var = 0; var < VERTEX_NUMBER; var++) {
 		cam.Vertex2f((float) var * VERTEX_SEPERATION + index * CHUNK_SIZE,
 				(heightMap[var]));
@@ -43,7 +43,7 @@ void Chunk::render() {
 
 	//renders the line between ground and air
 	GD.Begin(LINE_STRIP);
-	GD.ColorRGB(GREEN);
+	GD.ColorRGB(0xDE9357);
 	for (int var = 0; var < VERTEX_NUMBER; var++) {
 		cam.Vertex2f(((float) var * VERTEX_SEPERATION + index * CHUNK_SIZE),
 				(heightMap[var]));

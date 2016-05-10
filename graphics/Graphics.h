@@ -34,6 +34,7 @@
 #define GREY 0x888888
 #define DARK_GREY 0x444444
 #define BROWN 0xB07A45
+#define SKY 0x803900
 #define COLOR_ENERGY 0xffff22
 #define COLOR_HEALTH 0xff0000
 #define COLOR_SHIELD 0x22aaff
@@ -61,9 +62,10 @@ public:
 	void Vertex2f(float x, float y);
 	void Vertex2f(Vector2f arg);
 };
-
 extern Cam cam;
 
+
+unsigned int blend(unsigned int color1, unsigned int color2, float blendfactor);
 void renderVector2f(Vector2f &arg, float x, float y, float scale);
 
 void resetGraphics();

@@ -5,7 +5,7 @@
  *      Author: mathi
  */
 
-#include "Mathmatics.h"
+#include "Mathematics.h"
 
 float clamp(float x, float min, float max) {
 	if (x < min)

@@ -30,6 +30,19 @@ void Cam::follow(Vector2f position, Vector2f velocity){
 	}
 	offset.x = (15*offset.x + velocity.x * 1)/16;
 	offset.y = (15*offset.y + velocity.y * 0.5)/16;
+	if (offset.x < -11){
+		offset.x = -11;
+	} else if (offset.x > 11){
+		offset.x = 11;
+	}
+	if (offset.y < -5){
+		offset.y = -5;
+	} else if (offset.y > 5){
+		offset.y = 5;
+	}
+
+
+
 	pos = position + offset;
 	pos.y += off;
 }
@@ -74,5 +87,13 @@ void renderVector2f(Vector2f &arg, float x, float y, float scale){
 void resetGraphics()
 {
 	// TODO reset all graphics settings to something normal
+}
+
+unsigned int blend(unsigned int color1,unsigned  int color2, float f){
+	unsigned int b = (unsigned int) ((color1 & 0xff) * f) + ((color2 & 0xff) * (1-f));
+	unsigned int g = (unsigned int) ((color1 & 0xff00) * f) + ((color2 & 0xff00) * (1-f));
+	unsigned int r = (unsigned int) ((color1 & 0xff0000) * f) + ((color2 & 0xff0000) * (1-f));
+
+	return (r & 0xff0000)+(g & 0xff00)+(b & 0xff);
 }
 
