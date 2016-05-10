@@ -21,6 +21,8 @@ private:
 	Vector2f minPos;
 	Vector2f maxPos;
 
+	float getBlendFactor();
+
 public:
 	void render();
 	void update();
