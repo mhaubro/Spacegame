@@ -21,10 +21,10 @@ public:
     Player p;
     PhysicsObject ph;
 
-    unsigned short health;
-    unsigned short energy;
+    float health;
+    float energy;
     
-    unsigned short maxHealth;
-    unsigned short maxEnergy;
+    float maxHealth;
+    float maxEnergy;
     
 };

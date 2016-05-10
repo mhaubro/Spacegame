@@ -10,6 +10,7 @@
 #include "PhysicsObject.h"
 #include "BackGround.h"
 #include "Polygon.h"
+#include "Mathmatics.h"
 
 Vector2f startpos = Vector2f(0, 10);
 Vector2f startvel = Vector2f(6, 4);
@@ -19,9 +20,8 @@ Game::Game() :
 	maxHealth = 1000;
 	maxEnergy = 1000;
 
-	health = maxHealth / 3;
-	energy = maxEnergy / 2;
-
+	health = maxHealth;
+	energy = maxEnergy;
 
 	//ph = PhysicsObject(1, 1, vec, vec);
 }
@@ -43,7 +43,8 @@ void Game::run() {
 	Vector2f groundNormal = Vector2f();
 
 	//
-	Vector2f shape1[] = { Vector2f(-.2,.4), Vector2f(1, .1), Vector2f(1, -.1), Vector2f(-.2, -.4) };
+	Vector2f shape1[] = { Vector2f(-.2, .4), Vector2f(1, .1), Vector2f(1, -.1),
+			Vector2f(-.2, -.4) };
 	Vector2f shape2[] = { Vector2f(-.9, -.8), Vector2f(-.9, .8), Vector2f(-.1,
 			.8), Vector2f(-.1, -.8) };
 	Polygon poly1 = Polygon(ph.position, p.angle, 4, shape1);
@@ -72,8 +73,12 @@ void Game::run() {
 
 		if (in.getThrottle()) {
 			ph.velocity += FromAngle(0.01, p.angle);
-			Vector2f throttle = FromAngle((float) 30, p.angle); //Tilføjer en kraft på 30 newton i den vinkel
-			ph.addForce(throttle);
+			Vector2f throttle = FromAngle((float) 10, p.angle); //Tilføjer en kraft på 30 newton i den vinkel
+			if (energy > 0) {
+				ph.addForce(throttle);
+				energy -= 2.5;
+			}
+
 			GD.cmd_text(70, 70, 16, OPT_SIGNED, "touch");
 		}
 		ph.addAcceleration(Vector2f(0, -GRAVITY));
@@ -105,6 +110,9 @@ void Game::run() {
 			ph.position.x = 48;
 		}
 
+		energy += .2;
+		energy = clamp(energy, 0, maxEnergy);
+
 		world.update(ph.position.x);
 		p.height = ph.position.y - groundHeight;
 
@@ -113,7 +121,6 @@ void Game::run() {
 		Background.render();
 
 		world.render();
-
 
 		world.getNormal(ph.position.x, groundNormal);
 		GD.ColorRGB(PURPLE);
