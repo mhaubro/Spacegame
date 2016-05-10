@@ -19,6 +19,7 @@ public:
 	float angle();
 	float dotProduct(Vector2f extv);
 
+	void wrap(Vector2f min, Vector2f max);
 	Vector2f normalized();
 
 	Vector2f& operator=(const Vector2f& arg);

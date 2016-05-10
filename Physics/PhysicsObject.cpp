@@ -37,6 +37,9 @@ void PhysicsObject::applyAccelerationNG(Vector2f acc, float time) {	//Accelerati
 
 void PhysicsObject::applyG(float time) {//Acceleration has been applied for a given time
 	//Change position
+	if (time < 0 or time > 0.05){//Allows for change as long as there's at least a stable 20 fps.
+		return;
+	}
 	position.x += (velocity.x * time);
 	position.y += (velocity.y * time);
 	//Change velocity
@@ -44,9 +47,10 @@ void PhysicsObject::applyG(float time) {//Acceleration has been applied for a gi
 	velocity.y += (GRAVITY) * time;	//OBS: Om det skal være - eller +, idet det er ift. tidligere coordinater -> y stiger negativt
 }
 
-bool PhysicsObject::checkCollision(PhysicsObject& ph) {
+bool PhysicsObject::Collision(PhysicsObject& ph){
 	return (findDist(ph) < 0);
 }
+
 
 bool PhysicsObject::terrainCollision(World& world) {
 	return (world.getHeight(position.x) > position.y);
@@ -58,39 +62,34 @@ float PhysicsObject::findDistMidpoint(PhysicsObject& ph) {
 					+ powf(position.y - ph.position.y, 2));
 }
 
+void PhysicsObject::applyCollission(PhysicsObject& ph1, PhysicsObject& ph2){//ph er object 2, this er obj1.
+	//Changes velocity of two physicsobjects if they collided
+		//https://en.wikipedia.org/wiki/Elastic_collision
+	Vector2f v1subv2 = Vector2f(ph1.velocity - ph2.velocity);
+	Vector2f x1subx2 = Vector2f(ph1.position - ph2.position);
+	Vector2f v2subv1 = Vector2f(ph2.velocity - ph1.velocity);
+	Vector2f x2subx1 = Vector2f(ph2.position - ph1.position);
+	Vector2f pos2subpos1 = Vector2f(ph2.position - ph1.position);
+
+
+	Vector2f ph1v = velocity - x1subx2*((float)(2*ph2.mass*v1subv2.dotProduct(x1subx2)/(ph1.mass+ph2.mass)/(powf(x1subx2.length(),2))));
+	Vector2f ph2v =  ph2.velocity - pos2subpos1*((float)(2*ph1.mass*v2subv1.dotProduct(pos2subpos1)/(ph1.mass+ph2.mass)/(powf(pos2subpos1.length(),2))));
+
+	//	GD.cmd_number(40,70,16,OPT_SIGNED, v.x);
+	Vector2f v = velocity - x1subx2* ((float) (2 * ph2.mass * v1subv2.dotProduct(x1subx2)/ (ph1.mass + ph2.mass)/ (powf(x1subx2.length(), 2))));
+	Vector2f phv = ph2.velocity- x2subx1* ((float) (2 * ph1.mass * v2subv1.dotProduct(x2subx1)/ (ph1.mass + ph2.mass)/ (powf(x2subx1.length(), 2))));
+	//GD.cmd_number(40, 70, 16, OPT_SIGNED, v.x);
+	ph1.velocity.x = ph1v.x;
+	ph1.velocity.y = ph1v.y;
+	ph2.velocity.x = ph2v.x;
+	ph2.velocity.y = ph2v.y;
+
+}
 float PhysicsObject::findDist(PhysicsObject& ph) {
 	return findDistMidpoint(ph) - (radius + ph.radius);
 }
 
-void PhysicsObject::applyCollission(PhysicsObject& ph) {//ph er object 2, this er obj1.
-	//Changes velocity of two physicsobjects if they collided
-	//https://en.wikipedia.org/wiki/Elastic_collision
-	Vector2f v1subv2 = Vector2f(this->velocity - ph.velocity);
-	Vector2f x1subx2 = Vector2f(this->position - ph.position);
-	Vector2f v2subv1 = Vector2f(ph.velocity - this->velocity);
-	Vector2f x2subx1 = Vector2f(ph.position - this->position);
-
-	Vector2f v = velocity
-			- x1subx2
-					* ((float) (2 * ph.mass * v1subv2.dotProduct(x1subx2)
-							/ (this->mass + ph.mass)
-							/ (powf(x1subx2.length(), 2))));
-	Vector2f phv = ph.velocity
-			- x2subx1
-					* ((float) (2 * this->mass * v2subv1.dotProduct(x2subx1)
-							/ (this->mass + ph.mass)
-							/ (powf(x2subx1.length(), 2))));
-
-	GD.cmd_number(40, 70, 16, OPT_SIGNED, v.x);
-
-	velocity.x = v.x;
-	velocity.y = v.y;
-	ph.velocity.x = phv.x;
-	ph.velocity.y = phv.y;
-
-	//this->velocity -= x1subx2*((float)(2*ph.mass*v1subv2.dotProduct(x1subx2)/(this->mass+ph.mass)/(powf(x1subx2.length(),2))));
-
-}
+/*
 void PhysicsObject::applyCollissionthis(PhysicsObject& ph) {//ph er object 2, this er obj1.
 	//Changes velocity of two physicsobjects if they collided
 	//https://en.wikipedia.org/wiki/Elastic_collision
@@ -103,7 +102,7 @@ void PhysicsObject::applyCollissionthis(PhysicsObject& ph) {//ph er object 2, th
 			* ((float) (2 * ph.mass * v1subv2.dotProduct(x1subx2)
 					/ (this->mass + ph.mass) / (powf(x1subx2.length(), 2))));
 
-}
+}*/
 
 void PhysicsObject::applyTerrainCoolision(World& world){
 	static Vector2f terrainNormal = Vector2f(); //vector terrain normal

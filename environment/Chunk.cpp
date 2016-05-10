@@ -23,6 +23,12 @@ Chunk::~Chunk() {
 
 void Chunk::render() {
 
+	//GD.BitmapHandle(0);
+	//GD.BitmapSize(NEAREST, REPEAT, REPEAT, 480, 272);
+
+	//GD.ColorMask(0, 0, 0, 1);
+
+	//GD.BlendFunc(ONE, ONE);
 	//renders the main color of the chunk
 	GD.Begin(EDGE_STRIP_B);
 	GD.ColorRGB(BROWN);
@@ -30,6 +36,10 @@ void Chunk::render() {
 		cam.Vertex2f((float) var * VERTEX_SEPERATION + index * CHUNK_SIZE,
 				(heightMap[var]));
 	}
+	//GD.ColorMask(1, 1, 1, 0);
+	//GD.BlendFunc(DST_ALPHA, ONE_MINUS_DST_ALPHA);
+	//GD.Begin(BITMAPS);
+	//GD.Vertex2ii(0, 0, 0);
 
 	//renders the line between ground and air
 	GD.Begin(LINE_STRIP);
@@ -38,7 +48,11 @@ void Chunk::render() {
 		cam.Vertex2f(((float) var * VERTEX_SEPERATION + index * CHUNK_SIZE),
 				(heightMap[var]));
 	}
-
+	GD.ColorRGB(0x000000);
+	//GD.ColorMask(1, 1, 1, 1);
+	//GD.BitmapHandle(6);
+	//GD.BitmapSize(NEAREST, REPEAT, REPEAT, 480, 272);
+	GD.RestoreContext();
 	// TODO render details in chunks
 }
 
@@ -50,6 +64,8 @@ void Chunk::rewrite(int _index) {
 		heightMap[var] = pn.noise(var * VERTEX_SEPERATION + index * CHUNK_SIZE);
 	}
 }
+
+
 
 float Chunk::getHeight(float x) {
 

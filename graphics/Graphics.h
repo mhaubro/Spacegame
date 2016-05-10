@@ -3,6 +3,8 @@
 #include "mbed.h"
 #include "GD2.h"
 #include "Vector2f.h"
+#include "World.h"
+#include "Game.h"
 
 #define UNIT (float) 16
 #define UNIT16 (float) 16 * UNIT
@@ -38,6 +40,10 @@
 
 #define CAM_X_OFFSET16 SCREEN_WIDTH * 8
 #define CAM_Y_OFFSET16 SCREEN_HEIGHT * 8
+
+#define OFFSET_FACTOR 11
+
+#define CAM_GROUND_OFFSET 10
 
 class Cam
 {

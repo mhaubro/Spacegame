@@ -64,9 +64,9 @@ void Physicstest::runloop(Input in, Timer t, float *lasttime, float *currtime, c
 
 
 
-	if ((ph1)->checkCollision(*ph2)){
+	if ((ph1)->Collision(*ph2)){
 		//GD.cmd_text(40,60,16,OPT_SIGNED, "COLLISSION");
-		(ph1)->applyCollission(*ph2);
+		(ph1)->applyCollission(*ph2, *ph1);
 	}
 
 	if (button.isPressed()){

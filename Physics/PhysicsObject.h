@@ -31,12 +31,13 @@ public:
 	void changeState(float dt);
 
 	void checkBounds();
+	bool Collision(PhysicsObject& ph);
 	bool checkCollision(PhysicsObject& ph);
 	bool terrainCollision(World& world);
 	float findDistMidpoint(PhysicsObject& ph);
 	float findDist(PhysicsObject& ph);
-	void applyCollission(PhysicsObject& ph);//Edits for both
-	void applyCollissionthis(PhysicsObject& ph);//Edits data for this object with collision from ph.
+	void applyCollission(PhysicsObject& ph1, PhysicsObject& ph2);//Edits for both
+//	void applyCollissionthis(PhysicsObject& ph);//Edits data for this object with collision from ph.
 	void applyTerrainCoolision(World& world);
 };
 #endif

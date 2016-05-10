@@ -7,9 +7,13 @@
 
 #include "World.h"
 #include "Chunk.h"
+#include "GD2.h"
+#include "myassets.h"
 
 #define CHUNKS_FROM_CENTER 1
 #define NUMBER_OF_CHUNKS_LOADED (1 + CHUNKS_FROM_CENTER*2)
+//#define world World
+World world;
 
 World::World() {
 	chunks = new Chunk*[NUMBER_OF_CHUNKS_LOADED];
@@ -30,6 +34,9 @@ void World::update(float x) {
 }
 
 void World::render() {
+	GD.SaveContext();
+	GD.RestoreContext();
+
 	for (int var = 0; var < NUMBER_OF_CHUNKS_LOADED; ++var) {
 		chunks[var]->render();
 	}
