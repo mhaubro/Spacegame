@@ -76,12 +76,16 @@ bool Polygon::Collide(Polygon A, Polygon B, Vector2f& MTD) {
 	return true;
 }
 
-bool Polygon::TerrainCollide(Polygon A, World& world) {
+bool Polygon::TerrainCollide(Polygon A, World& world,Vector2f& MTD) {
 
 	Vector2f temp;
+	float height;
 	for (int i = 0; i < A.numVertexs; i++) {
 		temp = A.getVertexTransformed(i);
-		if (world.getHeight(temp.x) > temp.y) {
+		height = world.getHeight(temp.x);
+		if (height > temp.y) {
+			world.getNormal(temp.x, MTD);
+			MTD = MTD * (height - temp.y);
 			return true;
 		}
 	}
