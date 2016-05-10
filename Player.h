@@ -19,3 +19,5 @@ public:
 	void render();
 
 };
+
+extern Player p;

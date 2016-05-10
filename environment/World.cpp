@@ -12,7 +12,7 @@
 
 #define CHUNKS_FROM_CENTER 1
 #define NUMBER_OF_CHUNKS_LOADED (1 + CHUNKS_FROM_CENTER*2)
-//#define world World
+
 World world;
 
 World::World() {

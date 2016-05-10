@@ -6,22 +6,22 @@
 #include "Chunk.h"
 #include "Input.h"
 #include "World.h"
-#include "player.h"
+#include "Player.h"
 #include "PhysicsObject.h"
 #include "BackGround.h"
 #include "Polygon.h"
+#include "Mathematics.h"
 
 Vector2f startpos = Vector2f(0, 10);
 Vector2f startvel = Vector2f(6, 4);
 
 Game::Game() :
-		running(false), score(42), p(), ph(1, 1, startpos, startvel) {
+		running(false), score(42), ph(1, 1, startpos, startvel) {
 	maxHealth = 1000;
 	maxEnergy = 1000;
 
-	health = maxHealth / 3;
-	energy = maxEnergy / 2;
-
+	health = maxHealth;
+	energy = maxEnergy;
 
 	//ph = PhysicsObject(1, 1, vec, vec);
 }
@@ -42,7 +42,8 @@ void Game::run() {
 	Vector2f groundNormal = Vector2f();
 
 	//
-	Vector2f shape1[] = { Vector2f(-.2,.4), Vector2f(1, .1), Vector2f(1, -.1), Vector2f(-.2, -.4) };
+	Vector2f shape1[] = { Vector2f(-.2, .4), Vector2f(1, .1), Vector2f(1, -.1),
+			Vector2f(-.2, -.4) };
 	Vector2f shape2[] = { Vector2f(-.9, -.8), Vector2f(-.9, .8), Vector2f(-.1,
 			.8), Vector2f(-.1, -.8) };
 	Polygon poly1 = Polygon(ph.position, p.angle, 4, shape1);
@@ -73,9 +74,11 @@ void Game::run() {
 
 		if (in.getThrottle()) {
 			ph.velocity += FromAngle(0.01, p.angle);
-			Vector2f throttle = FromAngle((float) 30, p.angle); //Tilføjer en kraft på 30 newton i den vinkel
+			Vector2f throttle = FromAngle(getMaxThrottle(), p.angle); //Tilføjer en kraft på 30 newton i den vinkel
 			ph.addForce(throttle);
-			GD.cmd_text(70, 70, 16, OPT_SIGNED, "touch");
+			if (energy > 1)
+				energy -= 1;
+
 		}
 		ph.addAcceleration(Vector2f(0, -GRAVITY));
 
@@ -106,6 +109,9 @@ void Game::run() {
 			ph.position.x = 48;
 		}
 
+		energy += .2;
+		energy = clamp(energy, 0, maxEnergy);
+
 		world.update(ph.position.x);
 		p.height = ph.position.y - groundHeight;
 
@@ -113,21 +119,17 @@ void Game::run() {
 
 		//Background.render();
 
-		world.render();
+		//world.getNormal(ph.position.x, groundNormal);
+		//GD.ColorRGB(PURPLE);
+		//renderVector2f(groundNormal, ph.position.x, groundHeight, 1.5);
+		//Vector2f tangent = Vector2f(groundNormal.y, -groundNormal.x);
+		//GD.ColorRGB(ORANGE);
+		//renderVector2f(tangent, ph.position.x, groundHeight, 1.5);
 
-
-		world.getNormal(ph.position.x, groundNormal);
-		GD.ColorRGB(PURPLE);
-		renderVector2f(groundNormal, ph.position.x, groundHeight, 1.5);
-		Vector2f tangent = Vector2f(groundNormal.y, -groundNormal.x);
-		GD.ColorRGB(ORANGE);
-		renderVector2f(tangent, ph.position.x, groundHeight, 1.5);
-
-		GD.Begin(POINTS);
-		GD.PointSize(16 * 4);
-		GD.ColorRGB(RED);
-
-		cam.Vertex2f(ph.position.x, groundHeight);
+		//GD.Begin(POINTS);
+		//GD.PointSize(16 * 4);
+		//GD.ColorRGB(RED);
+		//cam.Vertex2f(ph.position.x, groundHeight);
 
 		GD.RestoreContext();
 
@@ -195,6 +197,9 @@ void Game::run() {
 		//Background.render();
 		sprite.render(ph.position.x, ph.position.y, p.angle + PI / 2, 1, 0);
 		//sky.render(6, 6, 0, 1, 0);
+
+		world.render();
+
 		GD.RestoreContext();
 
 		renderVector2f(ph.velocity, ph.position.x, ph.position.y, 1);
@@ -203,4 +208,19 @@ void Game::run() {
 
 		GD.swap();
 	}
+
+}
+
+float Game::getMaxThrottle() {
+	float max = 10;
+	if (energy <= 1) {
+		return 0;
+	}
+
+	float maxHeight = 30;
+	float minHeight = 10;
+
+	max *= (1-(clamp(cam.getY(), minHeight, maxHeight) - minHeight) / (maxHeight - minHeight));
+
+	return max;
 }
