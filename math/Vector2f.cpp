@@ -64,6 +64,10 @@ Vector2f Vector2f::RightNormal(const Vector2f& arg) {
 	return Vector2f(arg.y,-arg.x);
 }
 
+float determinant(const Vector2f& a, const Vector2f& b){
+	return a.x * b.y - a.y * b.x;
+}
+
 Vector2f& Vector2f::operator=(const Vector2f& arg) {
 	this->x = arg.x;
 	this->y = arg.y;

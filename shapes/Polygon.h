@@ -17,6 +17,8 @@ protected:
 	int numVertexs;
 	Vector2f* vertex;
 
+	float hitRadius;
+
 	Vector2f getVertexTransformed(int index);
 
 	static bool RayIntersectsSegment(Ray ray, Vector2f pt0, Vector2f pt1);
@@ -25,6 +27,8 @@ protected:
 public:
 	const float& angle;
 	const Vector2f& Position;
+
+	float getHitradius();
 
 	Polygon(Vector2f &position, float &angle, int numVertex, Vector2f data[]);
 	virtual ~Polygon();

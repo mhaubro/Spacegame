@@ -17,13 +17,25 @@ Polygon::Polygon(Vector2f &position, float &angle, int numVertex,
 		Vector2f data[]) :
 		Position(position), angle(angle), numVertexs(numVertex) {
 	vertex = new Vector2f[numVertex];
+
+	float d = 0;
+	float length;
 	for (int i = 0; i < numVertex; ++i) {
+		length = data[i].length();
+		if (length > d){
+			d = length;
+		}
 		vertex[i] = Vector2f(data[i]);
 	}
+	hitRadius = d;
 }
 
 Polygon::~Polygon() {
 	// TODO Auto-generated destructor stub
+}
+
+float Polygon::getHitradius(){
+	return hitRadius;
 }
 
 Vector2f Polygon::getVertexTransformed(int index) {
@@ -40,12 +52,29 @@ void Polygon::render() {
 	cam.Vertex2f(getVertexTransformed(0));
 }
 
-bool Polygon::Collide(Polygon A, Polygon B,
-		Vector2f& MTD) {
+bool Polygon::Collide(Polygon A, Polygon B, Vector2f& MTD) {
 
-	Vector2f dir = Vector2f(0,1);
+	if (abs((Vector2f() + A.Position - B.Position).length()) > A.hitRadius + B.hitRadius){
+		return false;
+	}
 
-	return RayCast(Ray(A.Position, dir), B);
+	GD.cmd_text(4, 100, 16, OPT_SIGNED, "Can Collide");
+
+	Vector2f dir = Vector2f(0, 1);
+
+	for (int i = 0; i < A.numVertexs; i++) {
+		if (RayCast(Ray(A.getVertexTransformed(i), dir), B)) {
+			return true;
+		}
+	}
+
+	for (int i = 0; i < B.numVertexs; i++) {
+		if (RayCast(Ray(B.getVertexTransformed(i), dir), A)) {
+			return true;
+		}
+	}
+
+	return false;
 
 }
 
@@ -84,36 +113,32 @@ Vector2f Polygon::FindMTD(Vector2f* PushVectors, int iNumVectors) {
 bool Polygon::RayIntersectsSegment(Ray ray, Vector2f pt0, Vector2f pt1) {
 	Vector2f edge = pt1 - pt0;
 	Vector2f edgeNormal = Vector2f::LeftNormal(edge);
-	float normalDotD = edge.dotProduct(ray.direction);
+
+	Vector2f d = ray.origin - pt0;
+
+	float div = edge.dotProduct(Vector2f::LeftNormal(ray.direction));
 
 	// if the edge and the ray direction is parallel, they will not cross.
-	if (Equals(normalDotD, 0.0f, 0.001f)) {
+	if (Equals(div, 0.0f, 0.001f)) {
 		return false;
 	}
 
-	Vector2f d0 = pt0 - ray.origin;
-	Vector2f d1 = pt1 - ray.origin;
+	float u = determinant(edge, d) / div;
+	float v = d.dotProduct(Vector2f::LeftNormal(ray.direction)) / div;
 
-
-	float d = d0.dotProduct(ray.direction);
-	float s0 = d0.dotProduct(Vector2f::LeftNormal(ray.direction)) / normalDotD;
-	float s1 = d1.dotProduct(Vector2f::LeftNormal(ray.direction)) / normalDotD;
-
-	return d > 0 && s0 > 0 && s0 < 1.0f && s1 > 0 && s1 < 1.0f;
+	return u > 0 && v > 0.0f && v <= 1.0f;
 }
 
 bool Polygon::RayCast(Ray ray, Polygon polygon) {
 	int crossings = 0;
 
 	for (int i = 0; i < polygon.numVertexs; i++) {
-		int j = (i+1)%polygon.numVertexs;
-		if (RayIntersectsSegment(ray, polygon.getVertexTransformed(i), polygon.getVertexTransformed(j))) {
+		int j = (i + 1) % polygon.numVertexs;
+		if (RayIntersectsSegment(ray, polygon.getVertexTransformed(i),
+				polygon.getVertexTransformed(j))) {
 			crossings++;
 		}
 	}
-
-	GD.cmd_text(4, 100,16,OPT_SIGNED, "crossings:");
-	GD.cmd_number(4,116, 16, OPT_SIGNED, crossings);
 
 	return (crossings > 0) && ((crossings % 2) != 0);
 }

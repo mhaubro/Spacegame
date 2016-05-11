@@ -45,6 +45,8 @@ public:
 
 };
 
-extern Vector2f FromAngle(float length, float angle);
+Vector2f FromAngle(float length, float angle);
+
+float determinant(const Vector2f& a, const Vector2f& b);
 
 #endif /* SRC_MATH_VECTOR2F_H_ */

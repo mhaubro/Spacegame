@@ -15,8 +15,8 @@ public:
 	Ray(Vector2f origin, Vector2f direction);
 	virtual ~Ray();
 
-	const Vector2f origin;
-	const Vector2f direction;
+	Vector2f origin;
+	Vector2f direction;
 
 	Vector2f getPoint(float t);
 
