@@ -47,14 +47,15 @@ void Game::run() {
 
 	//
 	Vector2f shape1[] = { Vector2f(-.7, 0), Vector2f(-.9, .4), Vector2f(-.9,
-			.8), Vector2f(-.1,.8), Vector2f(-.1,.4), Vector2f(1,.1), Vector2f(1,-.1), Vector2f(-.1,-.4),
-			Vector2f(-.1,-.8), Vector2f(-.9,-.8), Vector2f(-.9,-.4) };
+			.8), Vector2f(-.1, .8), Vector2f(-.1, .4), Vector2f(1, .1),
+			Vector2f(1, -.1), Vector2f(-.1, -.4), Vector2f(-.1, -.8), Vector2f(
+					-.9, -.8), Vector2f(-.9, -.4) };
 	Polygon poly1 = Polygon(ph.position, p.angle, 11, shape1);
 
 	float angle = 0;
 	Vector2f poly2Pos = Vector2f(20, 10);
-	Vector2f shape3[] = { Vector2f(-2, -2), Vector2f(-2, 2),
-			Vector2f(2, -2), Vector2f(2, 2) };
+	Vector2f shape3[] = { Vector2f(-2, -2), Vector2f(-2, 2), Vector2f(2, -2),
+			Vector2f(2, 2) };
 	Polygon poly3 = Polygon(poly2Pos, angle, 4, shape3);
 
 	Sprite sprite = Sprite(SPACESHIP_HANDLE, 32, 32, 1);
@@ -141,16 +142,24 @@ void Game::run() {
 		Vector2f temp1 = (Vector2f() + poly3.Position) - poly1.Position;
 		renderVector2f(temp1, ph.position.x, ph.position.y, 1);
 
-		static Vector2f temp = Vector2f();
-		if (Polygon::Collide(poly1, poly3, temp)) {
+		static Vector2f mtd = Vector2f();
+		static Vector2f normal = Vector2f();
+		if (Polygon::Collide(ph.velocity, poly1, poly3, mtd, normal)) {
+			normal = normal.normalized();
 
-			//ph.position += temp;
+			ph.velocity = ph.velocity
+					- (normal * (ph.velocity.dotProduct(normal) * 2));
+
+			ph.velocity *= .4;
+			ph.position += mtd;
 			GD.ColorRGB(RED);
 
 			poly1.render();
 
 		}
-		if (Polygon::TerrainCollide(poly1, world, temp)) {
+		GD.cmd_text(4, 66, 16, OPT_SIGNED, "POW");
+		GD.cmd_number(36, 66, 16, OPT_SIGNED, mtd.x);
+		if (Polygon::TerrainCollide(poly1, world, mtd)) {
 			GD.ColorRGB(BLUE);
 			static Vector2f terrainNormal = Vector2f(); //vector terrain normal
 			static Vector2f terrainTangent = Vector2f();
@@ -166,7 +175,7 @@ void Game::run() {
 			ph.velocity *= .4;
 			//velocity = (velocity * terrainNormal * .4) + (velocity * terrainTangent*.99);
 
-			ph.position += temp;
+			ph.position += mtd;
 		}
 
 		poly3.render();

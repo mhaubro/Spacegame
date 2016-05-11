@@ -52,7 +52,7 @@ void Polygon::render() {
 	cam.Vertex2f(getVertexTransformed(0));
 }
 
-bool Polygon::Collide(Polygon A, Polygon B, Vector2f& MTD) {
+bool Polygon::Collide(Vector2f dir, Polygon A, Polygon B, Vector2f& MTD, Vector2f& normal) {
 
 	if (abs((Vector2f() + A.Position - B.Position).length()) > A.hitRadius + B.hitRadius){
 		return false;
@@ -60,22 +60,26 @@ bool Polygon::Collide(Polygon A, Polygon B, Vector2f& MTD) {
 
 	GD.cmd_text(4, 100, 16, OPT_SIGNED, "Can Collide");
 
-	Vector2f dir = Vector2f(0, 1);
+	dir = dir.normalized();
+
+	float t = FLOAT_MAX;
+	bool collision = false;
 
 	for (int i = 0; i < A.numVertexs; i++) {
-		if (RayCast(Ray(A.getVertexTransformed(i), dir), B)) {
-			return true;
+		if (RayCast(Ray(A.getVertexTransformed(i), dir), B,t, normal)) {
+			collision = true;
 		}
 	}
 
 	for (int i = 0; i < B.numVertexs; i++) {
-		if (RayCast(Ray(B.getVertexTransformed(i), dir), A)) {
-			return true;
+		if (RayCast(Ray(B.getVertexTransformed(i), dir), A,t, normal)) {
+			collision = true;
 		}
 	}
 
-	return false;
+	MTD = dir * -t;
 
+	return collision;
 }
 
 bool Polygon::TerrainCollide(Polygon A, World& world, Vector2f& MTD) {
@@ -110,7 +114,7 @@ Vector2f Polygon::FindMTD(Vector2f* PushVectors, int iNumVectors) {
 	return MTD;
 }
 
-bool Polygon::RayIntersectsSegment(Ray ray, Vector2f pt0, Vector2f pt1) {
+bool Polygon::RayIntersectsSegment(Ray ray, Vector2f pt0, Vector2f pt1, float &t) {
 	Vector2f edge = pt1 - pt0;
 	Vector2f edgeNormal = Vector2f::LeftNormal(edge);
 
@@ -120,23 +124,32 @@ bool Polygon::RayIntersectsSegment(Ray ray, Vector2f pt0, Vector2f pt1) {
 
 	// if the edge and the ray direction is parallel, they will not cross.
 	if (Equals(div, 0.0f, 0.001f)) {
+		t = FLOAT_MAX;
 		return false;
 	}
 
 	float u = determinant(edge, d) / div;
 	float v = d.dotProduct(Vector2f::LeftNormal(ray.direction)) / div;
 
+	t = u;
+
 	return u > 0 && v > 0.0f && v <= 1.0f;
 }
 
-bool Polygon::RayCast(Ray ray, Polygon polygon) {
+bool Polygon::RayCast(Ray ray, Polygon polygon, float &t, Vector2f& normal) {
 	int crossings = 0;
+
+	float distance;
 
 	for (int i = 0; i < polygon.numVertexs; i++) {
 		int j = (i + 1) % polygon.numVertexs;
 		if (RayIntersectsSegment(ray, polygon.getVertexTransformed(i),
-				polygon.getVertexTransformed(j))) {
+				polygon.getVertexTransformed(j),distance)) {
 			crossings++;
+			if (distance < t && distance < FLOAT_MAX){
+				t = distance;
+				normal = Vector2f::RightNormal(polygon.getVertexTransformed(j)-polygon.getVertexTransformed(i));
+			}
 		}
 	}
 

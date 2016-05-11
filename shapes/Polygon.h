@@ -21,8 +21,8 @@ protected:
 
 	Vector2f getVertexTransformed(int index);
 
-	static bool RayIntersectsSegment(Ray ray, Vector2f pt0, Vector2f pt1);
-	static bool RayCast(Ray ray, Polygon polygon);
+	static bool RayIntersectsSegment(Ray ray, Vector2f pt0, Vector2f pt1, float &t);
+	static bool RayCast(Ray ray, Polygon polygon, float &t, Vector2f& normal);
 
 public:
 	const float& angle;
@@ -35,7 +35,7 @@ public:
 
 	void render();
 
-	static bool Collide(Polygon A, Polygon B, Vector2f& MTD);
+	static bool Collide(Vector2f dir, Polygon A, Polygon B, Vector2f& MTD, Vector2f& normal);
 	static bool TerrainCollide(Polygon A, World& world, Vector2f& MTD);
 	static Vector2f FindMTD(Vector2f* PushVectors, int iNumVectors);
 
