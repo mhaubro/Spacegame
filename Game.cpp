@@ -133,19 +133,13 @@ void Game::run() {
 
 		GD.RestoreContext();
 
+		Vector2f temp1 = (Vector2f() + poly3.Position) - poly1.Position;
+		renderVector2f(temp1,ph.position.x,ph.position.y,1);
+
 		static Vector2f temp = Vector2f();
-		if (Polygon::Collide(poly1, poly3, temp)
-				|| Polygon::Collide(poly2, poly3, temp)) {
-			Vector2f normal = temp.normalized();
-			Vector2f tangent = Vector2f(normal.y, -normal.x);
+		if (Polygon::Collide(poly1, poly3, temp)) {
 
-			ph.velocity = ph.velocity
-					- (normal * (ph.velocity.dotProduct(normal) * 2));
-
-			ph.velocity *= .4;
-			//velocity = (velocity * terrainNormal * .4) + (velocity * terrainTangent*.99);
-
-			ph.position += temp;
+			//ph.position += temp;
 			GD.ColorRGB(RED);
 
 			poly1.render();

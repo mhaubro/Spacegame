@@ -15,4 +15,8 @@ float clamp(float x, float min, float max) {
 	return x;
 }
 
+bool Equals(float a, float b, float tolerance){
+	return a <= b + tolerance && a >= b - tolerance;
+}
+
 

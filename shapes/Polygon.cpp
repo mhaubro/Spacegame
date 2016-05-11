@@ -9,6 +9,9 @@
 #include "GD2.h"
 #include "Graphics.h"
 #include "math.h"
+#include "Mathematics.h"
+
+#define FLOAT_MAX 10000000
 
 Polygon::Polygon(Vector2f &position, float &angle, int numVertex,
 		Vector2f data[]) :
@@ -37,46 +40,16 @@ void Polygon::render() {
 	cam.Vertex2f(getVertexTransformed(0));
 }
 
-bool Polygon::Collide(Polygon A, Polygon B, Vector2f& MTD) {
+bool Polygon::Collide(Polygon A, Polygon B,
+		Vector2f& MTD) {
 
-	Vector2f Axis[32];
-	int iNumAxis = 0;
+	Vector2f dir = Vector2f(0,1);
 
-	//TODO Optimize with direction. no reason to test a normal, that points away.
-	//Vector2f dir = A.Position - B.Position;
-	for (int i = 0; i < A.numVertexs; i++) {
-		Vector2f E = A.getVertexTransformed((i + 1) % A.numVertexs)
-				- A.getVertexTransformed(i);
-		Vector2f N = Vector2f(-E.y, E.x);
+	return RayCast(Ray(A.Position, dir), B);
 
-		if (AxisSeparatePolygons(N, A, B))
-			return false;
-
-		Axis[iNumAxis++] = N;
-	}
-	for (int i = 0; i < B.numVertexs; i++) {
-		Vector2f E = B.getVertexTransformed((i + 1) % B.numVertexs)
-				- B.getVertexTransformed(i);
-		Vector2f N = Vector2f(-E.y, E.x);
-
-		if (AxisSeparatePolygons(N, A, B))
-			return false;
-
-		Axis[iNumAxis++] = N;
-	}
-
-	// find the MTD among all the separation vectors
-	MTD = FindMTD(Axis, iNumAxis);
-
-	// makes sure the push vector is pushing A away from B
-	Vector2f D = A.Position - B.Position;
-	if (D.dotProduct(MTD) < 0.0f)
-		MTD = MTD * -1;
-
-	return true;
 }
 
-bool Polygon::TerrainCollide(Polygon A, World& world,Vector2f& MTD) {
+bool Polygon::TerrainCollide(Polygon A, World& world, Vector2f& MTD) {
 
 	Vector2f temp;
 	float height;
@@ -95,43 +68,6 @@ bool Polygon::TerrainCollide(Polygon A, World& world,Vector2f& MTD) {
 	return false;
 }
 
-bool Polygon::AxisSeparatePolygons(Vector2f& Axis, Polygon A, Polygon B) {
-	float mina, maxa;
-	float minb, maxb;
-
-	CalculateInterval(Axis, A, mina, maxa);
-	CalculateInterval(Axis, B, minb, maxb);
-
-	if (mina > maxb || minb > maxa)
-		return true;
-
-	// find the interval overlap
-	float d0 = maxa - minb;
-	float d1 = maxb - mina;
-	float depth = (d0 < d1) ? d0 : d1;
-
-	// convert the separation axis into a push vector (re-normalise
-	// the axis and multiply by interval overlap)
-	float axis_length_squared = Axis.x * Axis.x + Axis.y * Axis.y;
-
-	Axis *= depth / axis_length_squared;
-
-	return false;
-}
-
-void Polygon::CalculateInterval(Vector2f Axis, Polygon P, float& min,
-		float& max) {
-	float d = Axis.dotProduct(P.getVertexTransformed(0));
-	min = max = d;
-	for (int i = 0; i < P.numVertexs; i++) {
-		d = Axis.dotProduct(P.getVertexTransformed(i));
-		if (d < min)
-			min = d;
-		else if (d > max)
-			max = d;
-	}
-}
-
 Vector2f Polygon::FindMTD(Vector2f* PushVectors, int iNumVectors) {
 	Vector2f MTD = PushVectors[0];
 	float mind2 = PushVectors[0].dotProduct(PushVectors[0]);
@@ -143,5 +79,42 @@ Vector2f Polygon::FindMTD(Vector2f* PushVectors, int iNumVectors) {
 		}
 	}
 	return MTD;
+}
+
+bool Polygon::RayIntersectsSegment(Ray ray, Vector2f pt0, Vector2f pt1) {
+	Vector2f edge = pt1 - pt0;
+	Vector2f edgeNormal = Vector2f::LeftNormal(edge);
+	float normalDotD = edge.dotProduct(ray.direction);
+
+	// if the edge and the ray direction is parallel, they will not cross.
+	if (Equals(normalDotD, 0.0f, 0.001f)) {
+		return false;
+	}
+
+	Vector2f d0 = pt0 - ray.origin;
+	Vector2f d1 = pt1 - ray.origin;
+
+
+	float d = d0.dotProduct(ray.direction);
+	float s0 = d0.dotProduct(Vector2f::LeftNormal(ray.direction)) / normalDotD;
+	float s1 = d1.dotProduct(Vector2f::LeftNormal(ray.direction)) / normalDotD;
+
+	return d > 0 && s0 > 0 && s0 < 1.0f && s1 > 0 && s1 < 1.0f;
+}
+
+bool Polygon::RayCast(Ray ray, Polygon polygon) {
+	int crossings = 0;
+
+	for (int i = 0; i < polygon.numVertexs; i++) {
+		int j = (i+1)%polygon.numVertexs;
+		if (RayIntersectsSegment(ray, polygon.getVertexTransformed(i), polygon.getVertexTransformed(j))) {
+			crossings++;
+		}
+	}
+
+	GD.cmd_text(4, 100,16,OPT_SIGNED, "crossings:");
+	GD.cmd_number(4,116, 16, OPT_SIGNED, crossings);
+
+	return (crossings > 0) && ((crossings % 2) != 0);
 }
 

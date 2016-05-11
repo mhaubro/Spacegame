@@ -21,6 +21,8 @@ public:
 
 	void wrap(Vector2f min, Vector2f max);
 	Vector2f normalized();
+	static Vector2f LeftNormal(const Vector2f& arg);
+	static Vector2f RightNormal(const Vector2f& arg);
 
 	Vector2f& operator=(const Vector2f& arg);
 	Vector2f& operator+=(const Vector2f& arg);

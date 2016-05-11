@@ -10,4 +10,6 @@
 
 float clamp(float x, float min, float max);
 
+bool Equals(float a, float b, float tolerance);
+
 #endif /* SRC_MATH_MATHEMATICS_H_ */
