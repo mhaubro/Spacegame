@@ -22,7 +22,7 @@ Polygon::Polygon(Vector2f &position, float &angle, int numVertex,
 	float length;
 	for (int i = 0; i < numVertex; ++i) {
 		length = data[i].length();
-		if (length > d){
+		if (length > d) {
 			d = length;
 		}
 		vertex[i] = Vector2f(data[i]);
@@ -34,7 +34,7 @@ Polygon::~Polygon() {
 	// TODO Auto-generated destructor stub
 }
 
-float Polygon::getHitradius(){
+float Polygon::getHitradius() {
 	return hitRadius;
 }
 
@@ -52,34 +52,43 @@ void Polygon::render() {
 	cam.Vertex2f(getVertexTransformed(0));
 }
 
-bool Polygon::Collide(Vector2f dir, Polygon A, Polygon B, Vector2f& MTD, Vector2f& normal) {
+bool Polygon::Collide(Polygon A, Polygon B, Vector2f& MTD) {
 
-	if (abs((Vector2f() + A.Position - B.Position).length()) > A.hitRadius + B.hitRadius){
-		return false;
-	}
+	Vector2f Axis[32];
+	int iNumAxis = 0;
 
-	GD.cmd_text(4, 100, 16, OPT_SIGNED, "Can Collide");
-
-	dir = dir.normalized();
-
-	float t = FLOAT_MAX;
-	bool collision = false;
-
+	//TODO Optimize with direction. no reason to test a normal, that points away.
+	//Vector2f dir = A.Position - B.Position;
 	for (int i = 0; i < A.numVertexs; i++) {
-		if (RayCast(Ray(A.getVertexTransformed(i), dir), B,t, normal)) {
-			collision = true;
-		}
-	}
+		Vector2f E = A.getVertexTransformed((i + 1) % A.numVertexs)
+				- A.getVertexTransformed(i);
+		Vector2f N = Vector2f(-E.y, E.x);
 
+		if (AxisSeparatePolygons(N, A, B))
+			return false;
+
+		Axis[iNumAxis++] = N;
+	}
 	for (int i = 0; i < B.numVertexs; i++) {
-		if (RayCast(Ray(B.getVertexTransformed(i), -dir), A,t, normal)) {
-			collision = true;
-		}
+		Vector2f E = B.getVertexTransformed((i + 1) % B.numVertexs)
+				- B.getVertexTransformed(i);
+		Vector2f N = Vector2f(-E.y, E.x);
+
+		if (AxisSeparatePolygons(N, A, B))
+			return false;
+
+		Axis[iNumAxis++] = N;
 	}
 
-	MTD = dir * t;
+	// find the MTD among all the separation vectors
+	MTD = FindMTD(Axis, iNumAxis);
 
-	return collision;
+	// makes sure the push vector is pushing A away from B
+	Vector2f D = Vector2f() + A.Position - B.Position;
+	if (D.dotProduct(MTD) < 0.0f)
+		MTD = -MTD;
+
+	return true;
 }
 
 bool Polygon::TerrainCollide(Polygon A, World& world, Vector2f& MTD) {
@@ -114,7 +123,45 @@ Vector2f Polygon::FindMTD(Vector2f* PushVectors, int iNumVectors) {
 	return MTD;
 }
 
-bool Polygon::RayIntersectsSegment(Ray ray, Vector2f pt0, Vector2f pt1, float &t) {
+bool Polygon::AxisSeparatePolygons(Vector2f& Axis, Polygon A, Polygon B) {
+	float mina, maxa;
+	float minb, maxb;
+
+	CalculateInterval(Axis, A, mina, maxa);
+	CalculateInterval(Axis, B, minb, maxb);
+
+	if (mina > maxb || minb > maxa)
+		return true;
+
+	// find the interval overlap
+	float d0 = maxa - minb;
+	float d1 = maxb - mina;
+	float depth = (d0 < d1) ? d0 : d1;
+
+	// convert the separation axis into a push vector (re-normalise
+	// the axis and multiply by interval overlap)
+	float axis_length_squared = Axis.x * Axis.x + Axis.y * Axis.y;
+
+	Axis *= depth / axis_length_squared;
+
+	return false;
+}
+
+void Polygon::CalculateInterval(Vector2f Axis, Polygon P, float& min,
+		float& max) {
+	float d = Axis.dotProduct(P.getVertexTransformed(0));
+	min = max = d;
+	for (int i = 0; i < P.numVertexs; i++) {
+		d = Axis.dotProduct(P.getVertexTransformed(i));
+		if (d < min)
+			min = d;
+		else if (d > max)
+			max = d;
+	}
+}
+
+bool Polygon::RayIntersectsSegment(Ray ray, Vector2f pt0, Vector2f pt1,
+		float &t) {
 	Vector2f edge = pt1 - pt0;
 	Vector2f edgeNormal = Vector2f::LeftNormal(edge);
 
@@ -143,11 +190,13 @@ bool Polygon::RayCast(Ray ray, Polygon polygon, float &t, Vector2f& normal) {
 	for (int i = 0; i < polygon.numVertexs; i++) {
 		int j = (i + 1) % polygon.numVertexs;
 		if (RayIntersectsSegment(ray, polygon.getVertexTransformed(i),
-				polygon.getVertexTransformed(j),distance)) {
+				polygon.getVertexTransformed(j), distance)) {
 			crossings++;
-			if (distance < t && distance < FLOAT_MAX){
+			if (distance < t && distance < FLOAT_MAX) {
 				t = distance;
-				normal = Vector2f::RightNormal(polygon.getVertexTransformed(j)-polygon.getVertexTransformed(i));
+				normal = Vector2f::RightNormal(
+						polygon.getVertexTransformed(j)
+								- polygon.getVertexTransformed(i));
 			}
 		}
 	}
