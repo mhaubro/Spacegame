@@ -72,12 +72,12 @@ bool Polygon::Collide(Vector2f dir, Polygon A, Polygon B, Vector2f& MTD, Vector2
 	}
 
 	for (int i = 0; i < B.numVertexs; i++) {
-		if (RayCast(Ray(B.getVertexTransformed(i), dir), A,t, normal)) {
+		if (RayCast(Ray(B.getVertexTransformed(i), -dir), A,t, normal)) {
 			collision = true;
 		}
 	}
 
-	MTD = dir * -t;
+	MTD = dir * t;
 
 	return collision;
 }
@@ -119,7 +119,6 @@ bool Polygon::RayIntersectsSegment(Ray ray, Vector2f pt0, Vector2f pt1, float &t
 	Vector2f edgeNormal = Vector2f::LeftNormal(edge);
 
 	Vector2f d = ray.origin - pt0;
-
 	float div = edge.dotProduct(Vector2f::LeftNormal(ray.direction));
 
 	// if the edge and the ray direction is parallel, they will not cross.

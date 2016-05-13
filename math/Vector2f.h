@@ -41,6 +41,8 @@ public:
 	Vector2f operator+(const float arg);
 	Vector2f operator-(const float arg);
 
+	Vector2f operator-();
+
 
 
 };

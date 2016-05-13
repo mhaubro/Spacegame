@@ -147,3 +147,8 @@ Vector2f Vector2f::operator-(const float arg) {
 	return V;
 }
 
+Vector2f Vector2f::operator-(){
+	Vector2f V = Vector2f(-this->x,-this->y);
+	return V;
+}
+
