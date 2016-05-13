@@ -1,3 +1,7 @@
+#pragma once
+
+#include <sstream>
+
 #include "Game.h"
 #include "myassets.h"
 #include "UI.h"
@@ -43,17 +47,17 @@ void Game::run() {
 
 	//
 	Vector2f shape1[] = { Vector2f(-.2, .4), Vector2f(1, .1), Vector2f(1, -.1),
-			Vector2f(-.2, -.4) };
-	Vector2f shape2[] = { Vector2f(-.9, -.8), Vector2f(-.9, .8), Vector2f(-.1,
-			.8), Vector2f(-.1, -.8) };
-	Polygon poly1 = Polygon(ph.position, p.angle, 4, shape1);
-	Polygon poly2 = Polygon(ph.position, p.angle, 4, shape2);
+				Vector2f(-.2, -.4) };
+		Vector2f shape2[] = { Vector2f(-.9, -.8), Vector2f(-.9, .8), Vector2f(-.1,
+				.8), Vector2f(-.1, -.8) };
+		Polygon poly1 = Polygon(ph.position, p.angle, 4, shape1);
+		Polygon poly2 = Polygon(ph.position, p.angle, 4, shape2);
 
 	float angle = 0;
 	Vector2f poly2Pos = Vector2f(20, 10);
 	Vector2f shape3[] = { Vector2f(-1, -1), Vector2f(-1, 1), Vector2f(0, 2),
-			Vector2f(1, 1), Vector2f(1, -1) };
-	Polygon poly3 = Polygon(poly2Pos, angle, 5, shape3);
+				Vector2f(1, 1), Vector2f(1, -1) };
+		Polygon poly3 = Polygon(poly2Pos, angle, 5, shape3);
 
 	Sprite sprite = Sprite(SPACESHIP_HANDLE, 32, 32, 1);
 
@@ -85,6 +89,9 @@ void Game::run() {
 		//Time registering and change of state
 		dt = t.read();
 		t.reset();
+		float FPS = 1.0f / dt;
+		GD.cmd_text(4, 50, 16, OPT_SIGNED, "FPS:");
+		GD.cmd_number(36, 50, 16, OPT_SIGNED, FPS);
 
 		ph.changeState(dt);
 		//End of time.
@@ -133,26 +140,28 @@ void Game::run() {
 
 		GD.RestoreContext();
 
-		static Vector2f temp = Vector2f();
-		if (Polygon::Collide(poly1, poly3, temp)
-				|| Polygon::Collide(poly2, poly3, temp)) {
-			Vector2f normal = temp.normalized();
-			Vector2f tangent = Vector2f(normal.y, -normal.x);
+		Vector2f temp1 = (Vector2f() + poly3.Position) - poly1.Position;
+		renderVector2f(temp1, ph.position.x, ph.position.y, 1);
+
+		static Vector2f mtd = Vector2f();
+		static Vector2f normal = Vector2f();
+		if (Polygon::Collide(poly1, poly3, mtd) || Polygon::Collide(poly2,poly3,mtd)) {
+			normal = mtd.normalized();
 
 			ph.velocity = ph.velocity
 					- (normal * (ph.velocity.dotProduct(normal) * 2));
 
 			ph.velocity *= .4;
-			//velocity = (velocity * terrainNormal * .4) + (velocity * terrainTangent*.99);
-
-			ph.position += temp;
+			ph.position += mtd;
 			GD.ColorRGB(RED);
 
 			poly1.render();
-			poly2.render();
-
 		}
-		if (Polygon::TerrainCollide(poly1, world, temp)) {
+
+		GD.cmd_text(4, 66, 16, OPT_SIGNED, "POW");
+		GD.cmd_number(36, 66, 16, OPT_SIGNED, mtd.x);
+
+		if (Polygon::TerrainCollide(poly1, world, mtd) || Polygon::TerrainCollide(poly2, world, mtd)) {
 			GD.ColorRGB(BLUE);
 			static Vector2f terrainNormal = Vector2f(); //vector terrain normal
 			static Vector2f terrainTangent = Vector2f();
@@ -168,25 +177,7 @@ void Game::run() {
 			ph.velocity *= .4;
 			//velocity = (velocity * terrainNormal * .4) + (velocity * terrainTangent*.99);
 
-			ph.position += temp;
-		}
-		if (Polygon::TerrainCollide(poly2, world, temp)) {
-			GD.ColorRGB(BLUE);
-			static Vector2f terrainNormal = Vector2f(); //vector terrain normal
-			static Vector2f terrainTangent = Vector2f();
-
-			world.getNormal(ph.position.x, terrainNormal);
-			terrainTangent.x = terrainNormal.y;
-			terrainTangent.y = -terrainNormal.x;
-
-			ph.velocity = ph.velocity
-					- (terrainNormal
-							* (ph.velocity.dotProduct(terrainNormal) * 2));
-
-			ph.velocity *= .4;
-			//velocity = (velocity * terrainNormal * .4) + (velocity * terrainTangent*.99);
-
-			ph.position += temp;
+			ph.position += mtd;
 		}
 
 		poly3.render();
@@ -220,7 +211,9 @@ float Game::getMaxThrottle() {
 	float maxHeight = 30;
 	float minHeight = 10;
 
-	max *= (1-(clamp(cam.getY(), minHeight, maxHeight) - minHeight) / (maxHeight - minHeight));
+	max *= (1
+			- (clamp(cam.getY(), minHeight, maxHeight) - minHeight)
+					/ (maxHeight - minHeight));
 
 	return max;
 }

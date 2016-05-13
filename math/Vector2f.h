@@ -21,6 +21,8 @@ public:
 
 	void wrap(Vector2f min, Vector2f max);
 	Vector2f normalized();
+	static Vector2f LeftNormal(const Vector2f& arg);
+	static Vector2f RightNormal(const Vector2f& arg);
 
 	Vector2f& operator=(const Vector2f& arg);
 	Vector2f& operator+=(const Vector2f& arg);
@@ -39,10 +41,14 @@ public:
 	Vector2f operator+(const float arg);
 	Vector2f operator-(const float arg);
 
+	Vector2f operator-();
+
 
 
 };
 
-extern Vector2f FromAngle(float length, float angle);
+Vector2f FromAngle(float length, float angle);
+
+float determinant(const Vector2f& a, const Vector2f& b);
 
 #endif /* SRC_MATH_VECTOR2F_H_ */
