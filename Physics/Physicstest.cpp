@@ -56,10 +56,10 @@ void Physicstest::runloop(Input in, Timer t, float *lasttime, float *currtime, c
 	//}
 
 	ph1->addForce(force);
-	ph1->changeState(dt);
+	ph1->changeState();
 	ph1->checkBounds();
 	ph2->addForce(force);
-	ph2->changeState(dt);
+	ph2->changeState();
 	ph2->checkBounds();
 
 

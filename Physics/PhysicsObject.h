@@ -28,7 +28,7 @@ public:
 
 	void addAcceleration(Vector2f v);
 	void addForce(Vector2f v);
-	void changeState(float dt);
+	void changeState();
 
 	void checkBounds();
 	bool Collision(PhysicsObject& ph);

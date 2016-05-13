@@ -3,8 +3,10 @@
 #include "math.h"
 #include "GD2.h"
 #include "graphics.h"
+#include "GameTimer.h"
 
-void PhysicsObject::changeState(float dt) {
+void PhysicsObject::changeState() {
+	float dt = timer.getDeltaTime();
 	accelerations += forces * (1 / mass);
 	velocity += accelerations * dt;
 	position += velocity * dt;

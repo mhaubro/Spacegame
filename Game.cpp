@@ -15,6 +15,8 @@
 #include "BackGround.h"
 #include "Polygon.h"
 #include "Mathematics.h"
+#include "GameTimer.h"
+#include "Animation.h"
 
 Vector2f startpos = Vector2f(0, 10);
 Vector2f startvel = Vector2f(6, 4);
@@ -32,9 +34,7 @@ Game::Game() :
 
 void Game::run() {
 	running = true;
-	Timer t;
-	t.start(); //HUSK AT STARTE TIMER
-	float dt = 0;
+
 	Input in = Input();
 	UI ui = UI(this);
 	//GD.ClearColorRGB(BLACK);
@@ -60,10 +60,13 @@ void Game::run() {
 		Polygon poly3 = Polygon(poly2Pos, angle, 5, shape3);
 
 	Sprite sprite = Sprite(SPACESHIP_HANDLE, 32, 32, 1);
+	Sprite exhaust = Sprite(EXHAUST1_HANDLE, 8, 8, 1);
+	Animation anim = Animation(&exhaust, .1, 4);
 
 	while (running) {
 
 		in.pull();
+		timer.update();
 		//.Clear();
 
 		Background.render();
@@ -87,13 +90,11 @@ void Game::run() {
 		ph.addAcceleration(Vector2f(0, -GRAVITY));
 
 		//Time registering and change of state
-		dt = t.read();
-		t.reset();
-		float FPS = 1.0f / dt;
-		GD.cmd_text(4, 50, 16, OPT_SIGNED, "FPS:");
-		GD.cmd_number(36, 50, 16, OPT_SIGNED, FPS);
 
-		ph.changeState(dt);
+		GD.cmd_text(4, 50, 16, OPT_SIGNED, "FPS:");
+		GD.cmd_number(36, 50, 16, OPT_SIGNED, 1 / timer.getDeltaTime());
+
+		ph.changeState();
 		//End of time.
 
 		float groundHeight = world.getHeight(ph.position.x);
@@ -186,7 +187,7 @@ void Game::run() {
 		GD.Begin(BITMAPS);
 
 		//Background.render();
-		sprite.render(ph.position.x, ph.position.y, p.angle + PI / 2, 1, 0);
+		anim.render(ph.position.x, ph.position.y, p.angle + PI / 2, 4);
 		//sky.render(6, 6, 0, 1, 0);
 
 		world.render();
