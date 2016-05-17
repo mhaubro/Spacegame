@@ -16,7 +16,7 @@ public:
 
 
 
-	PhysicsObject(float mass, float radius, Vector2f& position, Vector2f& velocity);
+	PhysicsObject(float mass, Vector2f& position, Vector2f& velocity);
 
 //	Vector2f& getPosition();
 //	Vector2f& getVelocity();//Maybe implement?

@@ -128,7 +128,7 @@ void PhysicsObject::draw() {
 	GD.Vertex2f(position.x, position.y);
 }
 
-PhysicsObject::PhysicsObject(float mass, float radius, Vector2f& position,
+PhysicsObject::PhysicsObject(float mass, Vector2f& position,
 		Vector2f& velocity) :
 		mass(mass), radius(radius), position(position), velocity(velocity) {
 }

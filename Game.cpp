@@ -22,7 +22,7 @@ Vector2f startpos = Vector2f(0, 10);
 Vector2f startvel = Vector2f(6, 4);
 
 Game::Game() :
-		running(false), score(42), ph(1, 1, startpos, startvel) {
+		running(false), score(42), ph(1, startpos, startvel) {
 	maxHealth = 1000;
 	maxEnergy = 1000;
 

@@ -20,8 +20,8 @@ void Physicstest::run(){
 	t.start();
 	float lasttime = t.read();
 	float currtime = 0;
-	PhysicsObject ph1 = PhysicsObject(m1, pointsize, position1, velocity1);
-	PhysicsObject ph2 = PhysicsObject(m2, pointsize, position2, velocity2);
+	PhysicsObject ph1 = PhysicsObject(m1, position1, velocity1);
+	PhysicsObject ph2 = PhysicsObject(m2, position2, velocity2);
 
 	//DigitalOut D3 = DigitalOut(D3);
 	//DigitalOut D7 = DigitalOut(D7);
