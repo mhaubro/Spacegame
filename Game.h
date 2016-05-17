@@ -2,10 +2,9 @@
 
 #include "GD2.h"
 #include "mbed.h"
-
 #include "Player.h"
-
 #include "myassets.h"
+
 
 class Game
 {
@@ -20,12 +19,15 @@ public:
 
     unsigned int score;
 
-    PhysicsObject ph;
+    //Player p;
+    //PhysicsObject ph;
+    //PhysicsObject ph;
 
     float health;
     float energy;
     
+    void runtest();
     float maxHealth;
     float maxEnergy;
-    
+
 };

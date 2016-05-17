@@ -15,7 +15,7 @@
 class World {
 protected:
 
-	Chunk **chunks;
+	Chunk ** chunks;
 	unsigned int index = 0;
 
 	void decrementIndex();

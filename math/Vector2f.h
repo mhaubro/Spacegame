@@ -46,6 +46,7 @@ public:
 
 
 };
+//extern Vector2f Transform(const Vector2f& offset, const Vector2f EntityPosition, float angle);//Bad name?
 
 Vector2f FromAngle(float length, float angle);
 

@@ -1,6 +1,6 @@
 #include "UI.h"
 #include "Graphics.h"
-
+#include "player.h"
 #include <string.h>
 
 UI::UI(Game* game) : game(game)
@@ -42,8 +42,8 @@ void UI::render()
     // prints gameinfo in upper left corner
     GD.ColorRGB(WHITE);
     GD.cmd_text(4,4,16,OPT_SIGNED, "SPACE GAME");
-    GD.cmd_number(4, 4 + 12, 16, OPT_SIGNED, game->ph.position.x);
-    GD.cmd_number(4, 4 + 24, 16, OPT_SIGNED, game->ph.position.y);
+    GD.cmd_number(4, 4 + 12, 16, OPT_SIGNED, player.ph.position.x);
+    GD.cmd_number(4, 4 + 24, 16, OPT_SIGNED, player.ph.position.y);
     
     // prints the score in the upper right corner.
     GD.cmd_text(SCREEN_WIDTH-4, 4 , 16, OPT_RIGHTX, "SCORE");
@@ -73,7 +73,8 @@ void UI::render()
     
     // prints the height in the lower middle.
     GD.cmd_text(SCREEN_WIDTH/2-4, SCREEN_HEIGHT - 26 , 16, OPT_CENTERX, "Height");
-    GD.cmd_number(SCREEN_WIDTH/2-4, SCREEN_HEIGHT - 16, 16, OPT_CENTERX + 4, p.height);
+   // GD.cmd_number(SCREEN_WIDTH/2-4, SCREEN_HEIGHT - 16, 16, OPT_CENTERX + 4, player.height);
+    GD.cmd_number(SCREEN_WIDTH/2-4, SCREEN_HEIGHT - 16, 16, OPT_CENTERX + 4, player.height);
 
     GD.RestoreContext();
 }
