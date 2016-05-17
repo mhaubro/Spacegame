@@ -1,6 +1,7 @@
 #include "Particle.h"
 #include "bullet.h"
 
+
 particle::particle(Vector2f position, Vector2f velocity, int radius, unsigned int color){
 	this->visible = true;
 	this->color = color;

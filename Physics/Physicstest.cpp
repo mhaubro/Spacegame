@@ -20,8 +20,8 @@ void Physicstest::run(){
 	t.start();
 	float lasttime = t.read();
 	float currtime = 0;
-	PhysicsObject ph1 = PhysicsObject(m1, pointsize, position1, velocity1);
-	PhysicsObject ph2 = PhysicsObject(m2, pointsize, position2, velocity2);
+	PhysicsObject ph1 = PhysicsObject(m1, position1, velocity1);
+	PhysicsObject ph2 = PhysicsObject(m2, position2, velocity2);
 
 	//DigitalOut D3 = DigitalOut(D3);
 	//DigitalOut D7 = DigitalOut(D7);
@@ -56,10 +56,10 @@ void Physicstest::runloop(Input in, Timer t, float *lasttime, float *currtime, c
 	//}
 
 	ph1->addForce(force);
-	ph1->changeState(dt);
+	ph1->changeState();
 	ph1->checkBounds();
 	ph2->addForce(force);
-	ph2->changeState(dt);
+	ph2->changeState();
 	ph2->checkBounds();
 
 

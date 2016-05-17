@@ -11,7 +11,7 @@ class particle{
 private:
 	void applydrag(int dt);
 	void applyG(int dt);
-	PhysicsObject ph;
+	//PhysicsObject ph;
 
 public:
 	Vector2f position;

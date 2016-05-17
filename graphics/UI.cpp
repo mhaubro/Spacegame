@@ -58,7 +58,7 @@ void UI::render()
     GD.Vertex2f(16 * 4, 16 * (SCREEN_HEIGHT - 4));
     GD.Vertex2f(((16 * (SCREEN_WIDTH/2-16))/game->maxHealth)*game->health , 16 * (SCREEN_HEIGHT - 4));
     GD.cmd_text( 4, SCREEN_HEIGHT - 26 , 16, OPT_SIGNED, "Health");
-    GD.cmd_number(4, SCREEN_HEIGHT - 16, 16, OPT_SIGNED+4, game->energy);
+    GD.cmd_number(4, SCREEN_HEIGHT - 16, 16, OPT_SIGNED+4, game->health);
     
     // prints energy level in the lower right corner
     GD.Begin(LINES);
@@ -73,6 +73,7 @@ void UI::render()
     
     // prints the height in the lower middle.
     GD.cmd_text(SCREEN_WIDTH/2-4, SCREEN_HEIGHT - 26 , 16, OPT_CENTERX, "Height");
+   // GD.cmd_number(SCREEN_WIDTH/2-4, SCREEN_HEIGHT - 16, 16, OPT_CENTERX + 4, player.height);
     GD.cmd_number(SCREEN_WIDTH/2-4, SCREEN_HEIGHT - 16, 16, OPT_CENTERX + 4, player.height);
 
     GD.RestoreContext();

@@ -15,15 +15,19 @@ public:
     Game();
     void run();
     
+    float getMaxThrottle();
+
     unsigned int score;
 
     //Player p;
     //PhysicsObject ph;
+    //PhysicsObject ph;
 
-    unsigned short health;
-    unsigned short energy;
+    float health;
+    float energy;
     
-    unsigned short maxHealth;
-    unsigned short maxEnergy;
     void runtest();
+    float maxHealth;
+    float maxEnergy;
+
 };

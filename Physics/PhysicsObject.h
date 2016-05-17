@@ -16,7 +16,7 @@ public:
 
 
 
-	PhysicsObject(float mass, float radius, Vector2f& position, Vector2f& velocity);
+	PhysicsObject(float mass, Vector2f& position, Vector2f& velocity);
 
 //	Vector2f& getPosition();
 //	Vector2f& getVelocity();//Maybe implement?
@@ -28,7 +28,7 @@ public:
 
 	void addAcceleration(Vector2f v);
 	void addForce(Vector2f v);
-	void changeState(float dt);
+	void changeState();
 
 	void checkBounds();
 	bool Collision(PhysicsObject& ph);

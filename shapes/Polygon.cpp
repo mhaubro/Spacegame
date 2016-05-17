@@ -9,18 +9,33 @@
 #include "GD2.h"
 #include "Graphics.h"
 #include "math.h"
+#include "Mathematics.h"
+
+#define FLOAT_MAX 10000000
 
 Polygon::Polygon(Vector2f &position, float &angle, int numVertex,
 		Vector2f data[]) :
 		Position(position), angle(angle), numVertexs(numVertex) {
 	vertex = new Vector2f[numVertex];
+
+	float d = 0;
+	float length;
 	for (int i = 0; i < numVertex; ++i) {
+		length = data[i].length();
+		if (length > d) {
+			d = length;
+		}
 		vertex[i] = Vector2f(data[i]);
 	}
+	hitRadius = d;
 }
 
 Polygon::~Polygon() {
 	// TODO Auto-generated destructor stub
+}
+
+float Polygon::getHitradius() {
+	return hitRadius;
 }
 
 Vector2f Polygon::getVertexTransformed(int index) {
@@ -69,14 +84,14 @@ bool Polygon::Collide(Polygon A, Polygon B, Vector2f& MTD) {
 	MTD = FindMTD(Axis, iNumAxis);
 
 	// makes sure the push vector is pushing A away from B
-	Vector2f D = A.Position - B.Position;
+	Vector2f D = Vector2f() + A.Position - B.Position;
 	if (D.dotProduct(MTD) < 0.0f)
-		MTD = MTD * -1;
+		MTD = -MTD;
 
 	return true;
 }
 
-bool Polygon::TerrainCollide(Polygon A, World& world,Vector2f& MTD) {
+bool Polygon::TerrainCollide(Polygon A, World& world, Vector2f& MTD) {
 
 	Vector2f temp;
 	float height;
@@ -93,6 +108,19 @@ bool Polygon::TerrainCollide(Polygon A, World& world,Vector2f& MTD) {
 	//TODO check if the terrains points is in the polygon.
 
 	return false;
+}
+
+Vector2f Polygon::FindMTD(Vector2f* PushVectors, int iNumVectors) {
+	Vector2f MTD = PushVectors[0];
+	float mind2 = PushVectors[0].dotProduct(PushVectors[0]);
+	for (int i = 1; i < iNumVectors; i++) {
+		float d2 = PushVectors[i].dotProduct(PushVectors[i]);
+		if (d2 < mind2) {
+			mind2 = d2;
+			MTD = PushVectors[i];
+		}
+	}
+	return MTD;
 }
 
 bool Polygon::AxisSeparatePolygons(Vector2f& Axis, Polygon A, Polygon B) {
@@ -132,16 +160,47 @@ void Polygon::CalculateInterval(Vector2f Axis, Polygon P, float& min,
 	}
 }
 
-Vector2f Polygon::FindMTD(Vector2f* PushVectors, int iNumVectors) {
-	Vector2f MTD = PushVectors[0];
-	float mind2 = PushVectors[0].dotProduct(PushVectors[0]);
-	for (int i = 1; i < iNumVectors; i++) {
-		float d2 = PushVectors[i].dotProduct(PushVectors[i]);
-		if (d2 < mind2) {
-			mind2 = d2;
-			MTD = PushVectors[i];
+bool Polygon::RayIntersectsSegment(Ray ray, Vector2f pt0, Vector2f pt1,
+		float &t) {
+	Vector2f edge = pt1 - pt0;
+	Vector2f edgeNormal = Vector2f::LeftNormal(edge);
+
+	Vector2f d = ray.origin - pt0;
+	float div = edge.dotProduct(Vector2f::LeftNormal(ray.direction));
+
+	// if the edge and the ray direction is parallel, they will not cross.
+	if (Equals(div, 0.0f, 0.001f)) {
+		t = FLOAT_MAX;
+		return false;
+	}
+
+	float u = determinant(edge, d) / div;
+	float v = d.dotProduct(Vector2f::LeftNormal(ray.direction)) / div;
+
+	t = u;
+
+	return u > 0 && v > 0.0f && v <= 1.0f;
+}
+
+bool Polygon::RayCast(Ray ray, Polygon polygon, float &t, Vector2f& normal) {
+	int crossings = 0;
+
+	float distance;
+
+	for (int i = 0; i < polygon.numVertexs; i++) {
+		int j = (i + 1) % polygon.numVertexs;
+		if (RayIntersectsSegment(ray, polygon.getVertexTransformed(i),
+				polygon.getVertexTransformed(j), distance)) {
+			crossings++;
+			if (distance < t && distance < FLOAT_MAX) {
+				t = distance;
+				normal = Vector2f::RightNormal(
+						polygon.getVertexTransformed(j)
+								- polygon.getVertexTransformed(i));
+			}
 		}
 	}
-	return MTD;
+
+	return (crossings > 0) && ((crossings % 2) != 0);
 }
 
