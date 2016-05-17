@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Game.h"
 #include "Vector2f.h"
 #include "PhysicsObject.h"
 
@@ -8,7 +9,7 @@ protected:
 
 public:
 
-	//PhysicsObject ph;
+	PhysicsObject ph;
 	float angle;
 
 	float height;
@@ -17,5 +18,8 @@ public:
 
 	void update(float t);
 	void render();
+	void shoot();
 
 };
+
+extern Player player;

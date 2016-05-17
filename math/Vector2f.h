@@ -42,7 +42,6 @@ public:
 
 
 };
-
 extern Vector2f FromAngle(float length, float angle);
 
 #endif /* SRC_MATH_VECTOR2F_H_ */

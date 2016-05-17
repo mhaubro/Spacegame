@@ -1,3 +1,4 @@
+#include <vector>
 #include "Game.h"
 #include "myassets.h"
 #include "UI.h"
@@ -6,16 +7,18 @@
 #include "Chunk.h"
 #include "Input.h"
 #include "World.h"
-#include "player.h"
 #include "PhysicsObject.h"
 #include "BackGround.h"
 #include "Polygon.h"
+#include "bullet.h"
 
-Vector2f startpos = Vector2f(0, 10);
-Vector2f startvel = Vector2f(6, 4);
+
+Player player;
+vector<bullet> shots;
+vector<particle> particles;
 
 Game::Game() :
-		running(false), score(42), p(), ph(1, 1, startpos, startvel) {
+		running(false), score(42) {
 	maxHealth = 1000;
 	maxEnergy = 1000;
 
@@ -24,6 +27,38 @@ Game::Game() :
 
 
 	//ph = PhysicsObject(1, 1, vec, vec);
+}
+
+void Game::runtest(){
+	GD.ClearColorRGB(0x103000);
+	GD.Clear();
+	std::vector<bullet> shots;
+	Vector2f v1 = Vector2f(5, 5);
+	Vector2f v2 = Vector2f(3, 3);
+	Vector2f v3 = Vector2f(2, 2);
+	Vector2f v4 = Vector2f(3, 7);
+
+	bullet a = bullet(v1, v2, 8, 0xffffff, 1, 1);
+	bullet b = bullet(v2, v3, 8, 0xffffff, 1, 1);
+	bullet c = bullet(v3, v4, 8, 0xffffff, 1, 1);
+	bullet d = bullet(v4, v1, 8, 0xffffff, 1, 1);
+	shots.push_back(a);
+	shots.push_back(b);
+	shots.push_back(c);
+	shots.push_back(d);
+
+
+	while (true){
+		GD.Clear();
+		GD.Begin(POINTS);
+		//GD.PointSize(10);
+		//GD.Vertex2ii(50, 50);
+		for (std::vector<bullet>::iterator it = shots.begin(); it != shots.end(); it++){
+			it->render();
+		}
+		GD.swap();
+	}
+
 }
 
 void Game::run() {
@@ -37,7 +72,7 @@ void Game::run() {
 	GD.ClearColorA(255);
 	GD.SaveContext();
 
-	BackGround Background = BackGround(&ph);
+	BackGround Background = BackGround(&player.ph);
 	//World world = World();
 	Vector2f groundNormal = Vector2f();
 
@@ -45,8 +80,8 @@ void Game::run() {
 	Vector2f shape1[] = { Vector2f(-.2,.4), Vector2f(1, .1), Vector2f(1, -.1), Vector2f(-.2, -.4) };
 	Vector2f shape2[] = { Vector2f(-.9, -.8), Vector2f(-.9, .8), Vector2f(-.1,
 			.8), Vector2f(-.1, -.8) };
-	Polygon poly1 = Polygon(ph.position, p.angle, 4, shape1);
-	Polygon poly2 = Polygon(ph.position, p.angle, 4, shape2);
+	Polygon poly1 = Polygon(player.ph.position, player.angle, 4, shape1);
+	Polygon poly2 = Polygon(player.ph.position, player.angle, 4, shape2);
 
 	float angle = 0;
 	Vector2f poly2Pos = Vector2f(20, 10);
@@ -64,70 +99,70 @@ void Game::run() {
 		Background.render();
 
 		score++;
-		p.angle += in.getRotation() * 0.001;
+		player.angle += in.getRotation() * 0.001;
 
-		while (p.angle > PI2)
-			p.angle -= PI2;
-		while (p.angle < 0)
-			p.angle += PI2;
+		while (player.angle > PI2)
+			player.angle -= PI2;
+		while (player.angle < 0)
+			player.angle += PI2;
 
 		if (in.getThrottle()) {
-			ph.velocity += FromAngle(0.01, p.angle);
-			Vector2f throttle = FromAngle((float) 30, p.angle); //Tilføjer en kraft på 30 newton i den vinkel
-			ph.addForce(throttle);
+			player.ph.velocity += FromAngle(0.01, player.angle);
+			Vector2f throttle = FromAngle((float) 30, player.angle); //Tilføjer en kraft på 30 newton i den vinkel
+			player.ph.addForce(throttle);
 			GD.cmd_text(70, 70, 16, OPT_SIGNED, "touch");
 		}
-		ph.addAcceleration(Vector2f(0, -GRAVITY));
+		player.ph.addAcceleration(Vector2f(0, -GRAVITY));
 
 		//Time registering and change of state
 		dt = t.read();
 		t.reset();
 
-		ph.changeState(dt);
+		player.ph.changeState(dt);
 		//End of time.
 
-		float groundHeight = world.getHeight(ph.position.x);
+		float groundHeight = world.getHeight(player.ph.position.x);
 
-		if (ph.terrainCollision(world)) {
-			ph.applyTerrainCoolision(world);
+		if (player.ph.terrainCollision(world)) {
+			player.ph.applyTerrainCoolision(world);
 		}
-		if (ph.position.y > 100) {
-			ph.position.y = 100;
-			ph.velocity.x *= .5;
-			ph.velocity.y *= -.5;
-		}
-
-		if (ph.position.x < 0) {
-			ph.velocity.x *= -.1;
-			ph.position.x = 0;
-		}
-		if (ph.position.x > 48) {
-			ph.velocity.x *= -.1;
-			ph.position.x = 48;
+		if (player.ph.position.y > 100) {
+			player.ph.position.y = 100;
+			player.ph.velocity.x *= .5;
+			player.ph.velocity.y *= -.5;
 		}
 
-		world.update(ph.position.x);
-		p.height = ph.position.y - groundHeight;
+		if (player.ph.position.x < 0) {
+			player.ph.velocity.x *= -.1;
+			player.ph.position.x = 0;
+		}
+		if (player.ph.position.x > 48) {
+			player.ph.velocity.x *= -.1;
+			player.ph.position.x = 48;
+		}
 
-		cam.follow(ph.position, ph.velocity);
+		world.update(player.ph.position.x);
+		player.height = player.ph.position.y - groundHeight;
+
+		cam.follow(player.ph.position, player.ph.velocity);
 
 		//Background.render();
 
 		world.render();
 
 
-		world.getNormal(ph.position.x, groundNormal);
+		world.getNormal(player.ph.position.x, groundNormal);
 		GD.ColorRGB(PURPLE);
-		renderVector2f(groundNormal, ph.position.x, groundHeight, 1.5);
+		renderVector2f(groundNormal, player.ph.position.x, groundHeight, 1.5);
 		Vector2f tangent = Vector2f(groundNormal.y, -groundNormal.x);
 		GD.ColorRGB(ORANGE);
-		renderVector2f(tangent, ph.position.x, groundHeight, 1.5);
+		renderVector2f(tangent, player.ph.position.x, groundHeight, 1.5);
 
 		GD.Begin(POINTS);
 		GD.PointSize(16 * 4);
 		GD.ColorRGB(RED);
 
-		cam.Vertex2f(ph.position.x, groundHeight);
+		cam.Vertex2f(player.ph.position.x, groundHeight);
 
 		GD.RestoreContext();
 
@@ -137,13 +172,12 @@ void Game::run() {
 			Vector2f normal = temp.normalized();
 			Vector2f tangent = Vector2f(normal.y, -normal.x);
 
-			ph.velocity = ph.velocity
-					- (normal * (ph.velocity.dotProduct(normal) * 2));
+			player.ph.velocity = player.ph.velocity - (normal * (player.ph.velocity.dotProduct(normal) * 2));
 
-			ph.velocity *= .4;
+			player.ph.velocity *= .4;
 			//velocity = (velocity * terrainNormal * .4) + (velocity * terrainTangent*.99);
 
-			ph.position += temp;
+			player.ph.position += temp;
 			GD.ColorRGB(RED);
 
 			poly1.render();
@@ -155,36 +189,36 @@ void Game::run() {
 			static Vector2f terrainNormal = Vector2f(); //vector terrain normal
 			static Vector2f terrainTangent = Vector2f();
 
-			world.getNormal(ph.position.x, terrainNormal);
+			world.getNormal(player.ph.position.x, terrainNormal);
 			terrainTangent.x = terrainNormal.y;
 			terrainTangent.y = -terrainNormal.x;
 
-			ph.velocity = ph.velocity
+			player.ph.velocity = player.ph.velocity
 					- (terrainNormal
-							* (ph.velocity.dotProduct(terrainNormal) * 2));
+							* (player.ph.velocity.dotProduct(terrainNormal) * 2));
 
-			ph.velocity *= .4;
+			player.ph.velocity *= .4;
 			//velocity = (velocity * terrainNormal * .4) + (velocity * terrainTangent*.99);
 
-			ph.position += temp;
+			player.ph.position += temp;
 		}
 		if (Polygon::TerrainCollide(poly2, world, temp)) {
 			GD.ColorRGB(BLUE);
 			static Vector2f terrainNormal = Vector2f(); //vector terrain normal
 			static Vector2f terrainTangent = Vector2f();
 
-			world.getNormal(ph.position.x, terrainNormal);
+			world.getNormal(player.ph.position.x, terrainNormal);
 			terrainTangent.x = terrainNormal.y;
 			terrainTangent.y = -terrainNormal.x;
 
-			ph.velocity = ph.velocity
+			player.ph.velocity = player.ph.velocity
 					- (terrainNormal
-							* (ph.velocity.dotProduct(terrainNormal) * 2));
+							* (player.ph.velocity.dotProduct(terrainNormal) * 2));
 
-			ph.velocity *= .4;
+			player.ph.velocity *= .4;
 			//velocity = (velocity * terrainNormal * .4) + (velocity * terrainTangent*.99);
 
-			ph.position += temp;
+			player.ph.position += temp;
 		}
 
 		poly3.render();
@@ -193,11 +227,11 @@ void Game::run() {
 		GD.Begin(BITMAPS);
 
 		//Background.render();
-		sprite.render(ph.position.x, ph.position.y, p.angle + PI / 2, 1, 0);
+		sprite.render(player.ph.position.x, player.ph.position.y, player.angle + PI / 2, 1, 0);
 		//sky.render(6, 6, 0, 1, 0);
 		GD.RestoreContext();
 
-		renderVector2f(ph.velocity, ph.position.x, ph.position.y, 1);
+		renderVector2f(player.ph.velocity, player.ph.position.x, player.ph.position.y, 1);
 
 		ui.render();
 
