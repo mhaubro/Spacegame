@@ -12,7 +12,7 @@
 
 class Entity {
 protected:
-	PhysicsObject * const ph;
+	PhysicsObject ph;
 
 	Entity(Vector2f& pos, Vector2f& vel, float mass);
 
@@ -21,6 +21,11 @@ public:
 
 	virtual void update();
 	virtual void render();
+
+	virtual bool collide(Entity entity);
+
+	Vector2f getPosition();
+	Vector2f getVelocity();
 };
 
 #endif /* SRC_ENTITY_H_ */

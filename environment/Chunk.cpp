@@ -23,6 +23,7 @@ Chunk::~Chunk() {
 
 void Chunk::render() {
 
+	GD.RestoreContext();
 	//GD.BitmapHandle(0);
 	//GD.BitmapSize(NEAREST, REPEAT, REPEAT, 480, 272);
 
@@ -52,7 +53,7 @@ void Chunk::render() {
 	//GD.ColorMask(1, 1, 1, 1);
 	//GD.BitmapHandle(6);
 	//GD.BitmapSize(NEAREST, REPEAT, REPEAT, 480, 272);
-	GD.RestoreContext();
+
 	// TODO render details in chunks
 }
 

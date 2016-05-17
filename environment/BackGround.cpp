@@ -5,6 +5,7 @@
 #include "graphics.h"
 #include "sprite.h"
 #include "Mathematics.h"
+#include "Player.h"
 
 void BackGround::render() {
 
@@ -44,11 +45,10 @@ float BackGround::getBlendFactor() {
 }
 
 void BackGround::update() {
-	position = ph->position * 4;
+	position = player.getPosition() * 4;
 }
-BackGround::BackGround(PhysicsObject *phin) {
+BackGround::BackGround() {
 	position = Vector2f();
-	ph = phin;
 	minPos = Vector2f();
 	maxPos = Vector2f(BACKGROUND_WIDTH, BACKGROUND_HEIGHT);
 }

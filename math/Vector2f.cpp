@@ -7,6 +7,7 @@
 
 #include "Vector2f.h"
 #include "math.h"
+#include "GD2.h"
 
 Vector2f::Vector2f() :
 		x(0), y(0) {
@@ -24,6 +25,10 @@ Vector2f FromAngle(float length, float angle) {
 }
 float Vector2f::dotProduct(Vector2f extv) {
 	return x * extv.x + y * extv.y;
+}
+
+Vector2f Vector2f::vertexTransformed(Vector2f positionTransform, float rotationTransform){
+	return Vector2f(FromAngle(1, rotationTransform) * x	+ FromAngle(1, rotationTransform - PI / 2) * y) + positionTransform;
 }
 
 float Vector2f::length() {
@@ -57,14 +62,14 @@ Vector2f Vector2f::normalized() {
 }
 
 Vector2f Vector2f::LeftNormal(const Vector2f& arg) {
-	return Vector2f(-arg.y,arg.x);
+	return Vector2f(-arg.y, arg.x);
 }
 
 Vector2f Vector2f::RightNormal(const Vector2f& arg) {
-	return Vector2f(arg.y,-arg.x);
+	return Vector2f(arg.y, -arg.x);
 }
 
-float determinant(const Vector2f& a, const Vector2f& b){
+float determinant(const Vector2f& a, const Vector2f& b) {
 	return a.x * b.y - a.y * b.x;
 }
 
@@ -147,8 +152,8 @@ Vector2f Vector2f::operator-(const float arg) {
 	return V;
 }
 
-Vector2f Vector2f::operator-(){
-	Vector2f V = Vector2f(-this->x,-this->y);
+Vector2f Vector2f::operator-() {
+	Vector2f V = Vector2f(-this->x, -this->y);
 	return V;
 }
 

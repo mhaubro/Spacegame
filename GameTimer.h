@@ -13,8 +13,8 @@
 class GameTimer {
 
 protected:
-	double runtime = 0;
-	float deltatime = 0;
+	double runtime;
+	float deltatime;
 	Timer t;
 
 public:

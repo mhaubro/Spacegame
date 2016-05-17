@@ -1,4 +1,5 @@
-
+#ifndef BULLET_H_
+#define BULLET_H_
 
 #include "PhysicsConstants.h"
 #include "GD2.h"
@@ -22,3 +23,5 @@ public:
 	void applyforces(int dt);
 	void render();
 };
+
+#endif

@@ -1,4 +1,5 @@
-#pragma once
+#ifndef ASSET_H_
+#define ASSET_H_
 #include "Utils.h"
 
 static PROGMEM uint8_t __assets[779] = {
@@ -102,3 +103,5 @@ static const shape_t EXHAUST1_SHAPE = {6, 8, 8, 0};
 static const shape_t EXHAUST2_SHAPE = {7, 8, 8, 0};
 static const shape_t EXHAUST3_SHAPE = {8, 8, 8, 0};
 static const shape_t EXHAUST4_SHAPE = {9, 8, 8, 0};
+
+#endif

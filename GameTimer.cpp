@@ -9,7 +9,9 @@
 
 GameTimer timer;
 
-GameTimer::GameTimer() {
+GameTimer::GameTimer()
+:deltatime(0), runtime(0)
+	{
 	t.start(); //HUSK AT STARTE TIMER
 
 }

@@ -5,10 +5,11 @@
  *      Author: mathi
  */
 
+#include <math.h>
+
 #include "Polygon.h"
 #include "GD2.h"
 #include "Graphics.h"
-#include "math.h"
 #include "Mathematics.h"
 
 #define FLOAT_MAX 10000000
@@ -91,7 +92,7 @@ bool Polygon::Collide(Polygon A, Polygon B, Vector2f& MTD) {
 	return true;
 }
 
-bool Polygon::TerrainCollide(Polygon A, World& world, Vector2f& MTD) {
+bool Polygon::TerrainCollide(Polygon& A, Vector2f& MTD) {
 
 	Vector2f temp;
 	float height;

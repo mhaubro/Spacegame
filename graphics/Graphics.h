@@ -1,4 +1,5 @@
-#pragma once
+#ifndef GRAPHICS_H_
+#define GRAPHICS_H_
 
 #include "mbed.h"
 #include "GD2.h"
@@ -69,3 +70,5 @@ unsigned int blend(unsigned int color1, unsigned int color2, float blendfactor);
 void renderVector2f(Vector2f &arg, float x, float y, float scale);
 
 void resetGraphics();
+
+#endif

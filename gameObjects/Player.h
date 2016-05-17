@@ -1,25 +1,48 @@
-#pragma once
+#ifndef PLAYER_H_
+#define PLAYER_H_
 
-#include "Game.h"
+
 #include "Vector2f.h"
-#include "PhysicsObject.h"
+#include "Entity.h"
+#include "Animation.h"
+#include "Polygon.h"
 
-class Player {
+#include "Animation.h"
+
+
+
+class Player: public Entity {
 protected:
+
+	float getMaxThrottle();
+
+	Sprite* sprite;
+	Sprite* exhaust;
+	Animation* anim;
+
+	Polygon* collisionBox;
 
 public:
 
-	PhysicsObject ph;
 	float angle;
 
 	float height;
 
-	Player();//float mass, Vector2f startpos, Vector2f startvel);
+	float maxHealth = 1000;
+	float maxEnergy = 1000;
 
-	void update(float t);
+	float health = 42;
+	float energy = maxEnergy;
+
+	Player(Vector2f pos, Vector2f vel); //float mass, Vector2f startpos, Vector2f startvel);
+	virtual ~Player();
+
+	void update();
 	void render();
 	void shoot();
 
 };
 
 extern Player player;
+
+#endif

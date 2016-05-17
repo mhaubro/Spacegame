@@ -1,4 +1,5 @@
-#pragma once
+#ifndef ACCELEROMETER_H_
+#define ACCELEROMETER_H_
 
 #include "GD2.h"
 
@@ -13,3 +14,4 @@ static int gx = 0, gy = 0;
 void resetAcceleration();
 void getAcceleration(int& X, int& Y);
 
+#endif

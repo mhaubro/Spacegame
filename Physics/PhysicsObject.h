@@ -1,9 +1,12 @@
+
+
+#ifndef PHYSICSOBJECT_H
+#define PHYSICSOBJECT_H
+
 #include "PhysicsConstants.h"
 #include "Vector2f.h"
 #include "World.h"
 
-#ifndef PHYSICSOBJECT_H
-#define PHYSICSOBJECT_H
 class PhysicsObject {
 
 public:
@@ -20,15 +23,11 @@ public:
 
 //	Vector2f& getPosition();
 //	Vector2f& getVelocity();//Maybe implement?
-	void applyAcceleration(Vector2f acc, float time);//Acceleration has been applied for a given time
-	void applyAccelerationNG(Vector2f acc, float time);//Acceleration without gravity
-	void draw();
-	void applyG(float time);
-
+	void render();
 
 	void addAcceleration(Vector2f v);
 	void addForce(Vector2f v);
-	void changeState();
+	void update();
 
 	void checkBounds();
 	bool Collision(PhysicsObject& ph);

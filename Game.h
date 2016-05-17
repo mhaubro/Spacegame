@@ -1,33 +1,37 @@
-#pragma once
 
-#include "GD2.h"
-#include "mbed.h"
-#include "Player.h"
-#include "myassets.h"
+#ifndef GAME_H_
+#define GAME_H_
 
+#include "BackGround.h"
+#include "UI.h"
+#include "Entity.h"
+
+using namespace std;
 
 class Game
 {
 protected:
     bool running;
-    
+
+    UI ui;
+
+    BackGround background;
+
+    void update();
+    void render();
+
 public:
     Game();
+    ~Game();
+
+    bool init();
     void run();
-    
-    float getMaxThrottle();
 
     unsigned int score;
 
-    //Player p;
-    //PhysicsObject ph;
-    //PhysicsObject ph;
-
-    float health;
-    float energy;
-    
-    void runtest();
-    float maxHealth;
-    float maxEnergy;
 
 };
+
+extern Game game;
+
+#endif

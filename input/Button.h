@@ -1,4 +1,5 @@
-#pragma once
+#ifndef BUTTON_H_
+#define BUTTON_H_
 
 #include "mbed.h"
 
@@ -13,3 +14,5 @@ public:
     bool isPressed();
 
 };
+
+#endif

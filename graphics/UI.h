@@ -1,13 +1,13 @@
-#pragma once
-#include "GD2.h"
-#include "Game.h"
+#ifndef UI_H_
+#define UI_H_
 
 class UI
 {
 protected:
-    Game* game;
     
 public:
-    UI(Game* game);
+    UI();
     void render();
 };
+
+#endif

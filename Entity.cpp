@@ -7,11 +7,29 @@
 
 #include "Entity.h"
 
-Entity::Entity(Vector2f& pos, Vector2f& vel, float mass) : ph(new PhysicsObject(mass, pos, vel))
-{
+Entity::Entity(Vector2f& pos, Vector2f& vel, float mass) :
+		ph(PhysicsObject(mass, pos, vel)) {
 }
 
 Entity::~Entity() {
-	delete ph;
+}
+
+void Entity::update() {
+
+}
+void Entity::render() {
+
+}
+
+bool Entity::collide(Entity entity) {
+	return false;
+}
+
+Vector2f Entity::getPosition() {
+	return Vector2f(ph.position);
+}
+
+Vector2f Entity::getVelocity() {
+	return Vector2f(ph.velocity);
 }
 

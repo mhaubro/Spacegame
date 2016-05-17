@@ -7,6 +7,8 @@
 
 #include "Input.h"
 
+Input input;
+
 Input::Input() {
 	resetAcceleration();
 }

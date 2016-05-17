@@ -19,6 +19,8 @@ public:
 	float angle();
 	float dotProduct(Vector2f extv);
 
+	Vector2f vertexTransformed(Vector2f positionTransform, float rotationTransform);
+
 	void wrap(Vector2f min, Vector2f max);
 	Vector2f normalized();
 	static Vector2f LeftNormal(const Vector2f& arg);

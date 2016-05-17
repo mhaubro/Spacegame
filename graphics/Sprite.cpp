@@ -1,5 +1,8 @@
 
 #include "Sprite.h"
+#include "GD2.h"
+#include "arduino.h"
+#include "Graphics.h"
 
 #define SQRT2 1.41
 

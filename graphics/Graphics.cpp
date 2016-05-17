@@ -1,7 +1,5 @@
 #include "Graphics.h"
 
-
-
 Cam cam;
 
 Cam::Cam()

@@ -27,4 +27,6 @@ public:
 
 };
 
+extern Input input;
+
 #endif /* SRC_INPUT_INPUT_H_ */
