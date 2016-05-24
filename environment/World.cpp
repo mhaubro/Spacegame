@@ -81,7 +81,6 @@ void World::renderBullets(){
 		bullet & b = *it;
 		b.render();
 	}
-	GD.cmd_number(140, 140, 16, OPT_SIGNED, bullets.size());
 }
 
 float World::getHeight(float x) {
