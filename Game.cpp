@@ -11,7 +11,7 @@
 Game game;
 
 Game::Game() :
-		running(false), ui(), background(), score(42) {
+		running(false), isGameOver(false), ui(), background(), score(42) {
 
 }
 
@@ -88,6 +88,7 @@ void Game::update() {
 }
 
 void Game::render() {
+
 	background.render();
 
 //	for (int i = 0; i < entities.size(); i++) {
@@ -99,4 +100,12 @@ void Game::render() {
 	world.render();
 	ui.render();
 
+}
+
+bool Game::isOver(){
+	return isGameOver;
+}
+
+void Game::setGameOver(){
+	isGameOver = true;
 }
