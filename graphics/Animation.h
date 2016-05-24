@@ -10,24 +10,34 @@
 
 class Animation;
 
-#include "Sprite.h"
 #include "Vector2f.h"
 
 class Animation {
+protected:
+	void renderFrame(const float x, const float y, const float angle,
+			const float scale, unsigned short frame);
 
 public:
 
-	Sprite* sprite;
+	const unsigned char id;
+	const unsigned short width, height;
+
+	unsigned char startCell;
+	unsigned char frames;
+
 	double lastFrame;
 	double frameInterval;
 
-	unsigned char maxFrame;
 	unsigned char frame;
 
-	Animation(Sprite* sprite, double Interval, unsigned char maxFrame);
+	const float offsetX, offsetY;
+
+	Animation(unsigned char BitMapHandle, unsigned short imageWidth,
+			unsigned short imageHeight, unsigned char startCell, unsigned char frames, double Interval);
 	virtual ~Animation();
 
-	void render(const float x, const float y, const float angle, const float scale);
+	void render(const float x, const float y, const float angle,
+			const float scale);
 	void render(const Vector2f pos, const float angle, const float scale);
 };
 

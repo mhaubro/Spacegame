@@ -71,4 +71,6 @@ void renderVector2f(Vector2f &arg, float x, float y, float scale);
 
 void resetGraphics();
 
+void initGraphics();
+
 #endif
