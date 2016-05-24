@@ -21,9 +21,9 @@ Player::Player(Vector2f pos, Vector2f vel) :
 
 	collisionBox = new Polygon(ph.position, angle, 4, shape1);
 
-	sprite = new Sprite(SPACESHIP_HANDLE, 32, 32, 1);
-	exhaust = new Sprite(EXHAUST1_HANDLE, 8, 8, 1);
-	anim = new Animation(exhaust, .1, 4);
+	sprite = new Sprite(SPRITESHEET_HANDLE, 32, 32, 1);
+	exhaust = new Sprite(SPRITESHEET_HANDLE, 8, 8, 9);
+	anim = new Animation(exhaust, .5, 4);
 }
 
 Player::~Player() {
