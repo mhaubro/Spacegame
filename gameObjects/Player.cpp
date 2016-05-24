@@ -65,6 +65,7 @@ void Player::update() {
 		isThrust = true;
 		if (energy > 1)
 			energy -= 1;
+	}
 
 	if (input.getRightTouch() && timer.getRunTime() > lastShot + shotInterval){//Shooting //&&
 		lastShot = timer.getRunTime();
@@ -114,7 +115,7 @@ void Player::update() {
 
 }
 
-void Player::render() {
+void Player::render(){
 
 	GD.RestoreContext();
 	GD.Begin(BITMAPS);
