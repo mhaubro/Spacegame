@@ -28,6 +28,14 @@ bool Input::getThrottle() {
 	return false;
 }
 
+bool Input::getLeftTouch() {
+	return (GD.inputs.x > 0 && GD.inputs.x < 240);
+}
+
+bool Input::getRightTouch() {
+	return (GD.inputs.x > 240 && GD.inputs.x < 480);
+}
+
 float Input::getRotation() {
 	return (float)ax;
 }

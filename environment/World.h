@@ -21,12 +21,17 @@ protected:
 	void decrementIndex();
 	void incrementIndex();
 
+
 public:
 	World();
 	virtual ~World();
 
 	void update(float x);
 	void render();
+
+	void checkBullets();
+	void renderBullets();
+	void removeBullets();
 
 	float getHeight(float x);
 	Vector2f& getNormal(float x, Vector2f &vec);
