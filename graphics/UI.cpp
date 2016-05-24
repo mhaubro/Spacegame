@@ -97,5 +97,10 @@ void UI::render() {
 	GD.cmd_text(4, 50, 16, OPT_SIGNED, "FPS:");
 	GD.cmd_number(36, 50, 16, OPT_SIGNED, 1 / timer.getDeltaTime());
 
+	if (game.isOver()){
+		GD.ColorRGB(RED);
+		GD.cmd_text(SCREEN_WIDTH/2, SCREEN_HEIGHT/2, 16, OPT_CENTER, "YOU DIED!");
+	}
+
 	GD.RestoreContext();
 }
