@@ -20,6 +20,8 @@ protected:
 	Sprite* exhaust;
 	Animation* anim;
 
+	bool isThrust = false;
+
 	Polygon* collisionBox;
 
 public:

@@ -11,13 +11,13 @@
 //Vector2f STARTPOSVEC = Vector2f(0, 10);
 //Vector2f STARTVELVEC = Vector2f(6, 4);
 
-Player player = Player(Vector2f(2, 10), Vector2f(0,0));
+Player player = Player(Vector2f(2, 10), Vector2f(0, 0));
 
 Player::Player(Vector2f pos, Vector2f vel) :
 		Entity(pos, vel, 1), angle(0), height(0) {
 
 	Vector2f shape1[] = { Vector2f(-1, 1), Vector2f(1, 1), Vector2f(1, -1),
-				Vector2f(-1, -1) };
+			Vector2f(-1, -1) };
 
 	collisionBox = new Polygon(ph.position, angle, 4, shape1);
 
@@ -48,9 +48,12 @@ void Player::update() {
 		ph.velocity += FromAngle(0.01, angle);
 		Vector2f throttle = FromAngle(getMaxThrottle(), angle); //Tilføjer en kraft på 30 newton i den vinkel
 		ph.addForce(throttle);
+		isThrust = true;
 		if (energy > 1)
 			energy -= 1;
 
+	} else {
+		isThrust = false;
 	}
 
 	ph.update();
@@ -88,9 +91,13 @@ void Player::render() {
 	GD.RestoreContext();
 	GD.Begin(BITMAPS);
 
-	anim->render(Vector2f(-1.2,.65).vertexTransformed(ph.position,angle), angle + PI / 2, 1);
-	anim->render(Vector2f(-1.2,-.65).vertexTransformed(ph.position,angle), angle + PI / 2, 1);
-	sprite->render(ph.position.x, ph.position.y, angle + PI/2, 1,0);
+	if (isThrust) {
+		anim->render(Vector2f(-1.2, .65).vertexTransformed(ph.position, angle),
+				angle + PI / 2, 1);
+		anim->render(Vector2f(-1.2, -.65).vertexTransformed(ph.position, angle),
+				angle + PI / 2, 1);
+	}
+	sprite->render(ph.position.x, ph.position.y, angle + PI / 2, 1, 0);
 
 }
 
