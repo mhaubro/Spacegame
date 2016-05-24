@@ -15,14 +15,19 @@ class Player: public Entity {
 protected:
 
 	float getMaxThrottle();
+	Vector2f getShotPos();
+	Vector2f getShotVel(float velocity);
 
 	Sprite* sprite;
 	Sprite* exhaust;
 	Animation* anim;
 
+	double lastShot = 0;
+
 	bool isThrust = false;
 
 	Polygon* collisionBox;
+
 
 public:
 

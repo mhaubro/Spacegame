@@ -136,7 +136,7 @@ void PhysicsObject::render() {
 }
 
 PhysicsObject::PhysicsObject(float mass, Vector2f& position, Vector2f& velocity) :
-		mass(mass), radius(radius), position(position), velocity(velocity) {
+		mass(mass), radius(1), position(position), velocity(velocity) {
 }
 
 void PhysicsObject::checkBounds() {

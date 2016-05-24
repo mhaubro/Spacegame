@@ -1,12 +1,8 @@
+#include <vector>
+
 #include "Game.h"
 
-#include "GD2.h"
-#include "Player.h"
-#include "myassets.h"
-#include "Graphics.h"
-#include "Input.h"
-#include "World.h"
-#include "GameTimer.h"
+
 
 Game game;
 
@@ -41,6 +37,7 @@ void Game::run() {
 
 		update();
 		render();
+
 		//.Clear();
 //		static Vector2f mtd = Vector2f();
 //		static Vector2f normal = Vector2f();
