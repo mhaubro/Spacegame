@@ -6,8 +6,7 @@
 #include "Entity.h"
 #include "Animation.h"
 #include "Polygon.h"
-
-#include "Animation.h"
+#include "Sprite.h"
 
 
 

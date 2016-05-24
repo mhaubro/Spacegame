@@ -16,14 +16,14 @@ Player player = Player(Vector2f(2, 10), Vector2f(0, 0));
 Player::Player(Vector2f pos, Vector2f vel) :
 		Entity(pos, vel, 1), angle(0), height(0) {
 
-	Vector2f shape1[] = { Vector2f(-1, 1), Vector2f(1, 1), Vector2f(1, -1),
-			Vector2f(-1, -1) };
+	Vector2f shape1[] = { Vector2f(-1, 0), Vector2f(-.5, .8), Vector2f(1, 0),
+			Vector2f(-.5, -.8) };
 
 	collisionBox = new Polygon(ph.position, angle, 4, shape1);
 
-	sprite = new Sprite(SPRITESHEET_HANDLE, 32, 32, 1);
+	sprite = new Sprite(SPACESHIPS_HANDLE, 32, 32, 0);
 	exhaust = new Sprite(SPRITESHEET_HANDLE, 8, 8, 9);
-	anim = new Animation(exhaust, .5, 4);
+	anim = new Animation(SPRITESHEET_HANDLE,8,8,9,2,0.1);
 }
 
 Player::~Player() {
@@ -99,16 +99,17 @@ void Player::update() {
 void Player::render() {
 
 	GD.RestoreContext();
+	//collisionBox->render();
 	GD.Begin(BITMAPS);
 
 	if (isThrust) {
 		isThrust = false;
-		anim->render(Vector2f(-1.2, .65).vertexTransformed(ph.position, angle),
+		anim->render(Vector2f(-1.2, .2).vertexTransformed(ph.position, angle),
 				angle + PI / 2, 1);
-		anim->render(Vector2f(-1.2, -.65).vertexTransformed(ph.position, angle),
+		anim->render(Vector2f(-1.2, -.2).vertexTransformed(ph.position, angle),
 				angle + PI / 2, 1);
 	}
-	sprite->render(ph.position.x, ph.position.y, angle + PI / 2, 1, 0);
+	sprite->render(ph.position.x, ph.position.y, angle + PI / 2, 1);
 
 }
 

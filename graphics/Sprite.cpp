@@ -6,11 +6,11 @@
 
 #define SQRT2 1.41
 
-Sprite::Sprite(unsigned char BitMapHandle, unsigned short imageWidth, unsigned short imageHeight, unsigned char cells)
+Sprite::Sprite(unsigned char BitMapHandle, unsigned short imageWidth, unsigned short imageHeight, unsigned char cell)
 : 	id(BitMapHandle),
 	width(imageWidth),
 	height(imageHeight),
-	cells(cells),
+	cell(cell),
 	offsetX((imageWidth*SQRT2)/(UNIT*2)),
 	offsetY((imageHeight*SQRT2)/(UNIT*2))
 {
@@ -22,7 +22,7 @@ Sprite::~Sprite()
     
 }
 
-void Sprite::render(const float x, const float y, const float angle, const float scale, const unsigned char cell)
+void Sprite::render(const float x, const float y, const float angle, const float scale)
 {
     GD.BitmapHandle(id);
     GD.Cell(cell);
