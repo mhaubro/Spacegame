@@ -26,6 +26,7 @@ protected:
 	double lastShot = 0;
 
 	bool isThrust = false;
+	bool isDead = false;
 
 	Polygon* collisionBox;
 
@@ -39,7 +40,7 @@ public:
 	float maxHealth = 1000;
 	float maxEnergy = 1000;
 
-	float health = 42;
+	float health = maxHealth;
 	float energy = maxEnergy;
 
 	Player(Vector2f pos, Vector2f vel); //float mass, Vector2f startpos, Vector2f startvel);

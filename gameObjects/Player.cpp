@@ -37,12 +37,24 @@ Player::~Player() {
 
 void Player::update() {
 
-	player.angle += input.getRotation() * 0.001;
+	if (!game.isOver()) {
+		player.angle += input.getRotation() * 0.001;
 
-	while (angle > PI2)
-		angle -= PI2;
-	while (angle < 0)
-		angle += PI2;
+		while (angle > PI2)
+			angle -= PI2;
+		while (angle < 0)
+			angle += PI2;
+
+		if (input.getThrottle()) {
+			ph.velocity += FromAngle(0.01, angle);
+			Vector2f throttle = FromAngle(getMaxThrottle(), angle); //Tilføjer en kraft på 30 newton i den vinkel
+			ph.addForce(throttle);
+			isThrust = true;
+			if (energy > 1)
+				energy -= 1;
+
+		}
+	}
 
 	ph.addAcceleration(Vector2f(0, -GRAVITY));
 
@@ -53,10 +65,6 @@ void Player::update() {
 		isThrust = true;
 		if (energy > 1)
 			energy -= 1;
-
-	} else {
-		isThrust = false;
-	}
 
 	if (input.getRightTouch() && timer.getRunTime() > lastShot + shotInterval){//Shooting //&&
 		lastShot = timer.getRunTime();
@@ -72,15 +80,15 @@ void Player::update() {
 
 	player.height = ph.position.y - groundHeight;
 
-	energy += .2;
-	energy = clamp(energy, 0, maxEnergy);
-
 	Vector2f mtd = Vector2f();
 	Vector2f normal = Vector2f();
 	Vector2f tangent = Vector2f();
 
 	if (Polygon::TerrainCollide(*collisionBox, mtd)) {
-		GD.ColorRGB(BLUE);
+		float length = ph.velocity.length();
+		if (length > 5) {
+			health -= length * length;
+		}
 
 		normal = world.getNormal(ph.position.x, normal);
 		tangent = Vector2f::LeftNormal(normal);
@@ -94,6 +102,16 @@ void Player::update() {
 		ph.position += mtd;
 	}
 
+	energy += .2;
+	energy = clamp(energy, 0, maxEnergy);
+
+	health += .01;
+	if (health <= 0) {
+		isDead = true;
+		game.setGameOver();
+	}
+	health = clamp(health, 0, maxHealth);
+
 }
 
 void Player::render() {
@@ -102,6 +120,7 @@ void Player::render() {
 	GD.Begin(BITMAPS);
 
 	if (isThrust) {
+		isThrust = false;
 		anim->render(Vector2f(-1.2, .65).vertexTransformed(ph.position, angle),
 				angle + PI / 2, 1);
 		anim->render(Vector2f(-1.2, -.65).vertexTransformed(ph.position, angle),
@@ -112,6 +131,7 @@ void Player::render() {
 }
 
 float Player::getMaxThrottle() {
+
 	float max = 10;
 	if (energy <= 1) {
 		return 0;
