@@ -22,6 +22,7 @@ protected:
 	Sprite* exhaust;
 	Animation* anim;
 
+	const double shotInterval = 1;
 	double lastShot = 0;
 
 	bool isThrust = false;
