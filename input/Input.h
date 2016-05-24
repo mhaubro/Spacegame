@@ -25,6 +25,9 @@ public:
 	bool getThrottle();
 	float getRotation();
 
+	bool getLeftTouch();
+	bool getRightTouch();
+
 };
 
 extern Input input;

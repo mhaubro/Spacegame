@@ -5,8 +5,14 @@
 #include "BackGround.h"
 #include "UI.h"
 #include "Entity.h"
-
-using namespace std;
+#include "GD2.h"
+#include "Player.h"
+#include "myassets.h"
+#include "Graphics.h"
+#include "Input.h"
+#include "World.h"
+#include "GameTimer.h"
+#include "bullet.h"
 
 class Game
 {
