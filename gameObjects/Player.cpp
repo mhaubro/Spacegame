@@ -45,7 +45,7 @@ void Player::update() {
 		while (angle < 0)
 			angle += PI2;
 
-		if (input.getThrottle()) {
+		if (input.getLeftTouch()) {
 			ph.velocity += FromAngle(0.01, angle);
 			Vector2f throttle = FromAngle(getMaxThrottle(), angle); //Tilføjer en kraft på 30 newton i den vinkel
 			ph.addForce(throttle);
@@ -58,14 +58,6 @@ void Player::update() {
 
 	ph.addAcceleration(Vector2f(0, -GRAVITY));
 
-	if (input.getLeftTouch()) {//Changed from input.getThrottle(), to test shots.
-		ph.velocity += FromAngle(0.01, angle);
-		Vector2f throttle = FromAngle(getMaxThrottle(), angle); //Tilføjer en kraft på 30 newton i den vinkel
-		ph.addForce(throttle);
-		isThrust = true;
-		if (energy > 1)
-			energy -= 1;
-	}
 
 	if (input.getRightTouch() && timer.getRunTime() > lastShot + shotInterval){//Shooting //&&
 		lastShot = timer.getRunTime();
