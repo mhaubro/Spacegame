@@ -4,9 +4,14 @@
 #include "Graphics.h"
 #include "player.h"
 #include "GameTimer.h"
+#include "utils.h"
+#include "pinnames.h"
 
-UI::UI() {
-
+UI::UI()  {
+	button1 = new Button(PB_13);
+	button2 = new Button(PB_14);
+	button3 = new Button(PB_15);
+	button4 = new Button(PB_1);
 }
 
 void UI::render() {
@@ -101,6 +106,21 @@ void UI::render() {
 		GD.ColorRGB(RED);
 		GD.cmd_text(SCREEN_WIDTH/2, SCREEN_HEIGHT/2, 16, OPT_CENTER, "YOU DIED!");
 	}
+
+	if (button1->isPressed()){
+		GD.cmd_text(350, 200, 16, OPT_CENTER, "Digital3");
+	}
+
+	if (button2->isPressed()){
+		GD.cmd_text(350, 220, 16, OPT_CENTER, "Digital4");
+	}
+	if (button3->isPressed()){
+		GD.cmd_text(350, 240, 16, OPT_CENTER, "Digital5");
+	}
+	if (button4->isPressed()){
+		GD.cmd_text(350, 260, 16, OPT_CENTER, "Digital6");
+	}
+
 
 	GD.RestoreContext();
 }

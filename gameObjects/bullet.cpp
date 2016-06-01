@@ -3,7 +3,8 @@
 #include "bullet.h"
 #include "Vector2f.h"
 
-std::vector<bullet> bullets;
+std::vector<bullet> friendlybullets;
+std::vector<bullet> foebullets;
 
 bullet::bullet(Vector2f& pos, Vector2f& vel, int rad, int col) : position(pos), velocity(vel), color(col), radius(rad), visible(true){
 //	visible = true;

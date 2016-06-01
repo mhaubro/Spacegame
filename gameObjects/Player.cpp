@@ -64,7 +64,7 @@ void Player::update() {
 		Vector2f bulletpos = player.getShotPos();
 		Vector2f bulletv = player.getShotVel(10);//10 = startvelocity of bullet
 		bullet b = bullet(bulletpos, bulletv, 2, WHITE);//Param: pos, vel, Radius, color
-		bullets.push_back(b);
+		friendlybullets.push_back(b);
 	}
 
 	ph.update();

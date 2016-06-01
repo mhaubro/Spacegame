@@ -47,8 +47,9 @@ void World::render() {
 }
 
 //OBS: Bullet collisions with players/enemies/targets are handled by those objects.
-void World::checkBullets(){
-	for(std::vector<bullet>::iterator it = bullets.begin(); it != bullets.end(); ++it) {
+void World::checkBullets(){//Should be made to one function called twice, but this demands inclusion of bullet in the header, which for some unknown reason triggers compiler-errors in player.h.
+	//Friendly bullets
+	for(std::vector<bullet>::iterator it = friendlybullets.begin(); it != friendlybullets.end(); ++it) {
 	    bullet & b = *it;
 	    b.applyforces(timer.getDeltaTime());
 	    if(b.checkEarthCollision() || b.outOfBounds()){
@@ -58,28 +59,56 @@ void World::checkBullets(){
     	b.update();
 
 	}
+
+
+	for(std::vector<bullet>::iterator it = foebullets.begin(); it != foebullets.end(); ++it) {
+		    bullet & b = *it;
+		    b.applyforces(timer.getDeltaTime());
+		    if(b.checkEarthCollision() || b.outOfBounds()){
+		    	b.turnInvisible();
+
+		    }
+	    	b.update();
+		}
 	removeBullets();
 }
 
-void World::removeBullets(){
-	std::vector<bullet>::iterator i = bullets.begin();
-	while (i != bullets.end()){
+void World::removeBullets(){//See comment to update-bullets about double code.
+	std::vector<bullet>::iterator i = friendlybullets.begin();
+	while (i != friendlybullets.end()){
 		bullet & b = *i;
 		if (!b.isVisible()){//If a bullet is to be deleted, it is swapped with the last element, which is then deleted, since order doesn't matter
-			b = bullets[bullets.size()-1];
-			bullets.erase(bullets.end());
+			b = friendlybullets[friendlybullets.size()-1];
+			friendlybullets.erase(friendlybullets.end());
 		} else {
 			++i;
 		}
 
 
 	}
+
+	i = foebullets.begin();
+		while (i != foebullets.end()){
+			bullet & b = *i;
+			if (!b.isVisible()){//If a bullet is to be deleted, it is swapped with the last element, which is then deleted, since order doesn't matter
+				b = foebullets[foebullets.size()-1];
+				foebullets.erase(foebullets.end());
+			} else {
+				++i;
+			}
+
+
+		}
 }
 
 void World::renderBullets(){
-	for(std::vector<bullet>::iterator it = bullets.begin(); it != bullets.end(); ++it) {
+	for(std::vector<bullet>::iterator it = friendlybullets.begin(); it != friendlybullets.end(); ++it) {
 		bullet & b = *it;
 		b.render();
+	}
+	for(std::vector<bullet>::iterator it = foebullets.begin(); it != foebullets.end(); ++it) {
+			bullet & b = *it;
+			b.render();
 	}
 }
 
