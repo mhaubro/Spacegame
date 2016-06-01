@@ -43,5 +43,4 @@ public:
 };
 
 extern Game game;
-
 #endif

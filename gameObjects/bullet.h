@@ -34,6 +34,8 @@ public:
 	void operator= (const bullet& b);
 };
 
-extern std::vector<bullet> bullets;
+extern std::vector<bullet> friendlybullets;
+extern std::vector<bullet> foebullets;
+
 
 #endif
