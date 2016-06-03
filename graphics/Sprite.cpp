@@ -35,3 +35,7 @@ void Sprite::render(const float x, const float y, const float angle, const float
     GD.cmd_setmatrix();
     cam.Vertex2f(x-offsetX*scale,y+offsetY*scale);
 }
+
+void Sprite::render(const Vector2f pos, const float angle, const float scale){
+	render(pos.x,pos.y,angle,scale);
+}
