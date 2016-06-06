@@ -15,6 +15,7 @@ class Octave {
 protected:
 	const int f; // points per chunk
 	const int seed;
+	const int size;
 	float randomFloat(int x);
 
 public:

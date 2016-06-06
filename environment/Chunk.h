@@ -25,10 +25,12 @@ public:
 	Chunk(int _index);
 	virtual ~Chunk();
 	void render();
+	void update(float x);
 	void rewrite(int index);
 
 	float getHeight(float x);
 	Vector2f& getNormal(float x, Vector2f &vec);
+	int getIndex();
 
 };
 

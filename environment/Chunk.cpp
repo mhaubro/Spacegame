@@ -12,9 +12,8 @@
 #include "PerlinNoise.h"
 #include "Mathematics.h"
 
-Chunk::Chunk(int _index) :
-		index(_index) {
-	rewrite(index);
+Chunk::Chunk(int _index){
+	rewrite(_index);
 }
 
 Chunk::~Chunk() {
@@ -57,8 +56,33 @@ void Chunk::render() {
 	// TODO render details in chunks
 }
 
+void Chunk::update(float x){
+	float d = index * CHUNK_SIZE - x;
+
+	while (d < -(WORLD_SIZE * CHUNK_SIZE)/2){
+		d += (WORLD_SIZE * CHUNK_SIZE);
+	}
+
+	while (d > (WORLD_SIZE * CHUNK_SIZE)/2){
+		d -= (WORLD_SIZE * CHUNK_SIZE);
+	}
+
+	if (d < -(CHUNKS_FROM_CENTER + 1) * CHUNK_SIZE){
+		rewrite(index + NUMBER_OF_CHUNKS_LOADED);
+	}
+	if (d > (CHUNKS_FROM_CENTER) * CHUNK_SIZE){
+		rewrite(index - NUMBER_OF_CHUNKS_LOADED);
+	}
+}
+
 void Chunk::rewrite(int _index) {
 	index = _index;
+	while (index < 0){
+		index += WORLD_SIZE;
+	}
+	while (index >= WORLD_SIZE){
+		index -= WORLD_SIZE;
+	}
 
 	static PerlinNoise pn = PerlinNoise();
 	for (int var = 0; var < VERTEX_NUMBER; ++var) {
@@ -88,5 +112,9 @@ Vector2f& Chunk::getNormal(float x, Vector2f &vec) {
 	vec = FromAngle(1,angle);
 
 	return vec;
+}
+
+int Chunk::getIndex(){
+	return index;
 }
 
