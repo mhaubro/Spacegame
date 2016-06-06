@@ -26,6 +26,7 @@ public:
 
 	Vector2f getPosition();
 	Vector2f getVelocity();
+	bool isDead = false;
 };
 
 #endif /* SRC_ENTITY_H_ */

@@ -35,11 +35,14 @@ public:
 	virtual ~Polygon();
 
 	void render();
-
 	static bool Collide(Polygon A, Polygon B, Vector2f& MTD);
+	static bool Collide(Polygon A, Vector2f PointB, Vector2f& MTD, float radius);
+
 	static bool TerrainCollide(Polygon& A, Vector2f& MTD);
 	static bool AxisSeparatePolygons(Vector2f& Axis, Polygon A, Polygon B);
-	static void CalculateInterval(Vector2f Axis, Polygon P, float& min,
+	static bool AxisSeparatePolygons(Vector2f& Axis, Polygon A, Vector2f B, float radius);
+	static void CalculateInterval(Vector2f Axis, Polygon P, float& min, float& max);
+	static void CalculateInterval(Vector2f Axis, Vector2f Point, float radius, float& min,
 			float& max);
 	static Vector2f FindMTD(Vector2f* PushVectors, int iNumVectors);
 

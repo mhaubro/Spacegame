@@ -30,6 +30,10 @@ void Game::run() {
 	Polygon poly3 = Polygon(poly2Pos, angle, 5, shape3);
 
 	score = 300;
+	Vector2f pos = Vector2f(15,15);
+	Vector2f vel = Vector2f(0,0);
+	Enemy e = Enemy(pos, vel);
+	enemies.push_back(e);
 
 	while (running) {
 
@@ -51,6 +55,7 @@ void Game::update() {
 	score = score + 1;
 
 	player.update();
+	updateEnemies();
 	cam.follow(player.getPosition(), player.getVelocity());
 	world.update(player.getPosition().x);
 
@@ -60,6 +65,7 @@ void Game::render() {
 
 	background.render();
 	player.render();
+	renderEnemies();
 	world.render();
 	ui.render();
 
@@ -71,4 +77,32 @@ bool Game::isOver(){
 
 void Game::setGameOver(){
 	isGameOver = true;
+}
+
+void Game::renderEnemies(){
+	for(std::vector<Enemy>::iterator it = enemies.begin(); it != enemies.end(); ++it) {
+		Enemy & e = *it;
+		e.render();
+	}
+}
+
+void Game::updateEnemies(){
+	for(std::vector<Enemy>::iterator it = enemies.begin(); it != enemies.end(); ++it) {
+		Enemy & e = *it;
+		e.update();
+	}
+	removeEnemies();
+}
+
+void Game::removeEnemies(){//Same concept as removebullets
+	std::vector<Enemy>::iterator i = enemies.begin();
+	while (i != enemies.end()){
+		Enemy & e = *i;
+		if (e.isDead){//If a bullet is to be deleted, it is swapped with the last element, which is then deleted, since order doesn't matter
+			e = enemies[enemies.size()-1];
+			enemies.erase(enemies.end());
+		} else {
+			++i;
+		}
+	}
 }
