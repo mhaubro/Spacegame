@@ -5,31 +5,32 @@
 
 #include "game.h"
 #include "PhysicsConstants.h"
+#include "PhysicsObject.h"
 #include "GD2.h"
 #include "particle.h"
 
 
-class bullet{
+#define Lifespan 10
+
+class bullet : public PhysicsObject{
 private:
-	void applydrag(int dt);
-	void applyG(int dt);
+
+	const double startTime;
+	bool dead = false;
+	Animation anim;
 
 public:
 
-	Vector2f position;
-	Vector2f velocity;
-	int radius;
 	unsigned int color;
-	bool visible;
 
 	bullet(Vector2f& position, Vector2f& velocity, int radius, int color);
 	void update();
-	void applyforces(int dt);
 	void render();
-	void turnInvisible();
+
 	bool checkEarthCollision();
-	bool isVisible();
-	bool outOfBounds();
+
+	bool isDead();
+	void kill();
 
 	void operator= (const bullet& b);
 };

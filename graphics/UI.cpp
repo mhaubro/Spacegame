@@ -15,7 +15,7 @@ UI::UI() {
 }
 
 void UI::render() {
-	GD.SaveContext();
+	GD.RestoreContext();
 
 	if (game.isOver()) {
 		GD.ColorRGB(WHITE);

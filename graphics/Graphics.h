@@ -16,9 +16,9 @@
 #define SCREEN_WIDTH 480
 #define SCREEN_HEIGHT 272
 
-#define SCREEN_MIN_X -40
+#define SCREEN_MIN_X -20
 #define SCREEN_MIN_Y -20
-#define SCREEN_MAX_X 40
+#define SCREEN_MAX_X 20
 #define SCREEN_MAX_Y 20
 
 #define SCREEN_UNIT_BORDER_X (float) SCREEN_WIDTH / (2 * UNIT)

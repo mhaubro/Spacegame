@@ -62,7 +62,7 @@ void Player::update() {
 	if (input.getRightTouch() && timer.getRunTime() > lastShot + shotInterval){//Shooting //&&
 		lastShot = timer.getRunTime();
 		Vector2f bulletpos = player.getShotPos();
-		Vector2f bulletv = player.getShotVel(10);//10 = startvelocity of bullet. Same value in enemy -> enemyshot.
+		Vector2f bulletv = player.getShotVel(20);//10 = startvelocity of bullet
 		bullet b = bullet(bulletpos, bulletv, 2, WHITE);//Param: pos, vel, Radius, color
 		friendlybullets.push_back(b);
 	}
@@ -147,5 +147,5 @@ Vector2f Player::getShotPos(){
 }
 
 Vector2f Player::getShotVel(float velocity){
-	return FromAngle(velocity, angle);
+	return FromAngle(velocity, angle) + ph.velocity * 0.5;
 }
