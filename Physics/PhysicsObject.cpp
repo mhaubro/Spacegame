@@ -22,13 +22,11 @@ void PhysicsObject::update() {
 		velocity.y *= -.1;
 	}
 
-	if (position.x < 0) {
-		velocity.x *= -.1;
-		position.x = 0;
+	while (position.x > WORLD_SIZE * CHUNK_SIZE) {
+		position.x -= WORLD_SIZE * CHUNK_SIZE;
 	}
-	if (position.x > 48) {
-		velocity.x *= -.1;
-		position.x = 48;
+	while (position.x < 0) {
+		position.x += WORLD_SIZE * CHUNK_SIZE;
 	}
 
 }

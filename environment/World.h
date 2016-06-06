@@ -11,16 +11,16 @@
 #include "Chunk.h"
 
 #define WORLD_SIZE 16
+#define CHUNKS_FROM_CENTER 2
+#define NUMBER_OF_CHUNKS_LOADED (1 + CHUNKS_FROM_CENTER*2)
 
 class World {
 protected:
 
 	Chunk ** chunks;
-	unsigned int index = 0;
 
 	void decrementIndex();
 	void incrementIndex();
-
 
 public:
 	World();

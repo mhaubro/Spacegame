@@ -27,8 +27,12 @@ float Vector2f::dotProduct(Vector2f extv) {
 	return x * extv.x + y * extv.y;
 }
 
-Vector2f Vector2f::vertexTransformed(Vector2f positionTransform, float rotationTransform){
-	return Vector2f(FromAngle(1, rotationTransform) * x	+ FromAngle(1, rotationTransform - PI / 2) * y) + positionTransform;
+Vector2f Vector2f::vertexTransformed(Vector2f positionTransform,
+		float rotationTransform) {
+	return Vector2f(
+			FromAngle(1, rotationTransform) * x
+					+ FromAngle(1, rotationTransform - PI / 2) * y)
+			+ positionTransform;
 }
 
 float Vector2f::length() {
@@ -38,7 +42,13 @@ float Vector2f::length() {
 float Vector2f::angle() {
 	if (x == 0 && y == 0)
 		return 0;
-	return atan2f(x, y);
+	float a = atan2f(-y, x);
+
+	while (a < 0)
+		a += PI * 2;
+	while (a > PI * 2)
+		a -= PI * 2;
+	return a;
 }
 
 void Vector2f::wrap(Vector2f min, Vector2f max) {
