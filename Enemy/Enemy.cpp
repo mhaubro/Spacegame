@@ -86,7 +86,7 @@ Vector2f Enemy::getShotPos(){
 
 Vector2f Enemy::getShotVel(float velocity, float angle){
 	int seedvalue = (int)(ph.position.x*50 + angle*50);
-	float randangle = ran.randomF(seedvalue)*35-17.5;//Der skydes skævt med +- 17.5 grader.
+	float randangle = ran.Float(seedvalue)*35-17.5;//Der skydes skævt med +- 17.5 grader.
 	return FromAngle(velocity, randangle*3.14/180+angle);//Returnerer//
 }
 
