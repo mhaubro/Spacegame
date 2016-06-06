@@ -2,6 +2,7 @@
 #ifndef GAME_H_
 #define GAME_H_
 
+#include <vector>
 #include "BackGround.h"
 #include "UI.h"
 #include "Entity.h"
@@ -13,6 +14,7 @@
 #include "World.h"
 #include "GameTimer.h"
 #include "bullet.h"
+#include "enemy.h"
 
 class Game
 {
@@ -25,7 +27,11 @@ protected:
     BackGround background;
 
     void update();
+    void updateEnemies();
     void render();
+    void renderEnemies();
+    void removeEnemies();
+
 
 public:
     Game();

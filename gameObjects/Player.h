@@ -25,7 +25,6 @@ protected:
 	double lastShot = 0;
 
 	bool isThrust = false;
-	bool isDead = false;
 
 	Polygon* collisionBox;
 
