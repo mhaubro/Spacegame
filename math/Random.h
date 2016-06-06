@@ -15,7 +15,7 @@ public:
 	Random();
 	virtual ~Random();
 
-	float randomF(int x);
+	float Float(int x);
 };
 
 extern Random ran;

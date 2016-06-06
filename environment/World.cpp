@@ -43,6 +43,9 @@ void World::render() {
 	}
 
 	//Renders bullets
+	GD.ColorA(255);
+	GD.ColorRGB(WHITE);
+	GD.Begin(BITMAPS);
 	renderBullets();
 }
 
@@ -73,6 +76,9 @@ void World::checkBullets() { //Should be made to one function called twice, but 
 }
 
 void World::removeBullets() {//See comment to update-bullets about double code.
+
+	//TODO fix problem with remove. wrong bullets is removed
+
 	std::vector<bullet>::iterator i = friendlybullets.begin();
 	while (i != friendlybullets.end()) {
 		bullet & b = *i;

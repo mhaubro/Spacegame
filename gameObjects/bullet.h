@@ -12,12 +12,12 @@
 
 #define Lifespan 10
 
-
 class bullet : public PhysicsObject{
 private:
 
 	const double startTime;
 	bool dead = false;
+	Animation anim;
 
 public:
 

@@ -6,7 +6,8 @@ std::vector<bullet> friendlybullets;
 std::vector<bullet> foebullets;
 
 bullet::bullet(Vector2f& pos, Vector2f& vel, int rad, int col) :
-		PhysicsObject(1, pos, vel), startTime(timer.getRunTime()), color(col) {
+		PhysicsObject(1, pos, vel), startTime(timer.getRunTime()), anim(
+		SPRITESHEET_HANDLE, 8, 8, 11, 2, 0.1), color(col) {
 //	visible = true;
 //	color = col;
 //	radius = rad;
@@ -15,10 +16,12 @@ bullet::bullet(Vector2f& pos, Vector2f& vel, int rad, int col) :
 }
 
 void bullet::render() {
-	GD.ColorRGB(color);
-	GD.Begin(POINTS);
-	GD.PointSize(16 * radius);
-	cam.Vertex2f(position.x, position.y);
+//	GD.ColorRGB(color);
+//	GD.Begin(POINTS);
+//	GD.PointSize(16 * radius);
+//	cam.Vertex2f(position.x, position.y);
+	anim.render(position, velocity.angle(), 2);
+
 	//GD.cmd_text(40, 40, 16, OPT_SIGNED, "BULLETS");
 }
 
