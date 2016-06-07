@@ -11,8 +11,6 @@ protected:
 	bool checkCollision();
 
 public:
-	void applyForces(Vector2f forces, float dt);
-
 
 	RigidBody();
 
