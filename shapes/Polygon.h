@@ -26,8 +26,8 @@ protected:
 	static bool RayCast(Ray ray, Polygon polygon, float &t, Vector2f& normal);
 
 public:
-	const float& angle;
-	const Vector2f& Position;
+	float& angle;
+	Vector2f& Position;
 
 	float getHitradius();
 
@@ -36,9 +36,9 @@ public:
 
 	void render();
 	static bool Collide(Polygon A, Polygon B, Vector2f& MTD);
-	static bool Collide(Polygon A, Vector2f PointB, Vector2f& MTD, float radius);
+	static bool Collide(Polygon A, Vector2f PointB, float radius, Vector2f& MTD);
 
-	static bool TerrainCollide(Polygon& A, Vector2f& MTD);
+	static bool TerrainCollide(Polygon& A, Vector2f& MTD, Vector2f& Normal, Vector2f& Point);
 	static bool AxisSeparatePolygons(Vector2f& Axis, Polygon A, Polygon B);
 	static bool AxisSeparatePolygons(Vector2f& Axis, Polygon A, Vector2f B, float radius);
 	static void CalculateInterval(Vector2f Axis, Polygon P, float& min, float& max);

@@ -54,10 +54,11 @@ void Game::update() {
 
 	score = score + 1;
 
+	world.update(player.getPosition().x);
 	player.update();
 	updateEnemies();
 	cam.follow(player.getPosition(), player.getVelocity());
-	world.update(player.getPosition().x);
+
 
 }
 

@@ -55,6 +55,8 @@ void Polygon::render() {
 
 bool Polygon::Collide(Polygon A, Polygon B, Vector2f& MTD) {
 
+	if ((A.Position - B.Position).length() > A.hitRadius + B.hitRadius) return false;
+
 	Vector2f Axis[32];
 	int iNumAxis = 0;
 
@@ -92,23 +94,33 @@ bool Polygon::Collide(Polygon A, Polygon B, Vector2f& MTD) {
 	return true;
 }
 
-bool Polygon::TerrainCollide(Polygon& A, Vector2f& MTD) {
+bool Polygon::TerrainCollide(Polygon& A, Vector2f& MTD, Vector2f& Normal, Vector2f& Point) {
 
+	float height = world.getHeight(A.Position.x);
+
+	if (A.Position.y - height > A.hitRadius * 2) return false;
+
+	bool collision = false;
+	float maxDepth = -1;
 	Vector2f temp;
-	float height;
+
 	for (int i = 0; i < A.numVertexs; i++) {
 		temp = A.getVertexTransformed(i);
 		height = world.getHeight(temp.x);
 		if (height > temp.y) {
-			world.getNormal(temp.x, MTD);
-			MTD = MTD * (height - temp.y);
-			return true;
+			if (height - temp.y > maxDepth){
+				maxDepth = height - temp.y;
+				Point = Vector2f(temp.x,height);
+				world.getNormal(temp.x,Normal);
+			}
+			collision = true;
 		}
 	}
 
 	//TODO check if the terrains points is in the polygon.
 
-	return false;
+	MTD = Vector2f(0,maxDepth);
+	return collision;
 }
 
 Vector2f Polygon::FindMTD(Vector2f* PushVectors, int iNumVectors) {
@@ -211,7 +223,9 @@ bool Polygon::RayCast(Ray ray, Polygon polygon, float &t, Vector2f& normal) {
 //##############################################
 //##############################################
 
-bool Polygon::Collide(Polygon A, Vector2f Point, Vector2f& MTD, float radius) {
+bool Polygon::Collide(Polygon A, Vector2f Point, float radius, Vector2f& MTD) {
+
+	if ((Point - A.Position).length() > A.hitRadius + radius) return false;
 
 	Vector2f Axis[32];
 	int iNumAxis = 0;
