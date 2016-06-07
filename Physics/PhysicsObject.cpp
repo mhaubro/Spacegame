@@ -8,7 +8,7 @@ PhysicsObject::PhysicsObject(float mass, Vector2f& position, Vector2f& velocity)
 		mass(mass), radius(1), position(position), velocity(velocity) {
 }
 
-void PhysicsObject::update() {
+void PhysicsObject::updatePhysics() {
 	float dt = timer.getDeltaTime();
 	accelerations += forces * (1 / mass);
 	velocity += accelerations * dt;
@@ -43,3 +43,14 @@ void PhysicsObject::addAcceleration(Vector2f v) {
 	accelerations += v;
 }
 
+Vector2f PhysicsObject::getPosition(){
+	return position;
+}
+
+Vector2f PhysicsObject::getVelocity(){
+	return velocity;
+}
+
+float PhysicsObject::getMass(){
+	return mass;
+}

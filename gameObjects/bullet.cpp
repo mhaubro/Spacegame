@@ -26,7 +26,7 @@ void bullet::render() {
 }
 
 void bullet::update() {
-	this->PhysicsObject::update();
+	this->PhysicsObject::updatePhysics();
 	if (timer.getRunTime() > startTime + Lifespan) {
 		dead = true;
 	}

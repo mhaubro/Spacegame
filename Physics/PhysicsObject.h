@@ -1,5 +1,4 @@
 
-
 #ifndef PHYSICSOBJECT_H
 #define PHYSICSOBJECT_H
 
@@ -8,14 +7,17 @@
 #include "World.h"
 
 class PhysicsObject {
-
-public:
+protected:
 	float mass;
-	float radius;
+
 	Vector2f forces;
 	Vector2f accelerations;
 	Vector2f position;
 	Vector2f velocity;
+
+public:
+
+	float radius;
 
 	PhysicsObject(float mass, Vector2f& position, Vector2f& velocity);
 
@@ -25,7 +27,11 @@ public:
 
 	void addAcceleration(Vector2f v);
 	void addForce(Vector2f v);
-	void update();
+	void updatePhysics();
+
+	Vector2f getPosition();
+	Vector2f getVelocity();
+	float getMass();
 
 };
 #endif

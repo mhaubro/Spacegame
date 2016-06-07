@@ -5,13 +5,17 @@ class RigidBody : public PhysicsObject{
 
 protected:
 
+	float inertia;
+
 	float angle;//Angle of unit, radians.
-	float angularAcc;
-	//Collection of stuff that makes up the rigid body
-	bool checkCollision();
+	float aVelocity;
+	float aAcceleration;
+	float aTorque;
 
 public:
 
 	RigidBody();
+
+
 
 };

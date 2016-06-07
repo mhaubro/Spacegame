@@ -10,7 +10,7 @@
 
 
 
-class Player: public Entity {
+class Player: public Entity, public PhysicsObject {
 protected:
 
 	float getMaxThrottle();
