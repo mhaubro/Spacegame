@@ -4,7 +4,7 @@
 #include "myassets.h"
 #include "Mathematics.h"
 #include "Game.h"
-#include "PhysicsObject.h"
+#include "RigidBody.h"
 #include "Graphics.h"
 #include "Input.h"
 #include "bullet.h"
@@ -20,7 +20,7 @@ Vector2f tangent = Vector2f();
 Vector2f collisionPoint = Vector2f(10, 10);
 
 Player::Player(Vector2f pos, Vector2f vel) :
-		Entity(), PhysicsObject(1, pos, vel), angle(0), height(0) {
+		Entity(), RigidBody(1,1,pos,0,vel) , height(0) {
 
 	Vector2f shape1[] = { Vector2f(-1, 0), Vector2f(-.5, .8), Vector2f(1, 0),
 			Vector2f(-.5, -.8) };
@@ -52,7 +52,7 @@ void Player::update() {
 		if (input.getLeftTouch()) {
 			velocity += FromAngle(0.01, angle);
 			Vector2f throttle = FromAngle(getMaxThrottle(), angle); //Tilføjer en kraft på 30 newton i den vinkel
-			addForce(throttle, position);
+			addForce(throttle, position + Vector2f(.2,0));
 			isThrust = true;
 			if (energy > 1)
 				energy -= 1;

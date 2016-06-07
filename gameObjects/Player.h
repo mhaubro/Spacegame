@@ -11,7 +11,7 @@
 
 
 
-class Player: public Entity, public PhysicsObject {
+class Player: public Entity, public RigidBody {
 protected:
 
 	float getMaxThrottle();
@@ -31,8 +31,6 @@ protected:
 
 
 public:
-
-	float angle;
 
 	float height;
 
