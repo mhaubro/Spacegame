@@ -293,8 +293,9 @@ bool Polygon::AxisSeparatePolygons(Vector2f& Axis, Polygon A, Vector2f Point, fl
 void Polygon::CalculateInterval(Vector2f Axis, Vector2f Point, float radius, float& min,
 		float& max) {
 	float d = Axis.dotProduct(Point);
-	min = d - radius;
-	max = d + radius;
+	float r = radius * Axis.length();
+	min = d - r;
+	max = d + r;
 }
 
 //	//Implemented by making a convex hull, and checking whether this is equal to the former convex hull
