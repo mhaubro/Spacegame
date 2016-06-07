@@ -8,6 +8,10 @@ PhysicsObject::PhysicsObject(float mass, Vector2f& position, Vector2f& velocity)
 		mass(mass), position(position), velocity(velocity) {
 }
 
+PhysicsObject::~PhysicsObject(){
+
+}
+
 void PhysicsObject::updatePhysics() {
 	float dt = timer.getDeltaTime();
 	accelerations += forces * (1 / mass);
@@ -16,6 +20,11 @@ void PhysicsObject::updatePhysics() {
 	accelerations = 0;
 	forces = 0;
 
+	loopPosition();
+
+}
+
+void PhysicsObject::loopPosition() {
 	if (position.y > 100) {
 		position.y = 100;
 		velocity.y *= -.1;
@@ -32,10 +41,9 @@ void PhysicsObject::updatePhysics() {
 	while (position.x < 0) {
 		position.x += WORLD_SIZE * CHUNK_SIZE;
 	}
-
 }
 
-void PhysicsObject::addForce(Vector2f v) {
+void PhysicsObject::addForce(Vector2f v, Vector2f point) {
 	forces += v;
 }
 
@@ -43,14 +51,14 @@ void PhysicsObject::addAcceleration(Vector2f v) {
 	accelerations += v;
 }
 
-Vector2f PhysicsObject::getPosition(){
+Vector2f PhysicsObject::getPosition() {
 	return position;
 }
 
-Vector2f PhysicsObject::getVelocity(){
+Vector2f PhysicsObject::getVelocity() {
 	return velocity;
 }
 
-float PhysicsObject::getMass(){
+float PhysicsObject::getMass() {
 	return mass;
 }

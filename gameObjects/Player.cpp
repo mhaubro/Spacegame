@@ -52,7 +52,7 @@ void Player::update() {
 		if (input.getLeftTouch()) {
 			velocity += FromAngle(0.01, angle);
 			Vector2f throttle = FromAngle(getMaxThrottle(), angle); //Tilføjer en kraft på 30 newton i den vinkel
-			addForce(throttle);
+			addForce(throttle, position);
 			isThrust = true;
 			if (energy > 1)
 				energy -= 1;

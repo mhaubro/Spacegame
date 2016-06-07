@@ -4,6 +4,7 @@
 
 #include "Vector2f.h"
 #include "Entity.h"
+#include "RigidBody.h"
 #include "Animation.h"
 #include "Polygon.h"
 #include "Sprite.h"

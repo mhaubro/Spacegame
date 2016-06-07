@@ -15,15 +15,16 @@ protected:
 	Vector2f position;
 	Vector2f velocity;
 
+	void loopPosition();
+
 public:
 
 	PhysicsObject(float mass, Vector2f& position, Vector2f& velocity);
+	virtual ~PhysicsObject();
 
-	void render();
-
-	void addAcceleration(Vector2f v);
-	void addForce(Vector2f v);
-	void updatePhysics();
+	virtual void addAcceleration(Vector2f v);
+	virtual void addForce(Vector2f v, Vector2f point);
+	virtual void updatePhysics();
 
 	Vector2f getPosition();
 	Vector2f getVelocity();
