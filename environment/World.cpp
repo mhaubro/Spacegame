@@ -131,7 +131,7 @@ Vector2f& World::getNormal(float x, Vector2f &vec) {
 	int index = ((int) (x / CHUNK_SIZE));
 	for (int i = 0; i < NUMBER_OF_CHUNKS_LOADED; i++) {
 		if (chunks[i]->getIndex() == index) {
-			return chunks[i]->getNormal((x - i * CHUNK_SIZE), vec);
+			return chunks[i]->getNormal((x - index * CHUNK_SIZE), vec);
 		}
 	}
 	return vec = Vector2f(0,1);

@@ -94,7 +94,7 @@ void Enemy::checkHits(){
 	for(std::vector<bullet>::iterator it = friendlybullets.begin(); it != friendlybullets.end(); ++it) {
 		bullet b = *it;
 		Vector2f MTD;
-		if (collisionBox->Collide(*collisionBox, b.position, MTD, (float) b.radius)){
+		if (collisionBox->Collide(*collisionBox, b.position, b.radius, MTD)){
 			game.score = game.score + 10000;
 		}
 

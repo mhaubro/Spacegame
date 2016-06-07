@@ -12,7 +12,6 @@
 #include "PerlinNoise.h"
 #include "Mathematics.h"
 
-
 Chunk::Chunk(int _index) {
 	rewrite(_index);
 }
@@ -40,6 +39,10 @@ void Chunk::render() {
 		cam.Vertex2f(((float) var * VERTEX_SEPERATION + index * CHUNK_SIZE),
 				(heightMap[var]));
 	}
+
+	GD.Begin(POINTS);
+	GD.ColorRGB(BLUE);
+	cam.Vertex2f(index * CHUNK_SIZE, heightMap[0]);
 
 	// TODO render details in chunks
 //	GD.ColorRGB(WHITE);
@@ -77,7 +80,6 @@ void Chunk::update(float x) {
 
 void Chunk::rewrite(int _index) {
 
-
 	index = _index;
 	while (index < 0) {
 		index += WORLD_SIZE;
@@ -104,23 +106,29 @@ void Chunk::rewrite(int _index) {
 float Chunk::getHeight(float x) {
 
 	int i = (int) ((x * (VERTEX_NUMBER - 1)) / CHUNK_SIZE);
-	float y1 = heightMap[i];
-	float y2 = heightMap[i + 1];
-	float x1 = i * VERTEX_SEPERATION;
-	float v = (x - x1) / VERTEX_SEPERATION;
+	if (i >= 0 && i < VERTEX_NUMBER) {
+		float y1 = heightMap[i];
+		float y2 = heightMap[i + 1];
+		float x1 = i * VERTEX_SEPERATION;
+		float v = (x - x1) / VERTEX_SEPERATION;
 
-	return (y1 * (1 - v)) + (y2 * v);
+		return (y1 * (1 - v)) + (y2 * v);
+	}
+	return 0;
 
 }
 
 Vector2f& Chunk::getNormal(float x, Vector2f &vec) {
 	int i = (int) ((x * (VERTEX_NUMBER - 1)) / CHUNK_SIZE);
-	float dy = heightMap[i + 1] - heightMap[i];
+	if (i >= 0 && i < VERTEX_NUMBER) {
+		float dy = heightMap[i + 1] - heightMap[i];
 
-	float angle = atan2f(VERTEX_SEPERATION, dy) + PI;
-	vec = FromAngle(1, angle);
+		float angle = atan2f(VERTEX_SEPERATION, dy) + PI;
+		vec = FromAngle(1, angle);
 
-	return vec;
+		return vec;
+	}
+	return vec = Vector2f(0, -1);
 }
 
 int Chunk::getIndex() {
