@@ -17,12 +17,8 @@ protected:
 
 public:
 
-	float radius;
-
 	PhysicsObject(float mass, Vector2f& position, Vector2f& velocity);
 
-//	Vector2f& getPosition();
-//	Vector2f& getVelocity();//Maybe implement?
 	void render();
 
 	void addAcceleration(Vector2f v);

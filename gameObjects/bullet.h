@@ -21,9 +21,10 @@ private:
 
 public:
 
+	float radius;
 	unsigned int color;
 
-	bullet(Vector2f& position, Vector2f& velocity, int radius, int color);
+	bullet(Vector2f& position, Vector2f& velocity, float radius, int color);
 	void update();
 	void render();
 

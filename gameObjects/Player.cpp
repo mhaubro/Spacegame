@@ -79,9 +79,9 @@ void Player::update() {
 	Vector2f mtd = Vector2f();
 
 	if (Polygon::TerrainCollide(*collisionBox, mtd, normal, collisionPoint)) {
-		float speed = normal.normalized().dotProduct(velocity);
-		if (speed > 5) {
-			health -= speed * speed;
+		float damage = velocity.length();
+		if (damage > 1) {
+			health -= damage * damage;
 		}
 
 		position += mtd;

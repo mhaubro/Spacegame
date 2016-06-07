@@ -5,7 +5,7 @@
 #include "GameTimer.h"
 
 PhysicsObject::PhysicsObject(float mass, Vector2f& position, Vector2f& velocity) :
-		mass(mass), radius(1), position(position), velocity(velocity) {
+		mass(mass), position(position), velocity(velocity) {
 }
 
 void PhysicsObject::updatePhysics() {
