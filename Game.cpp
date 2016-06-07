@@ -6,7 +6,7 @@ Game game;
 unsigned int score;
 
 Game::Game() :
-		running(false), isGameOver(false), ui(), background(), score(42) {
+		running(false), isGameOver(false), ui(), background(), score(0) {
 }
 
 Game::~Game() {
@@ -29,7 +29,7 @@ void Game::run() {
 			Vector2f(1, 1), Vector2f(1, -1) };
 	Polygon poly3 = Polygon(poly2Pos, angle, 5, shape3);
 
-	score = 300;
+	//score = 300;
 	Vector2f pos = Vector2f(15,15);
 	Vector2f vel = Vector2f(0,0);
 	Enemy e = Enemy(pos, vel);
@@ -52,7 +52,7 @@ void Game::update() {
 
 	timer.update();
 
-	score = score + 1;
+	//score = score + 1;
 
 	player.update();
 	updateEnemies();
@@ -80,16 +80,19 @@ void Game::setGameOver(){
 }
 
 void Game::renderEnemies(){
+	GD.RestoreContext();
 	for(std::vector<Enemy>::iterator it = enemies.begin(); it != enemies.end(); ++it) {
 		Enemy & e = *it;
-		e.render();
+		if (!e.isDead)//Might end up being unused since always true.
+			e.render();
 	}
 }
 
 void Game::updateEnemies(){
 	for(std::vector<Enemy>::iterator it = enemies.begin(); it != enemies.end(); ++it) {
 		Enemy & e = *it;
-		e.update();
+		if (!e.isDead)//Might end up being unused since always true.
+			e.update();
 	}
 	removeEnemies();
 }

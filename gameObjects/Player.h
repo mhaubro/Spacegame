@@ -16,7 +16,7 @@ protected:
 	float getMaxThrottle();
 	Vector2f getShotPos();
 	Vector2f getShotVel(float velocity);
-
+	void checkHits();
 	Sprite* sprite;
 	Sprite* exhaust;
 	Animation* anim;

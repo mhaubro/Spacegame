@@ -99,12 +99,26 @@ void Player::update() {
 	energy = clamp(energy, 0, maxEnergy);
 
 	health += .01;
+
+	checkHits();//To place here, or maybe before regen?
+
 	if (health <= 0) {
 		isDead = true;
 		game.setGameOver();
 	}
 	health = clamp(health, 0, maxHealth);
 
+}
+
+void Player::checkHits(){
+	for(std::vector<bullet>::iterator it = foebullets.begin(); it != foebullets.end(); ++it) {
+		bullet & b = *it;
+		Vector2f MTD;
+		if (collisionBox->Collide(*collisionBox, b.position, MTD, (float) b.radius)){
+			b.kill();
+			health -= 100;
+		}
+	}
 }
 
 void Player::render(){

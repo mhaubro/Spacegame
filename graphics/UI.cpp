@@ -116,17 +116,17 @@ void UI::render() {
 		GD.cmd_number(36, 50, 16, OPT_SIGNED, 1 / timer.getDeltaTime());
 
 		if (button1->isPressed()) {
-			GD.cmd_text(350, 200, 16, OPT_CENTER, "Digital3");
+			//GD.cmd_text(350, 200, 16, OPT_CENTER, "Digital3");
 		}
 
 		if (button2->isPressed()) {
-			GD.cmd_text(350, 220, 16, OPT_CENTER, "Digital4");
+			//GD.cmd_text(350, 220, 16, OPT_CENTER, "Digital4");
 		}
 		if (button3->isPressed()) {
-			GD.cmd_text(350, 240, 16, OPT_CENTER, "Digital5");
+			//GD.cmd_text(350, 240, 16, OPT_CENTER, "Digital5");
 		}
 		if (button4->isPressed()) {
-			GD.cmd_text(350, 260, 16, OPT_CENTER, "Digital6");
+			//GD.cmd_text(350, 260, 16, OPT_CENTER, "Digital6");
 		}
 
 	}
