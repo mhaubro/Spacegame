@@ -27,6 +27,19 @@ float Vector2f::dotProduct(Vector2f extv) {
 	return x * extv.x + y * extv.y;
 }
 
+float Vector2f::crossproduct(Vector2f arg) {
+	return (this->x * arg.y - this->y * arg.x);
+}
+
+Vector2f Vector2f::projectAt(Vector2f arg) {
+	Vector2f normalArg = arg.normalized();
+	return normalArg * normalArg.dotProduct(*this);
+}
+
+float Vector2f::scalarProjectAt(Vector2f arg) {
+	return arg.normalized().dotProduct(*this);
+}
+
 Vector2f Vector2f::vertexTransformed(Vector2f positionTransform,
 		float rotationTransform) {
 	return Vector2f(
@@ -67,16 +80,19 @@ void Vector2f::wrap(Vector2f min, Vector2f max) {
 	}
 }
 Vector2f Vector2f::normalized() {
-	float length = this->length();
-	return Vector2f(x / length, y / length);
+	float len = this->length();
+	if (len != 0) {
+		return Vector2f(x / len, y / len);
+	}
+	return Vector2f(1,0);
 }
 
-Vector2f Vector2f::LeftNormal(const Vector2f& arg) {
-	return Vector2f(-arg.y, arg.x);
+Vector2f Vector2f::leftNormal() {
+	return Vector2f(-y, x);
 }
 
-Vector2f Vector2f::RightNormal(const Vector2f& arg) {
-	return Vector2f(arg.y, -arg.x);
+Vector2f Vector2f::rightNormal() {
+	return Vector2f(y, -x);
 }
 
 float determinant(const Vector2f& a, const Vector2f& b) {
@@ -149,6 +165,11 @@ Vector2f Vector2f::operator-(const Vector2f& arg) {
 
 Vector2f Vector2f::operator*(const float arg) {
 	Vector2f V = Vector2f(this->x * arg, this->y * arg);
+	return V;
+}
+
+Vector2f Vector2f::operator/(const float arg) {
+	Vector2f V = Vector2f(this->x / arg, this->y / arg);
 	return V;
 }
 

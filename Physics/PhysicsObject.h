@@ -1,5 +1,4 @@
 
-
 #ifndef PHYSICSOBJECT_H
 #define PHYSICSOBJECT_H
 
@@ -8,35 +7,30 @@
 #include "World.h"
 
 class PhysicsObject {
-
-public:
+protected:
 	float mass;
-	float radius;
+
 	Vector2f forces;
 	Vector2f accelerations;
 	Vector2f position;
 	Vector2f velocity;
 
+	void loopPosition();
 
+public:
 
 	PhysicsObject(float mass, Vector2f& position, Vector2f& velocity);
+	virtual ~PhysicsObject();
 
-//	Vector2f& getPosition();
-//	Vector2f& getVelocity();//Maybe implement?
-	void render();
+	virtual void addAcceleration(Vector2f v);
+	virtual void addForce(Vector2f v, Vector2f point);
+	virtual void addImpulse(Vector2f impulse, Vector2f point);
+	virtual void updatePhysics();
 
-	void addAcceleration(Vector2f v);
-	void addForce(Vector2f v);
-	void update();
+	Vector2f getPosition();
+	Vector2f getVelocity();
+	float getMass();
 
-	void checkBounds();
-	bool Collision(PhysicsObject& ph);
-	bool checkCollision(PhysicsObject& ph);
-	bool terrainCollision(World& world);
-	float findDistMidpoint(PhysicsObject& ph);
-	float findDist(PhysicsObject& ph);
-	void applyCollission(PhysicsObject& ph1, PhysicsObject& ph2);//Edits for both
-//	void applyCollissionthis(PhysicsObject& ph);//Edits data for this object with collision from ph.
-	void applyTerrainCoolision(World& world);
 };
+
 #endif

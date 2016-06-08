@@ -4,13 +4,14 @@
 
 #include "Vector2f.h"
 #include "Entity.h"
+#include "RigidBody.h"
 #include "Animation.h"
 #include "Polygon.h"
 #include "Sprite.h"
 
 
 
-class Player: public Entity {
+class Player: public Entity, public RigidBody {
 protected:
 
 	float getMaxThrottle();
@@ -24,14 +25,12 @@ protected:
 	const double shotInterval = .2;
 	double lastShot = 0;
 
-	bool isThrust = false;
+	bool enginesOn = false;
 
 	Polygon* collisionBox;
 
 
 public:
-
-	float angle;
 
 	float height;
 

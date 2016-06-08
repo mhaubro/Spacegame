@@ -5,9 +5,9 @@
 std::vector<bullet> friendlybullets;
 std::vector<bullet> foebullets;
 
-bullet::bullet(Vector2f& pos, Vector2f& vel, int rad, int col) :
+bullet::bullet(Vector2f& pos, Vector2f& vel, float radius, int col) :
 		PhysicsObject(1, pos, vel), startTime(timer.getRunTime()), anim(
-		SPRITESHEET_HANDLE, 8, 8, 11, 2, 0.1), color(col) {
+		SPRITESHEET_HANDLE, 8, 8, 11, 2, 0.1), radius(radius), color(col) {
 //	visible = true;
 //	color = col;
 //	radius = rad;
@@ -26,7 +26,7 @@ void bullet::render() {
 }
 
 void bullet::update() {
-	this->PhysicsObject::update();
+	this->PhysicsObject::updatePhysics();
 	if (timer.getRunTime() > startTime + Lifespan) {
 		dead = true;
 	}

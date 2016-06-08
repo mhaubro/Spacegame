@@ -9,12 +9,12 @@
 std::vector<Enemy> enemies;
 
 Enemy::Enemy(Vector2f pos, Vector2f vel) :
-Entity(pos, vel, 1), height(pos.y), health(100), lastShot(0) {
+Entity(),PhysicsObject(1,pos,vel) ,height(pos.y), health(100), lastShot(0) {
 	// Auto-generated constructor stub
 	Vector2f shape1[] = { Vector2f(-.5, -.5), Vector2f(-.5, .5), Vector2f(.5, .5),
 				Vector2f(.5, -.5) };
 	float angle = 0;
-		collisionBox = new Polygon(ph.position, angle, 4, shape1);
+		collisionBox = new Polygon(position, angle, 4, shape1);
 
 		sprite = new Sprite(SPACESHIPS_HANDLE, 32, 32, 0);
 		exhaust = new Sprite(SPRITESHEET_HANDLE, 8, 8, 9);
@@ -67,7 +67,7 @@ float Enemy::calcAngleToPlayer(){
 	//Returns angle between -pi, pi.
 	//Calculate dx, dy with respect to shooting exit.
 	//Shoots at random, if player is within the viewing angle, which is 120 degrees (2*60) from the bullet exit.
-	Vector2f dPos = player.getPosition() - getPosition();//The vector from enemy to player.
+	Vector2f dPos = player.getPosition() - position;//The vector from enemy to player.
 	if (orientRight){
 		dPos -= shotOffset;
 	} else {
@@ -78,14 +78,14 @@ float Enemy::calcAngleToPlayer(){
 
 Vector2f Enemy::getShotPos(){
 	if (orientRight){
-		return ph.position + Vector2f(.5, 0);
+		return position + Vector2f(.5, 0);
 	} else {
-		return ph.position + Vector2f(-.5, 0);
+		return position+ Vector2f(-.5, 0);
 	}
 }
 
 Vector2f Enemy::getShotVel(float velocity, float angle){
-	int seedvalue = (int)(ph.position.x*50 + angle*50);
+	int seedvalue = (int)(position.x*50 + angle*50);
 	float randangle = ran.Float(seedvalue)*35-17.5;//Der skydes skævt med +- 17.5 grader.
 	return FromAngle(velocity, randangle*3.14/180+angle);//Returnerer//
 }
@@ -94,7 +94,7 @@ void Enemy::checkHits(){
 	for(std::vector<bullet>::iterator it = friendlybullets.begin(); it != friendlybullets.end(); ++it) {
 		bullet b = *it;
 		Vector2f MTD;
-		if (collisionBox->Collide(*collisionBox, b.position, b.radius, MTD)){
+		if (collisionBox->Collide(*collisionBox, b.getPosition(), b.radius, MTD)){
 			game.score = game.score + 10000;
 		}
 
