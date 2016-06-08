@@ -90,9 +90,12 @@ void Player::update() {
 		float ecoff = .5;
 		float fcoff = .25;
 
-		float impuls = ((velocity*(-(1+ecoff))).dotProduct(normal))/(1/mass + powf((collisionPoint - position).crossproduct(normal),2)/inertia);
+		Vector2f diff = collisionPoint - position;
+		Vector2f pointVel = velocity + diff.rightNormal().normalized() * ((diff).length() * aVelocity);
+
+		float impuls = ((pointVel * -(1 + ecoff)).dotProduct(normal))/(1/mass + powf((diff).crossproduct(normal),2)/inertia);
 		impulseN = normal * impuls;
-		impulseF = -velocity.projectAt(tangent).normalized() * impuls * fcoff;
+		impulseF = -pointVel.projectAt(tangent).normalized() * impuls * fcoff;
 
 		addImpulse(impulseN + impulseF,collisionPoint);
 
