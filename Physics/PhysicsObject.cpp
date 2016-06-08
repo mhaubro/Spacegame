@@ -47,6 +47,10 @@ void PhysicsObject::addForce(Vector2f v, Vector2f point) {
 	forces += v;
 }
 
+void PhysicsObject::addImpulse(Vector2f impulse, Vector2f point){
+	velocity += impulse / mass;
+}
+
 void PhysicsObject::addAcceleration(Vector2f v) {
 	accelerations += v;
 }

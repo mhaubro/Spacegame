@@ -30,8 +30,8 @@ void Game::run() {
 	Polygon poly3 = Polygon(poly2Pos, angle, 5, shape3);
 
 	score = 300;
-	Vector2f pos = Vector2f(15,15);
-	Vector2f vel = Vector2f(0,0);
+	Vector2f pos = Vector2f(15, 15);
+	Vector2f vel = Vector2f(0, 0);
 	Enemy e = Enemy(pos, vel);
 	enemies.push_back(e);
 
@@ -59,7 +59,6 @@ void Game::update() {
 	updateEnemies();
 	cam.follow(player.getPosition(), player.getVelocity());
 
-
 }
 
 void Game::render() {
@@ -70,37 +69,65 @@ void Game::render() {
 	world.render();
 	ui.render();
 
+	static float a = 0;
+	a += .01;
+
+	while (a > PI * 2)
+		a -= PI * 2;
+
+	Vector2f dir = Vector2f(2, 3);
+	Vector2f x = FromAngle(4,a);
+	Vector2f y = x.rightNormal();
+
+	Vector2f px = dir.projectAt(x);
+	Vector2f py = dir.projectAt(y);
+
+	GD.RestoreContext();
+	renderVector2f(dir, 10, 10, 1);
+
+	GD.ColorRGB(GREY);
+	renderVector2f(x, 10, 10, 1);
+	renderVector2f(y, 10, 10, 1);
+
+	GD.ColorRGB(RED);
+	renderVector2f(px, 10, 10, 1);
+
+	GD.ColorRGB(BLUE);
+	renderVector2f(py, px.x + 10, px.y + 10, 1);
+
 }
 
-bool Game::isOver(){
+bool Game::isOver() {
 	return isGameOver;
 }
 
-void Game::setGameOver(){
+void Game::setGameOver() {
 	isGameOver = true;
 }
 
-void Game::renderEnemies(){
-	for(std::vector<Enemy>::iterator it = enemies.begin(); it != enemies.end(); ++it) {
+void Game::renderEnemies() {
+	for (std::vector<Enemy>::iterator it = enemies.begin(); it != enemies.end();
+			++it) {
 		Enemy & e = *it;
 		e.render();
 	}
 }
 
-void Game::updateEnemies(){
-	for(std::vector<Enemy>::iterator it = enemies.begin(); it != enemies.end(); ++it) {
+void Game::updateEnemies() {
+	for (std::vector<Enemy>::iterator it = enemies.begin(); it != enemies.end();
+			++it) {
 		Enemy & e = *it;
 		e.update();
 	}
 	removeEnemies();
 }
 
-void Game::removeEnemies(){//Same concept as removebullets
+void Game::removeEnemies() { //Same concept as removebullets
 	std::vector<Enemy>::iterator i = enemies.begin();
-	while (i != enemies.end()){
+	while (i != enemies.end()) {
 		Enemy & e = *i;
-		if (e.isDead){//If a bullet is to be deleted, it is swapped with the last element, which is then deleted, since order doesn't matter
-			e = enemies[enemies.size()-1];
+		if (e.isDead) { //If a bullet is to be deleted, it is swapped with the last element, which is then deleted, since order doesn't matter
+			e = enemies[enemies.size() - 1];
 			enemies.erase(enemies.end());
 		} else {
 			++i;

@@ -19,6 +19,9 @@ Vector2f normal = Vector2f();
 Vector2f tangent = Vector2f();
 Vector2f collisionPoint = Vector2f(10, 10);
 
+Vector2f impulseN = Vector2f();
+Vector2f impulseF = Vector2f();
+
 Player::Player(Vector2f pos, Vector2f vel) :
 		Entity(), RigidBody(1,1,pos,0,vel) , height(0) {
 
@@ -42,19 +45,15 @@ Player::~Player() {
 void Player::update() {
 
 	if (!game.isOver()) {
-		player.angle += input.getRotation() * 0.001;
 
-		while (angle > PI2)
-			angle -= PI2;
-		while (angle < 0)
-			angle += PI2;
+		player.aVelocity += input.getRotation() * 0.001;
+		player.aVelocity *= .99;
 
 		if (input.getLeftTouch()) {
-			velocity += FromAngle(0.01, angle);
 			Vector2f throttle = FromAngle(getMaxThrottle(), angle); //Tilføjer en kraft på 30 newton i den vinkel
-			addForce(throttle, position + Vector2f(.2,0));
-			isThrust = true;
-			if (energy > 1)
+			addForce(throttle, position);
+			enginesOn = true;
+			if (energy >= 1)
 				energy -= 1;
 
 		}
@@ -79,19 +78,31 @@ void Player::update() {
 	Vector2f mtd = Vector2f();
 
 	if (Polygon::TerrainCollide(*collisionBox, mtd, normal, collisionPoint)) {
-		float damage = velocity.length();
+		normal = normal.normalized();
+		tangent = normal.rightNormal();
+
+		float damage = abs(velocity.scalarProjectAt(normal));
 		if (damage > 1) {
 			health -= damage * damage;
 		}
-
 		position += mtd;
 
-		tangent = Vector2f::LeftNormal(normal);
+		float ecoff = .5;
+		float fcoff = .25;
 
-		velocity = velocity
-				- (normal * (velocity.dotProduct(normal) * 2));
+		float impuls = ((velocity*(-(1+ecoff))).dotProduct(normal))/(1/mass + powf((collisionPoint - position).crossproduct(normal),2)/inertia);
+		impulseN = normal * impuls;
+		impulseF = -velocity.projectAt(tangent).normalized() * impuls * fcoff;
 
-		velocity *= .4;
+		addImpulse(impulseN + impulseF,collisionPoint);
+
+
+//		tangent = normal.leftNormal();
+//
+//		velocity = velocity
+//				- (normal * (velocity.dotProduct(normal) * 2));
+//
+//		velocity *= .4;
 		//velocity = (velocity * terrainNormal * .4) + (velocity * terrainTangent*.99);
 
 	}
@@ -114,8 +125,8 @@ void Player::render() {
 	//collisionBox->render();
 	GD.Begin(BITMAPS);
 
-	if (isThrust) {
-		isThrust = false;
+	if (enginesOn) {
+		enginesOn = false;
 		anim->render(Vector2f(-1.2, .2).vertexTransformed(position, angle),
 				angle + PI / 2, 1);
 		anim->render(Vector2f(-1.2, -.2).vertexTransformed(position, angle),
@@ -129,7 +140,8 @@ void Player::render() {
 	cam.Vertex2f(collisionPoint);
 
 	GD.Begin(LINES);
-	renderVector2f(normal, collisionPoint.x, collisionPoint.y, 1);
+	renderVector2f(impulseN, collisionPoint.x, collisionPoint.y, 1);
+	renderVector2f(impulseF, collisionPoint.x, collisionPoint.y, 1);
 
 }
 

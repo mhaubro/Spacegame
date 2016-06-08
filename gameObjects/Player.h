@@ -25,7 +25,7 @@ protected:
 	const double shotInterval = .2;
 	double lastShot = 0;
 
-	bool isThrust = false;
+	bool enginesOn = false;
 
 	Polygon* collisionBox;
 

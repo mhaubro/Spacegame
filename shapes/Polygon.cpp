@@ -176,10 +176,10 @@ void Polygon::CalculateInterval(Vector2f Axis, Polygon P, float& min,
 bool Polygon::RayIntersectsSegment(Ray ray, Vector2f pt0, Vector2f pt1,
 		float &t) {
 	Vector2f edge = pt1 - pt0;
-	Vector2f edgeNormal = Vector2f::LeftNormal(edge);
+	Vector2f edgeNormal = edge.leftNormal();
 
 	Vector2f d = ray.origin - pt0;
-	float div = edge.dotProduct(Vector2f::LeftNormal(ray.direction));
+	float div = edge.dotProduct(ray.direction.leftNormal());
 
 	// if the edge and the ray direction is parallel, they will not cross.
 	if (Equals(div, 0.0f, 0.001f)) {
@@ -188,7 +188,7 @@ bool Polygon::RayIntersectsSegment(Ray ray, Vector2f pt0, Vector2f pt1,
 	}
 
 	float u = determinant(edge, d) / div;
-	float v = d.dotProduct(Vector2f::LeftNormal(ray.direction)) / div;
+	float v = d.dotProduct(ray.direction.leftNormal()) / div;
 
 	t = u;
 
@@ -207,9 +207,7 @@ bool Polygon::RayCast(Ray ray, Polygon polygon, float &t, Vector2f& normal) {
 			crossings++;
 			if (distance < t && distance < FLOAT_MAX) {
 				t = distance;
-				normal = Vector2f::RightNormal(
-						polygon.getVertexTransformed(j)
-								- polygon.getVertexTransformed(i));
+				normal = (polygon.getVertexTransformed(j) - polygon.getVertexTransformed(i)).rightNormal();
 			}
 		}
 	}

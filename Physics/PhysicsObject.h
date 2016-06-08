@@ -24,6 +24,7 @@ public:
 
 	virtual void addAcceleration(Vector2f v);
 	virtual void addForce(Vector2f v, Vector2f point);
+	virtual void addImpulse(Vector2f impulse, Vector2f point);
 	virtual void updatePhysics();
 
 	Vector2f getPosition();
@@ -31,4 +32,5 @@ public:
 	float getMass();
 
 };
+
 #endif

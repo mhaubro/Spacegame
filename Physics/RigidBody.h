@@ -22,7 +22,8 @@ public:
 
 	virtual void addAcceleration(Vector2f v);
 	virtual void addAngularAcceleration(float acceleration);
-	virtual void addForce(Vector2f v, Vector2f point);
+	virtual void addForce(const Vector2f v, const Vector2f point);
+	virtual void addImpulse(const Vector2f impulse, const Vector2f point);
 	virtual void addTorque(float torque);
 	virtual void updatePhysics();
 

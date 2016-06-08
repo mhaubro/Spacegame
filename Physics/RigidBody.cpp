@@ -1,5 +1,6 @@
 #include "RigidBody.h"
 #include "GameTimer.h"
+#include "arduino.h"
 
 RigidBody::RigidBody(float mass, float inertia, Vector2f position, float angle,
 		Vector2f velocity) :
@@ -17,11 +18,14 @@ void RigidBody::updatePhysics() {
 	aVelocity += aAcceleration * dt;
 	angle += aVelocity * dt;
 
+	while (angle > PI * 2)
+		angle -= PI * 2;
+	while (angle < 0)
+		angle += PI * 2;
 
 	accelerations += forces * (1 / mass);
 	velocity += accelerations * dt;
 	position += velocity * dt;
-
 
 	// reseting accumulative variables
 	aAcceleration = 0;
@@ -45,7 +49,20 @@ void RigidBody::addTorque(float _torque) {
 }
 
 void RigidBody::addForce(Vector2f _force, Vector2f point) {
+
+	Vector2f dir = (point - position);
+
 	forces += _force;
+	aTorque += dir.length() * _force.scalarProjectAt(dir.rightNormal());
+
+}
+
+void RigidBody::addImpulse(Vector2f impulse, Vector2f point) {
+
+	Vector2f dir = (point - position);
+
+	velocity += impulse / mass;
+	aVelocity -= dir.crossproduct(impulse) / inertia;
 }
 
 float RigidBody::getInertia() {
