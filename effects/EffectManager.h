@@ -11,11 +11,12 @@
 #include "Effect.h"
 
 #include <vector>
+#include <tr1/memory>
 
 class EffectManager {
 protected:
 
-	std::vector<Effect*> mEffects;
+	std::vector<std::tr1::shared_ptr<Effect> > mEffects;
 
 public:
 	EffectManager();

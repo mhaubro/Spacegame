@@ -9,8 +9,8 @@
 #include "GameTimer.h"
 
 StaticAnimationEffect::StaticAnimationEffect(Vector2f _position, double _lifespan,
-		AnimationTemplate& _template) :
-		Effect(_position), mAnimation(_template, _position, 0.0f, 1.0f), mStartTime(
+		AnimationTemplate& _template, float _angle, float _scale) :
+		Effect(_position), mAnimation(_template, _position, _angle, _scale), mStartTime(
 				timer.getRunTime()), mLifespan(_lifespan), mIsDead(false) {
 
 }

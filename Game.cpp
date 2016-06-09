@@ -2,11 +2,12 @@
 
 #include "Game.h"
 
+
 Game game;
 unsigned int score;
 
 Game::Game() :
-		running(false), isGameOver(false), ui(), background(), score(42) {
+		running(false), isGameOver(false), ui(), background(), score(42), mEffectManager() {
 }
 
 Game::~Game() {
@@ -41,8 +42,6 @@ void Game::run() {
 		update();
 		render();
 
-		poly3.render();
-
 		GD.swap();
 	}
 
@@ -57,6 +56,7 @@ void Game::update() {
 	world.update(player.getPosition().x);
 	player.update();
 	updateEnemies();
+	mEffectManager.update();
 	cam.follow(player.getPosition(), player.getVelocity());
 
 }
@@ -67,6 +67,7 @@ void Game::render() {
 	player.render();
 	renderEnemies();
 	world.render();
+	mEffectManager.render();
 	ui.render();
 
 }

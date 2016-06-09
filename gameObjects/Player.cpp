@@ -8,6 +8,7 @@
 #include "Graphics.h"
 #include "Input.h"
 #include "bullet.h"
+#include "StaticAnimationEffect.h"
 
 static SpriteTemplate SpaceShipTemplate = SpriteTemplate(SPACESHIPS_HANDLE, 32,
 		32, 0);
@@ -89,6 +90,11 @@ void Player::update() {
 		impulseF = -pointVel.projectAt(tangent).normalized() * impuls * fcoff;
 
 		addImpulse(impulseN + impulseF, collisionPoint);
+
+		if (impuls > 5) {
+			StaticAnimationEffect* effect = new StaticAnimationEffect(collisionPoint, 1,ExhaustAnimationTemplate, normal.angle()-PI/2, 8);
+			game.mEffectManager.addEffect(effect);
+		}
 	}
 
 	energy += .2;
@@ -131,13 +137,6 @@ void Player::render() {
 	GD.ColorRGB(WHITE);
 	GD.PointSize(16 * 4);
 	cam.Vertex2f(collisionPoint);
-
-	GD.Begin(LINES);
-	renderVector2f(impulseN, collisionPoint.x, collisionPoint.y, 1);
-	renderVector2f(impulseF, collisionPoint.x, collisionPoint.y, 1);
-
-	Vector2f inAngle = FromAngle(2, input.getRotation());
-	renderVector2f(inAngle, 0, 10, 1);
 
 }
 

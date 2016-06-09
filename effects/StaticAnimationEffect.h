@@ -20,7 +20,7 @@ protected:
 	bool mIsDead;
 
 public:
-	StaticAnimationEffect(Vector2f position, double lifeSpan, AnimationTemplate& animation);
+	StaticAnimationEffect(Vector2f position, double lifeSpan, AnimationTemplate& animation, float _angle = 0, float _scale = 1);
 	virtual ~StaticAnimationEffect();
 
 	virtual void update();
