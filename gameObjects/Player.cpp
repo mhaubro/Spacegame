@@ -46,7 +46,7 @@ void Player::update() {
 
 	if (!game.isOver()) {
 
-		player.aVelocity += input.getRotation() * 0.001;
+		player.aVelocity += input.getRotation();
 		player.aVelocity *= .99;
 
 		if (input.getLeftTouch()) {
@@ -145,6 +145,9 @@ void Player::render() {
 	GD.Begin(LINES);
 	renderVector2f(impulseN, collisionPoint.x, collisionPoint.y, 1);
 	renderVector2f(impulseF, collisionPoint.x, collisionPoint.y, 1);
+
+	Vector2f inAngle = FromAngle(2,input.getRotation());
+	renderVector2f(inAngle,0,10,1);
 
 }
 

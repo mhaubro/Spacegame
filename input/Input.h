@@ -14,7 +14,8 @@
 class Input {
 protected:
 	//Button b1 = new Button();
-	int ax = 0, ay = 0;
+	int ax = 0, ay = 0, az = 0;
+	float angle;
 
 public:
 	Input();
@@ -27,6 +28,8 @@ public:
 
 	bool getLeftTouch();
 	bool getRightTouch();
+
+	float calculateAngle();
 
 };
 
