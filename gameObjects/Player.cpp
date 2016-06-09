@@ -15,17 +15,24 @@
 
 Player player = Player(Vector2f(2, 10), Vector2f(0, 0));
 
+Vector2f normal = Vector2f();
+Vector2f tangent = Vector2f();
+Vector2f collisionPoint = Vector2f(10, 10);
+
 Player::Player(Vector2f pos, Vector2f vel) :
 		Entity(pos, vel, 1), angle(0), height(0) {
 
-	Vector2f shape1[] = { Vector2f(-1, 0), Vector2f(-.5, .8), Vector2f(1, 0),
-			Vector2f(-.5, -.8) };
+	std::vector<Vector2f> shape;
+	shape.push_back(Vector2f(-1, 0));
+	shape.push_back(Vector2f(-.5, .8));
+	shape.push_back(Vector2f(1, 0));
+	shape.push_back(Vector2f(-.5, -.8));
 
-	collisionBox = new Polygon(ph.position, angle, 4, shape1);
+	collisionBox = new Polygon(&ph.position, &angle, 4, shape);
 
 	sprite = new Sprite(SPACESHIPS_HANDLE, 32, 32, 0);
 	exhaust = new Sprite(SPRITESHEET_HANDLE, 8, 8, 9);
-	anim = new Animation(SPRITESHEET_HANDLE,8,8,9,2,0.1);
+	anim = new Animation(SPRITESHEET_HANDLE, 8, 8, 9, 2, 0.1);
 }
 
 Player::~Player() {
@@ -50,22 +57,23 @@ void Player::update() {
 			Vector2f throttle = FromAngle(getMaxThrottle(), angle); //Tilføjer en kraft på 30 newton i den vinkel
 			ph.addForce(throttle);
 			isThrust = true;
-			if (energy > 1)
+			if (energy > 1){
 				energy -= 1;
+			}
 
+		}
+		if (input.getRightTouch() && timer.getRunTime() > lastShot + shotInterval) { //Shooting //&&
+			lastShot = timer.getRunTime();
+			Vector2f bulletpos = player.getShotPos();
+			Vector2f bulletv = player.getShotVel(20); //10 = startvelocity of bullet
+			bullet b = bullet(bulletpos, bulletv, 2, WHITE); //Param: pos, vel, Radius, color
+			friendlybullets.push_back(b);
 		}
 	}
 
 	ph.addAcceleration(Vector2f(0, -GRAVITY));
 
 
-	if (input.getRightTouch() && timer.getRunTime() > lastShot + shotInterval){//Shooting //&&
-		lastShot = timer.getRunTime();
-		Vector2f bulletpos = player.getShotPos();
-		Vector2f bulletv = player.getShotVel(20);//10 = startvelocity of bullet
-		bullet b = bullet(bulletpos, bulletv, 2, WHITE);//Param: pos, vel, Radius, color
-		friendlybullets.push_back(b);
-	}
 
 	ph.update();
 
@@ -74,16 +82,15 @@ void Player::update() {
 	player.height = ph.position.y - groundHeight;
 
 	Vector2f mtd = Vector2f();
-	Vector2f normal = Vector2f();
-	Vector2f tangent = Vector2f();
 
-	if (Polygon::TerrainCollide(*collisionBox, mtd)) {
-		float length = ph.velocity.length();
-		if (length > 5) {
-			health -= length * length;
+	if (Polygon::TerrainCollide(*collisionBox, mtd, normal, collisionPoint)) {
+		float speed = normal.normalized().dotProduct(ph.velocity);
+		if (speed > 5) {
+			health -= speed * speed;
 		}
 
-		normal = world.getNormal(ph.position.x, normal);
+		ph.position += mtd;
+
 		tangent = Vector2f::LeftNormal(normal);
 
 		ph.velocity = ph.velocity
@@ -92,7 +99,6 @@ void Player::update() {
 		ph.velocity *= .4;
 		//velocity = (velocity * terrainNormal * .4) + (velocity * terrainTangent*.99);
 
-		ph.position += mtd;
 	}
 
 	energy += .2;
@@ -111,17 +117,20 @@ void Player::update() {
 }
 
 void Player::checkHits(){
+	if (startT + 5 > timer.getRunTime()){//Grants invulnerability the first five seconds.
+		return;
+	}
 	for(std::vector<bullet>::iterator it = foebullets.begin(); it != foebullets.end(); ++it) {
 		bullet & b = *it;
 		Vector2f MTD;
-		if (collisionBox->Collide(*collisionBox, b.position, MTD, (float) b.radius)){
+		if (collisionBox->Collide(*collisionBox, b.position,  b.radius, MTD)){
 			b.kill();
 			health -= 100;
 		}
 	}
 }
 
-void Player::render(){
+void Player::render() {
 
 	GD.RestoreContext();
 	//collisionBox->render();
@@ -135,6 +144,14 @@ void Player::render(){
 				angle + PI / 2, 1);
 	}
 	sprite->render(ph.position.x, ph.position.y, angle + PI / 2, 1);
+
+	GD.Begin(POINTS);
+	GD.ColorRGB(WHITE);
+	GD.PointSize(16 * 4);
+	cam.Vertex2f(collisionPoint);
+
+	GD.Begin(LINES);
+	renderVector2f(normal,collisionPoint.x,collisionPoint.y,1);
 
 }
 
@@ -155,11 +172,15 @@ float Player::getMaxThrottle() {
 	return max;
 }
 
-Vector2f Player::getShotPos(){
+Vector2f Player::getShotPos() {
 	Vector2f offset = FromAngle(1.2, angle);
 	return ph.position + offset;
 }
 
-Vector2f Player::getShotVel(float velocity){
+void Player::startTime(){
+	startT = timer.getRunTime();
+}
+
+Vector2f Player::getShotVel(float velocity) {
 	return FromAngle(velocity, angle) + ph.velocity * 0.5;
 }

@@ -1,6 +1,7 @@
 #include <vector>
 #include "bullet.h"
 #include "Vector2f.h"
+#include "animation.h"
 
 std::vector<bullet> friendlybullets;
 std::vector<bullet> foebullets;
@@ -13,6 +14,16 @@ bullet::bullet(Vector2f& pos, Vector2f& vel, int rad, int col) :
 //	radius = rad;
 	//position = Vector2f(pos.x, pos.y);
 	//velocity = Vector2f(vel.x, vel.y);
+}
+bullet& bullet::operator=(const bullet& b){
+	this->velocity = b.velocity;
+	this->position = b.position;
+	this->radius = b.radius;
+	this->color = b.color;
+	this->startTime = b.startTime;
+	this->dead = b.dead;
+	this->mass = b.mass;
+	return *this;
 }
 
 void bullet::render() {
@@ -28,19 +39,12 @@ void bullet::render() {
 void bullet::update() {
 	this->PhysicsObject::update();
 	if (timer.getRunTime() > startTime + Lifespan) {
-		dead = true;
+		kill();
 	}
 }
 
 bool bullet::checkEarthCollision() {	//Simplified
 	return (position.y < world.getHeight(position.x));
-}
-
-void bullet::operator=(const bullet& b) {
-	this->velocity = b.velocity;
-	this->position = b.position;
-	this->radius = b.radius;
-	this->color = b.color;
 }
 
 bool bullet::isDead() {

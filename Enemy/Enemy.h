@@ -9,8 +9,10 @@
 #define SRC_ENEMY_ENEMY_H_
 
 #define FIRERATE (float) 1.5
-
+#include <vector>
+#include <memory>//USE SMART POINTERS FOR ENEMY-ARRAY INSTEAD OF CLASSICAL//TODO
 #include "Entity.h"
+#include "graphics.h"
 #include "Sprite.h"
 #include "Animation.h"
 #include "Polygon.h"
@@ -25,23 +27,24 @@ protected:
 	Sprite* sprite;
 	Sprite* exhaust;
 	Animation* anim;
-
-	double lastShot = 0;
-
-
-
 	Polygon* collisionBox;
 
 	Vector2f shotOffset = Vector2f(.5, 0);//Marks offset from center of object to shooting mound. Both positive as well as negativ
 	int health;
+	float birthTime;
 	bool orientRight = true;//Boolean value that marks if the enemy is oriented toward right. If false, it is oriented towards the left.
 	bool braking = false;
 	float brakeStart;
 	float brakeTime = 1;
 	bool aiming;
 	float aimStart;
-	float aimTime = .75;
-
+	float aimTime = 1.75;
+	bool shooting;
+	float shotStart;
+	float shotAngle;
+	float lastShot = 0;
+	float shotDT = .2;
+	float shotTime = .3;
 
 	void checkHits();
 	void bestMove();
@@ -53,26 +56,30 @@ protected:
 	Vector2f getShotVel(float velocity, float angle);
 	void checkAlive();
 	void kill();
-	bool shotInRange(float angle);
+	bool shotInRange(Vector2f shotVector);
 	void shotAction(float angle);
 	void moveAction(Vector2f vectorToPlayer);
 	float getHeight();
 	void turn();
 	void brakeAction();
-
+	void brake();
+	void shotAction();
+	void updatePh();
+	bool enemyOnScreen();
 
 
 public:
 
-	bool isDead;
+	bool isDead;//TODO move to private, make functions kill and read.
 
 
 	Enemy(Vector2f pos, Vector2f vel);
+	Enemy& operator=(const Enemy & enemy);
 	virtual ~Enemy();
 
 	void update();
 	void render();
 	bool collide(Entity entity);
 };
-extern std::vector<Enemy> enemies;
+extern std::vector<Enemy*> enemies;
 #endif /* SRC_ENEMY_ENEMY_H_ */

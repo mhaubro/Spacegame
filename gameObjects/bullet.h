@@ -6,16 +6,14 @@
 #include "game.h"
 #include "PhysicsConstants.h"
 #include "PhysicsObject.h"
-#include "GD2.h"
-#include "particle.h"
+#include "Animation.h"
 
-
-#define Lifespan 10
+#define Lifespan 5
 
 class bullet : public PhysicsObject{
 private:
 
-	const double startTime;
+	double startTime;
 	bool dead = false;
 	Animation anim;
 
@@ -23,7 +21,10 @@ public:
 
 	unsigned int color;
 
+
 	bullet(Vector2f& position, Vector2f& velocity, int radius, int color);
+	bullet& operator=(const bullet& b);
+
 	void update();
 	void render();
 
@@ -31,8 +32,6 @@ public:
 
 	bool isDead();
 	void kill();
-
-	void operator= (const bullet& b);
 };
 
 extern std::vector<bullet> friendlybullets;

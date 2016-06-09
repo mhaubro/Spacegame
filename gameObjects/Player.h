@@ -14,6 +14,7 @@ class Player: public Entity {
 protected:
 
 	float getMaxThrottle();
+	float startT;
 	Vector2f getShotPos();
 	Vector2f getShotVel(float velocity);
 	void checkHits();
@@ -47,6 +48,7 @@ public:
 	void update();
 	void render();
 	void shoot();
+	void startTime();
 
 };
 

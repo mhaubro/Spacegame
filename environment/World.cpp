@@ -9,8 +9,10 @@
 #include "GD2.h"
 #include "myassets.h"
 #include "bullet.h"
+#include "graphics.h"
 
 World world;
+bool isBDead(bullet b);
 
 World::World() {
 	chunks = new Chunk*[NUMBER_OF_CHUNKS_LOADED];
@@ -57,10 +59,8 @@ void World::checkBullets() { //Should be made to one function called twice, but 
 		bullet & b = *it;
 		if (b.checkEarthCollision()) {
 			b.kill();
-
 		}
 		b.update();
-
 	}
 
 	for (std::vector<bullet>::iterator it = foebullets.begin();
@@ -77,14 +77,12 @@ void World::checkBullets() { //Should be made to one function called twice, but 
 
 void World::removeBullets() {//See comment to update-bullets about double code.
 
-	//TODO fix problem with remove. wrong bullets is removed
-
-	std::vector<bullet>::iterator i = friendlybullets.begin();
-	while (i != friendlybullets.end()) {
+	/*std::vector<bullet>::iterator i = friendlybullets.begin();
+	while (i != friendlybullets.end() && !friendlybullets.empty()) {
 		bullet & b = *i;
 		if (b.isDead()) {//If a bullet is to be deleted, it is swapped with the last element, which is then deleted, since order doesn't matter
-			b = friendlybullets[friendlybullets.size() - 1];
-			friendlybullets.erase(friendlybullets.end());
+			b = (friendlybullets.back());
+			friendlybullets.pop_back();
 		} else {
 			++i;
 		}
@@ -92,16 +90,23 @@ void World::removeBullets() {//See comment to update-bullets about double code.
 	}
 
 	i = foebullets.begin();
-	while (i != foebullets.end()) {
+	while (i != foebullets.end() && !foebullets.empty()) {
 		bullet & b = *i;
 		if (b.isDead()) {//If a bullet is to be deleted, it is swapped with the last element, which is then deleted, since order doesn't matter
-			b = foebullets[foebullets.size() - 1];
-			foebullets.erase(foebullets.end());
+			b = (foebullets.back());
+			foebullets.pop_back();
 		} else {
 			++i;
 		}
 
-	}
+	}*/
+	friendlybullets.erase(std::remove_if(friendlybullets.begin(), friendlybullets.end(), isBDead), friendlybullets.end());
+	foebullets.erase(std::remove_if(foebullets.begin(), foebullets.end(), isBDead), foebullets.end());
+	//http://stackoverflow.com/questions/4115279/most-efficient-way-of-erasing-deleting-multiple-stdvector-elements-while-retai
+}
+
+bool isBDead(bullet b){
+	return (b.isDead());
 }
 
 void World::renderBullets() {
@@ -131,7 +136,7 @@ Vector2f& World::getNormal(float x, Vector2f &vec) {
 	int index = ((int) (x / CHUNK_SIZE));
 	for (int i = 0; i < NUMBER_OF_CHUNKS_LOADED; i++) {
 		if (chunks[i]->getIndex() == index) {
-			return chunks[i]->getNormal((x - i * CHUNK_SIZE), vec);
+			return chunks[i]->getNormal((x - index * CHUNK_SIZE), vec);
 		}
 	}
 	return vec = Vector2f(0,1);

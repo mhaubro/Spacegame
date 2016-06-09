@@ -128,6 +128,15 @@ void UI::render() {
 		if (button4->isPressed()) {
 			//GD.cmd_text(350, 260, 16, OPT_CENTER, "Digital6");
 		}
+		//Prints enemy location:
+		GD.cmd_text(350, 50, 16, OPT_SIGNED, "Efront:");
+		GD.cmd_number(400, 50, 16, OPT_SIGNED, enemies.front()->getPosition().x);
+		GD.cmd_number(430, 50, 16, OPT_SIGNED, enemies.front()->getPosition().y);
+
+		GD.cmd_text(350, 80, 16, OPT_SIGNED, "Eback:");
+		GD.cmd_number(400, 80, 16, OPT_SIGNED, enemies.back()->getPosition().x);
+		GD.cmd_number(430, 80, 16, OPT_SIGNED, enemies.back()->getPosition().y);
+
 
 	}
 

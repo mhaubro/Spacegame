@@ -17,6 +17,14 @@ Vector2f::Vector2f(float x, float y) :
 		x(x), y(y) {
 }
 
+Vector2f::Vector2f(const Vector2f & v) :
+		x(v.x), y(v.y) {
+}
+
+Vector2f::Vector2f(Vector2f & v) :
+		x(v.x), y(v.y) {
+}
+
 Vector2f::~Vector2f() {
 }
 

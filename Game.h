@@ -3,6 +3,8 @@
 #define GAME_H_
 
 #include <vector>
+#include <memory>
+#include <algorithm>
 #include "BackGround.h"
 #include "UI.h"
 #include "Entity.h"
@@ -22,6 +24,7 @@ protected:
     bool running;
     bool isGameOver;
 
+
     UI ui;
 
     BackGround background;
@@ -31,7 +34,7 @@ protected:
     void render();
     void renderEnemies();
     void removeEnemies();
-
+    void generateEnemy();
 
 public:
     Game();
@@ -47,6 +50,7 @@ public:
 
 
 };
+
 
 extern Game game;
 #endif
