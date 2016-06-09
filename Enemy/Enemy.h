@@ -11,8 +11,8 @@
 #define FIRERATE (float) 1.5
 
 #include "Entity.h"
-#include "Sprite.h"
-#include "Animation.h"
+#include "SpriteTemplate.h"
+#include "AnimationTemplate.h"
 #include "Polygon.h"
 #include "myassets.h"
 #include "bullet.h"
@@ -22,9 +22,9 @@ class Enemy : public Entity, public PhysicsObject{
 protected:
 	int height;
 
-	Sprite* sprite;
-	Sprite* exhaust;
-	Animation* anim;
+	SpriteTemplate* sprite;
+	SpriteTemplate* exhaust;
+	AnimationTemplate* anim;
 
 	double lastShot = 0;
 

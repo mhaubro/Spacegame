@@ -3,7 +3,7 @@
 #include "utils.h"
 #include "myassets.h"
 #include "graphics.h"
-#include "sprite.h"
+#include "spriteTemplate.h"
 #include "Mathematics.h"
 #include "Player.h"
 
