@@ -29,6 +29,8 @@ protected:
 
 	Polygon* collisionBox;
 
+	void updateSteering();
+
 
 public:
 
