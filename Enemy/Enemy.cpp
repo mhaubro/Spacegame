@@ -17,8 +17,7 @@
 std::vector<Enemy*> enemies;
 
 Enemy::Enemy(Vector2f pos, Vector2f vel) :
-Entity(pos, vel, 1), height(pos.y), health(100), lastShot(0), isDead(false), collisionBox(), birthTime(timer.getRunTime())
- {
+Entity(),PhysicsObject(1,pos,vel) ,height(pos.y), health(100), isDead(false), collisionBox(), lastShot(0), birthTime(timer.getRunTime()) {
 	// Auto-generated constructor stub
 	std::vector<Vector2f> shape;
 	shape.push_back(Vector2f(-.5, -.5));
@@ -28,7 +27,7 @@ Entity(pos, vel, 1), height(pos.y), health(100), lastShot(0), isDead(false), col
 
 	float angle = 0;
 
-	collisionBox = new Polygon((&ph.position), &angle, 4, shape);
+	collisionBox = new Polygon(&position, &angle, 4, shape);
 
 	sprite = new Sprite(SPACESHIPS_HANDLE, 32, 32, 0);
 	exhaust = new Sprite(SPRITESHEET_HANDLE, 8, 8, 9);
@@ -47,7 +46,7 @@ void Enemy::render(){
 	GD.Begin(POINTS);
 	GD.PointSize(16*10);
 	GD.ColorA(BLUE);
-	cam.Vertex2f(ph.position);
+	cam.Vertex2f(position);
 	GD.RestoreContext();
 }
 bool Enemy::collide(Entity entity){//TODO
@@ -76,7 +75,7 @@ bool Enemy::enemyOnScreen(){
 	Vector2f dscreen = Vector2f();
 	dscreen.x += cam.getX();
 	dscreen.y += cam.getY();
-	dscreen -= ph.position;
+	dscreen -= position;
 	int screenxLength = SCREEN_WIDTH/CHUNK_SIZE/2-1;//Distance from cam-center to where shooting should be allowed, in units
 	int screenyLength = SCREEN_HEIGHT/CHUNK_SIZE/2-1;//Same as above;
 	//x markerer om x er inbounds. De to || statements er ift. sammensyningen (1024 -> 0), og objekter på begge sider. Antages at dx ikke kan gå under -chunk*world eller over chunk*world.
@@ -96,7 +95,7 @@ float Enemy::calcAngleToPlayer(){
 	//Returns angle between -pi, pi.
 	//Calculate dx, dy with respect to shooting exit.
 	//Shoots at random, if player is within the viewing angle, which is 120 degrees (2*60) from the bullet exit.
-	Vector2f dPos = player.getPosition() - getPosition();//The vector from enemy to player.
+	Vector2f dPos = player.getPosition() - position;//The vector from enemy to player.
 	if (orientRight){
 		dPos -= shotOffset;
 	} else {
@@ -107,14 +106,14 @@ float Enemy::calcAngleToPlayer(){
 
 Vector2f Enemy::getShotPos(){
 	if (orientRight){
-		return ph.position + Vector2f(.5, 0);
+		return position + Vector2f(.5, 0);
 	} else {
-		return ph.position + Vector2f(-.5, 0);
+		return position+ Vector2f(-.5, 0);
 	}
 }
 
 Vector2f Enemy::getShotVel(float velocity, float angle){
-	int seedvalue = (int)(ph.position.x*50 + angle*50);
+	int seedvalue = (int)(position.x*50 + angle*50);
 	float randangle = ran.Float(seedvalue)*35-17.5;//Der skydes skævt med +- 17.5 grader.
 	return FromAngle(velocity, randangle*3.14/180+angle);//Returnerer//
 }
@@ -123,7 +122,7 @@ void Enemy::checkHits(){
 	for(std::vector<bullet>::iterator it = friendlybullets.begin(); it != friendlybullets.end(); ++it) {
 		bullet & b = *it;
 		Vector2f MTD;
-		if ((*collisionBox).Collide((*collisionBox), b.position, b.radius, MTD)){
+		if (collisionBox->Collide(*collisionBox, b.getPosition(), b.radius, MTD)){
 			b.kill();
 			game.score = game.score + 100;
 			health -= 10;
@@ -144,7 +143,7 @@ void Enemy::kill(){
 
 void Enemy::bestMove(){
 	//Calculates the delta-vector:
-	Vector2f VectorToPlayer = player.getPosition() - ph.position;
+	Vector2f VectorToPlayer = player.getPosition() - position;
 
 	//Checks whether the player is in range:
 	Vector2f shotVector;
@@ -199,19 +198,19 @@ void Enemy::shotAction(){
 }
 
 void Enemy::brake(){
-	if (brakeStart + brakeTime < timer.getRunTime() or (ph.velocity.x == 0 && ph.velocity.y == 0)){
+	if (brakeStart + brakeTime < timer.getRunTime() or (velocity.x == 0 && velocity.y == 0)){
 		braking = false;
 		return;
 	}
-	if (ph.velocity.x < .1 && ph.velocity.x > -.1){
-		ph.velocity.x = 0;
+	if (velocity.x < .1 && velocity.x > -.1){
+		velocity.x = 0;
 	} else {
-		ph.velocity.x *= .94;
+		velocity.x *= .94;
 	}
-	if (ph.velocity.y < .1 && ph.velocity.y > -.1){
-		ph.velocity.y = 0;
+	if (velocity.y < .1 && velocity.y > -.1){
+		velocity.y = 0;
 	} else {
-		ph.velocity.y *= .94;
+		velocity.y *= .94;
 	}
 }
 
@@ -228,17 +227,17 @@ void Enemy::shotAction(float angle){
 //Consider turns.
 void Enemy::moveAction(Vector2f vectorToPlayer){//Maybe use defined vector as the ones in the top of the file.
 	if (vectorToPlayer.x < 0){//Placed left to the player, but unable to see.
-		ph.addAcceleration(Vector2f(-ENEMYACCELERATION, 0));
+		addAcceleration(Vector2f(-ENEMYACCELERATION, 0));
 	} else {//Placed right of the player, but unable to see.
-		ph.addAcceleration(Vector2f(ENEMYACCELERATION, 0));
+		addAcceleration(Vector2f(ENEMYACCELERATION, 0));
 	}
 
 	if (getHeight() < 8){//If it's flying low, it want to go up
-		ph.addAcceleration(Vector2f(0, ENEMYACCELERATION));
+		addAcceleration(Vector2f(0, ENEMYACCELERATION));
 	} else if (vectorToPlayer.y < 0){//If it's placed above the player
-		ph.addAcceleration(Vector2f(0, -ENEMYACCELERATION));
+		addAcceleration(Vector2f(0, -ENEMYACCELERATION));
 	} else {//If it's placed below the player
-		ph.addAcceleration(Vector2f(0, ENEMYACCELERATION));
+		addAcceleration(Vector2f(0, ENEMYACCELERATION));
 	}
 }
 
@@ -248,13 +247,13 @@ void Enemy::brakeAction(){
 }
 
 float Enemy::getHeight(){
-	return (ph.position.y - world.getHeight(ph.position.x));
+	return (position.y - world.getHeight(position.x));
 }
 
 void Enemy::updatePh(){
-	ph.update();
-	if (ph.velocity.length() > 3){
-		ph.velocity *=1/(ph.velocity.length())*3;//Sets max velocity at 3.
+	updatePhysics();
+	if (velocity.length() > 3){
+		velocity *=1/(velocity.length())*3;//Sets max velocity at 3.
 	}
 }
 

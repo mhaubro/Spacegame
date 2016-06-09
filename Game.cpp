@@ -32,7 +32,6 @@ void Game::run() {
 	shape.push_back(Vector2f(1, -1));
 	Polygon poly3 = Polygon(&poly2Pos, &angle, 5, shape);
 
-	//score = 300;
 	Vector2f pos = Vector2f(15,15);
 	Vector2f pos2 = Vector2f(25,15);
 	Vector2f vel = Vector2f(0,0);
@@ -65,7 +64,6 @@ void Game::update() {
 	updateEnemies();
 	cam.follow(player.getPosition(), player.getVelocity());
 
-
 }
 
 void Game::render() {
@@ -76,13 +74,39 @@ void Game::render() {
 	world.render();
 	ui.render();
 
+	static float a = 0;
+	a += .01;
+
+	while (a > PI * 2)
+		a -= PI * 2;
+
+	Vector2f dir = Vector2f(2, 3);
+	Vector2f x = FromAngle(4,a);
+	Vector2f y = x.rightNormal();
+
+	Vector2f px = dir.projectAt(x);
+	Vector2f py = dir.projectAt(y);
+
+	GD.RestoreContext();
+	renderVector2f(dir, 10, 10, 1);
+
+	GD.ColorRGB(GREY);
+	renderVector2f(x, 10, 10, 1);
+	renderVector2f(y, 10, 10, 1);
+
+	GD.ColorRGB(RED);
+	renderVector2f(px, 10, 10, 1);
+
+	GD.ColorRGB(BLUE);
+	renderVector2f(py, px.x + 10, px.y + 10, 1);
+
 }
 
-bool Game::isOver(){
+bool Game::isOver() {
 	return isGameOver;
 }
 
-void Game::setGameOver(){
+void Game::setGameOver() {
 	isGameOver = true;
 }
 
@@ -99,8 +123,9 @@ void Game::updateEnemies(){
 
 	for(std::vector<Enemy*>::iterator it = enemies.begin(); it != enemies.end(); ++it) {
 		Enemy & e = **it;//Derefences the iterator to a pointer -> Dereferences the pointer to a the enemy-object.
-		if (!e.isDead)//Might end up being unused since always true.
+		if (!e.isDead){//Might end up being unused since always true.
 			e.update();
+		}
 	}
 
 	removeEnemies();
@@ -108,6 +133,7 @@ void Game::updateEnemies(){
 	if (enemies.size() < 4){
 		generateEnemy();
 	}
+
 }
 
 void Game::generateEnemy(){//Generates an enemy at a random position relative to the camera position

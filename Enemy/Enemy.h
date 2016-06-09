@@ -20,7 +20,7 @@
 #include "bullet.h"
 #include "random.h"
 
-class Enemy : public Entity{
+class Enemy : public Entity, public PhysicsObject{
 protected:
 	int height;
 

@@ -18,11 +18,32 @@ Input::~Input() {
 
 void Input::pull() {
 	GD.get_inputs();
-	getAcceleration(ax,ay);
+	getAcceleration(ax, ay, az);
+
+}
+
+float Input::calculateAngle() {
+
+	float dot = ay * ay + az * az;
+	if (dot == 0){
+		return (float) PI / 2;
+	}
+
+	float length = sqrtf(ay * ay + az * az)
+			* sqrtf(ax * ax + ay * ay + az * az);
+
+	if (length == 0) return 0;
+
+	if (dot < 0) {
+		return acosf(dot / length) + PI;
+	} else {
+		return acosf(dot / length);
+	}
+
 }
 
 bool Input::getThrottle() {
-	if (GD.inputs.x != -32768){
+	if (GD.inputs.x != -32768) {
 		return true;
 	}
 	return false;
@@ -37,5 +58,5 @@ bool Input::getRightTouch() {
 }
 
 float Input::getRotation() {
-	return (float)ax;
+	return ((float) ax)*-0.0065;
 }

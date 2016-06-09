@@ -10,11 +10,10 @@
 
 #include "PhysicsObject.h"
 
-class Entity {
+class Entity{
 protected:
-	PhysicsObject ph;
 
-	Entity(Vector2f& pos, Vector2f& vel, float mass);
+	Entity();
 
 public:
 	virtual ~Entity();
@@ -24,8 +23,6 @@ public:
 
 	virtual bool collide(Entity entity);
 
-	Vector2f getPosition();
-	Vector2f getVelocity();
 	bool isDead = false;
 };
 
