@@ -6,14 +6,10 @@
 #include "Game.h"
 #include "RigidBody.h"
 #include "Graphics.h"
+#include "GraphicsTemplates.h"
 #include "Input.h"
 #include "bullet.h"
 #include "StaticAnimationEffect.h"
-
-static SpriteTemplate SpaceShipTemplate = SpriteTemplate(SPACESHIPS_HANDLE, 32,
-		32, 0);
-static AnimationTemplate ExhaustAnimationTemplate = AnimationTemplate(
-SPRITESHEET_HANDLE, 8, 8, 9, 2, .1);
 
 Player player = Player(Vector2f(2, 10), Vector2f(0, 0));
 
@@ -26,9 +22,9 @@ Vector2f impulseF = Vector2f();
 
 Player::Player(Vector2f pos, Vector2f vel) :
 		Entity(), RigidBody(1, 1, pos, 0, vel), height(0), sprite(
-				Sprite(SpaceShipTemplate, pos, angle, 1)), exhaust1(
-				Animation(ExhaustAnimationTemplate, pos, angle, 1)), exhaust2(
-				Animation(ExhaustAnimationTemplate, pos, angle, 1)) {
+				Sprite(SpaceShipSprite32, pos, angle, 1)), exhaust1(
+				Animation(ExhaustAnimation8, pos, angle, 1)), exhaust2(
+				Animation(ExhaustAnimation8, pos, angle, 1)) {
 
 	Vector2f shape1[] = { Vector2f(-1, 0), Vector2f(-.5, .8), Vector2f(1, 0),
 			Vector2f(-.5, -.8) };
@@ -92,7 +88,14 @@ void Player::update() {
 		addImpulse(impulseN + impulseF, collisionPoint);
 
 		if (impuls > 5) {
-			StaticAnimationEffect* effect = new StaticAnimationEffect(collisionPoint, 1,ExhaustAnimationTemplate, normal.angle()-PI/2, 8);
+			StaticAnimationEffect* effect = new StaticAnimationEffect(
+					collisionPoint + normal, .8,
+					GroundCollisionAnimation32, normal.angle() + PI / 2, 1);
+			game.mEffectManager.addEffect(effect);
+		} else if (impuls > 2) {
+			StaticAnimationEffect* effect = new StaticAnimationEffect(
+					collisionPoint + normal*.5, 1.2,
+					GroundCollisionAnimation16, normal.angle() + PI / 2, 1);
 			game.mEffectManager.addEffect(effect);
 		}
 	}

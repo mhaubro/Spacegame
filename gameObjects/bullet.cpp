@@ -1,12 +1,11 @@
 #include <vector>
 #include "bullet.h"
 #include "Vector2f.h"
+#include "GraphicsTemplates.h"
 
 std::vector<bullet> friendlybullets;
 std::vector<bullet> foebullets;
 
-static AnimationTemplate BulletTemplate = AnimationTemplate(SPRITESHEET_HANDLE,
-		8, 8, 11, 2, 0.1);
 
 bullet::bullet(Vector2f& pos, Vector2f& vel, float radius, int col) :
 		PhysicsObject(1, pos, vel), startTime(timer.getRunTime()), mAnimation(

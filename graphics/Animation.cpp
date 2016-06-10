@@ -6,12 +6,12 @@
  */
 
 #include "Animation.h"
+#include "GameTimer.h"
 
 Animation::Animation(AnimationTemplate & _template, Vector2f _position,
 		float _angle, float _scale) :
 		mTemplate(_template), mPosition(_position), mAngle(_angle), mScale(
-				_scale){
-	// TODO Auto-generated constructor stub
+				_scale), mLastFrame(timer.getRunTime()), mFrame(0){
 
 }
 
