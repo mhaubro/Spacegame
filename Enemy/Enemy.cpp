@@ -7,11 +7,6 @@
 
 #include "Enemy.h"
 
-
-//#define RIGHTVECTOR Vector2f(10, 0);
-//#define LEFTVECTOR 	Vector2f(-10, 0);
-//#define UPVECTOR 	Vector2f(0, 10);
-//#define DOWNVECTOR	Vector2f(0, -10);
 #define ENEMYACCELERATION 1.5
 
 std::vector<std::tr1::shared_ptr<Enemy> > enemies;
@@ -25,7 +20,6 @@ braking(false), aiming(false), shooting(false), orientRight(true){
 	shape.push_back(Vector2f(-.5, .5));
 	shape.push_back(Vector2f(.5, .5));
 	shape.push_back(Vector2f(.5, -.5));
-
 	angle = 0;
 
 	collisionBox = new Polygon(&position, &angle, 4, shape);
@@ -44,9 +38,6 @@ Enemy::Enemy() : Entity(),PhysicsObject(1) ,height(0), health(100), lastShot(0),
 	angle = 0;
 
 	collisionBox = new Polygon(&position, &angle, 4, shape);
-//		sprite = new SpriteTemplate(SPACESHIPS_HANDLE, 32, 32, 0);
-//		exhaust = new SpriteTemplate(SPRITESHEET_HANDLE, 8, 8, 9);
-//		anim = new AnimationTemplate(SPRITESHEET_HANDLE,8,8,9,2,0.1);
 }
 
 Enemy::~Enemy() {
@@ -327,7 +318,7 @@ void Enemy::updatePh(){
 
 
 
-Enemy& Enemy::operator=(const Enemy & enemy){//
+Enemy& Enemy::operator=(const Enemy & enemy){//TODO MAYBE DELETE THIS? Easily editable, but still useless code atm.
 	isDead = enemy.isDead;
 	height = enemy.height;
 	shotOffset = enemy.shotOffset;

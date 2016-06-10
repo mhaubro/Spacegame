@@ -6,14 +6,10 @@
 #include "Game.h"
 #include "RigidBody.h"
 #include "Graphics.h"
+#include "GraphicsTemplates.h"
 #include "Input.h"
 #include "bullet.h"
 #include "StaticAnimationEffect.h"
-
-static SpriteTemplate SpaceShipTemplate = SpriteTemplate(SPACESHIPS_HANDLE, 32,
-		32, 0);
-static AnimationTemplate ExhaustAnimationTemplate = AnimationTemplate(
-SPRITESHEET_HANDLE, 8, 8, 9, 2, .1);
 
 Player player = Player(Vector2f(2, 10), Vector2f(0, 0));
 
@@ -25,10 +21,10 @@ Vector2f impulseN = Vector2f();
 Vector2f impulseF = Vector2f();
 
 Player::Player(Vector2f pos, Vector2f vel) :
-		Entity(), RigidBody(1, 1, pos, 0, vel), height(0), sprite(
-				Sprite(SpaceShipTemplate, pos, angle, 1)), exhaust1(
-				Animation(ExhaustAnimationTemplate, pos, angle, 1)), exhaust2(
-				Animation(ExhaustAnimationTemplate, pos, angle, 1)) {
+		Entity(), RigidBody(1, .5, pos, 0, vel), height(0), sprite(
+				Sprite(SpaceShipSprite32, pos, angle, 1)), exhaust1(
+				Animation(ExhaustAnimation8, pos, angle, 1)), exhaust2(
+				Animation(ExhaustAnimation8, pos, angle, 1)) {
 
 	std::vector<Vector2f> shape;
 	shape.push_back(Vector2f(-1, 0));
@@ -53,6 +49,8 @@ void Player::update() {
 			Vector2f bulletv = player.getShotVel(20); //10 = startvelocity of bullet
 			bullet b = bullet(bulletpos, bulletv, .1, WHITE); //Param: pos, vel, Radius, color
 			friendlybullets.push_back(b);
+
+			addImpulse(-bulletv*b.getMass(),bulletpos);
 		}
 	}
 
@@ -92,7 +90,14 @@ void Player::update() {
 		addImpulse(impulseN + impulseF, collisionPoint);
 
 		if (impuls > 5) {
-			StaticAnimationEffect* effect = new StaticAnimationEffect(collisionPoint, 1,ExhaustAnimationTemplate, normal.angle()-PI/2, 8);
+			StaticAnimationEffect* effect = new StaticAnimationEffect(
+					collisionPoint + normal, .8,
+					GroundCollisionAnimation32, normal.angle() + PI / 2, 1);
+			game.mEffectManager.addEffect(effect);
+		} else if (impuls > 2) {
+			StaticAnimationEffect* effect = new StaticAnimationEffect(
+					collisionPoint + normal*.5, 1.2,
+					GroundCollisionAnimation16, normal.angle() + PI / 2, 1);
 			game.mEffectManager.addEffect(effect);
 		}
 	}
