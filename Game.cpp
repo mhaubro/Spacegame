@@ -2,11 +2,12 @@
 
 #include "Game.h"
 
+
 Game game;
 unsigned int score;
 
 Game::Game() :
-		running(false), isGameOver(false), ui(), background(), score(42) {
+		running(false), isGameOver(false), ui(), background(), score(42), mEffectManager() {
 }
 
 Game::~Game() {
@@ -41,8 +42,6 @@ void Game::run() {
 		update();
 		render();
 
-		poly3.render();
-
 		GD.swap();
 	}
 
@@ -57,6 +56,7 @@ void Game::update() {
 	world.update(player.getPosition().x);
 	player.update();
 	updateEnemies();
+	mEffectManager.update();
 	cam.follow(player.getPosition(), player.getVelocity());
 
 }
@@ -67,33 +67,8 @@ void Game::render() {
 	player.render();
 	renderEnemies();
 	world.render();
+	mEffectManager.render();
 	ui.render();
-
-	static float a = 0;
-	a += .01;
-
-	while (a > PI * 2)
-		a -= PI * 2;
-
-	Vector2f dir = Vector2f(2, 3);
-	Vector2f x = FromAngle(4,a);
-	Vector2f y = x.rightNormal();
-
-	Vector2f px = dir.projectAt(x);
-	Vector2f py = dir.projectAt(y);
-
-	GD.RestoreContext();
-	renderVector2f(dir, 10, 10, 1);
-
-	GD.ColorRGB(GREY);
-	renderVector2f(x, 10, 10, 1);
-	renderVector2f(y, 10, 10, 1);
-
-	GD.ColorRGB(RED);
-	renderVector2f(px, 10, 10, 1);
-
-	GD.ColorRGB(BLUE);
-	renderVector2f(py, px.x + 10, px.y + 10, 1);
 
 }
 

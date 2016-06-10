@@ -5,24 +5,20 @@
 std::vector<bullet> friendlybullets;
 std::vector<bullet> foebullets;
 
+static AnimationTemplate BulletTemplate = AnimationTemplate(SPRITESHEET_HANDLE,
+		8, 8, 11, 2, 0.1);
+
 bullet::bullet(Vector2f& pos, Vector2f& vel, float radius, int col) :
-		PhysicsObject(1, pos, vel), startTime(timer.getRunTime()), anim(
-		SPRITESHEET_HANDLE, 8, 8, 11, 2, 0.1), radius(radius), color(col) {
-//	visible = true;
-//	color = col;
-//	radius = rad;
-	//position = Vector2f(pos.x, pos.y);
-	//velocity = Vector2f(vel.x, vel.y);
+		PhysicsObject(1, pos, vel), startTime(timer.getRunTime()), mAnimation(
+				BulletTemplate, pos, 0, 2), radius(radius), color(col) {
+
 }
 
 void bullet::render() {
-//	GD.ColorRGB(color);
-//	GD.Begin(POINTS);
-//	GD.PointSize(16 * radius);
-//	cam.Vertex2f(position.x, position.y);
-	anim.render(position, velocity.angle(), 2);
+	mAnimation.setPosition(position);
+	mAnimation.setAngle(velocity.angle());
+	mAnimation.render();
 
-	//GD.cmd_text(40, 40, 16, OPT_SIGNED, "BULLETS");
 }
 
 void bullet::update() {

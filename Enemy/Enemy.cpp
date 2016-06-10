@@ -16,9 +16,9 @@ Entity(),PhysicsObject(1,pos,vel) ,height(pos.y), health(100), lastShot(0) {
 	float angle = 0;
 		collisionBox = new Polygon(position, angle, 4, shape1);
 
-		sprite = new Sprite(SPACESHIPS_HANDLE, 32, 32, 0);
-		exhaust = new Sprite(SPRITESHEET_HANDLE, 8, 8, 9);
-		anim = new Animation(SPRITESHEET_HANDLE,8,8,9,2,0.1);
+		sprite = new SpriteTemplate(SPACESHIPS_HANDLE, 32, 32, 0);
+		exhaust = new SpriteTemplate(SPRITESHEET_HANDLE, 8, 8, 9);
+		anim = new AnimationTemplate(SPRITESHEET_HANDLE,8,8,9,2,0.1);
 }
 
 Enemy::~Enemy() {

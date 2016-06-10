@@ -17,7 +17,7 @@ private:
 
 	const double startTime;
 	bool dead = false;
-	Animation anim;
+	Animation mAnimation;
 
 public:
 
