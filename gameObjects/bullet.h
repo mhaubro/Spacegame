@@ -3,41 +3,39 @@
 
 #include<vector>
 
-#include "game.h"
 #include "PhysicsConstants.h"
 #include "PhysicsObject.h"
 #include "GD2.h"
-#include "particle.h"
+#include "Animation.h"
 
+#define BULLET_MASS .02
 
 #define Lifespan 10
 
-class bullet : public PhysicsObject{
+class Bullet: public PhysicsObject {
 private:
 
 	const double startTime;
-	bool dead = false;
+	bool mDead;
+	bool mFriendly;
+	float mRadius;
 	Animation mAnimation;
+
+	bool checkEarthCollision();
 
 public:
 
-	float radius;
-	unsigned int color;
-
-	bullet(Vector2f& position, Vector2f& velocity, float radius, int color);
+	Bullet(Vector2f& position, Vector2f& velocity, float radius, bool friendly);
 	void update();
 	void render();
-
-	bool checkEarthCollision();
 
 	bool isDead();
 	void kill();
 
-	void operator= (const bullet& b);
+	bool getFriendly();
+	float getRadius();
+
+	void operator=(const Bullet& b);
 };
-
-extern std::vector<bullet> friendlybullets;
-extern std::vector<bullet> foebullets;
-
 
 #endif
