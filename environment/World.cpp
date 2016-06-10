@@ -75,30 +75,6 @@ void World::checkBullets() { //Should be made to one function called twice, but 
 }
 
 void World::removeBullets() {//See comment to update-bullets about double code.
-
-	/*std::vector<bullet>::iterator i = friendlybullets.begin();
-	while (i != friendlybullets.end() && !friendlybullets.empty()) {
-		bullet & b = *i;
-		if (b.isDead()) {//If a bullet is to be deleted, it is swapped with the last element, which is then deleted, since order doesn't matter
-			b = (friendlybullets.back());
-			friendlybullets.pop_back();
-		} else {
-			++i;
-		}
-
-	}
-
-	i = foebullets.begin();
-	while (i != foebullets.end() && !foebullets.empty()) {
-		bullet & b = *i;
-		if (b.isDead()) {//If a bullet is to be deleted, it is swapped with the last element, which is then deleted, since order doesn't matter
-			b = (foebullets.back());
-			foebullets.pop_back();
-		} else {
-			++i;
-		}
-
-	}*/
 	friendlybullets.erase(std::remove_if(friendlybullets.begin(), friendlybullets.end(), isBDead), friendlybullets.end());
 	foebullets.erase(std::remove_if(foebullets.begin(), foebullets.end(), isBDead), foebullets.end());
 	//http://stackoverflow.com/questions/4115279/most-efficient-way-of-erasing-deleting-multiple-stdvector-elements-while-retai

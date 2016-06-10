@@ -7,23 +7,31 @@
 std::vector<bullet> friendlybullets;
 std::vector<bullet> foebullets;
 
+static AnimationTemplate BulletTemplate = AnimationTemplate(SPRITESHEET_HANDLE,
+		8, 8, 11, 2, 0.1);
+
 bullet::bullet(Vector2f& pos, Vector2f& vel, float radius, int col) :
-		PhysicsObject(1, pos, vel), startTime(timer.getRunTime()), anim(
-		SPRITESHEET_HANDLE, 8, 8, 11, 2, 0.1), radius(radius), color(col) {
+		PhysicsObject(1, pos, vel), startTime(timer.getRunTime()), mAnimation(
+				BulletTemplate, pos, 0, 2), radius(radius), color(col) {
 }
+
 bullet& bullet::operator=(const bullet& b){
 	this->velocity = b.velocity;
-	this->position = b.position;
+	this->position.x = b.position.x;
+	this->position.y = b.position.y;
 	this->radius = b.radius;
 	this->color = b.color;
 	this->startTime = b.startTime;
 	this->dead = b.dead;
 	this->mass = b.mass;
+	//this->mAnimation = b.mAnimation;//TODO ENSURE THIS IS COPYIED OKAY OR NOT AT ALL
 	return *this;
 }
 
 void bullet::render() {
-	anim.render(position, velocity.angle(), 2);
+	mAnimation.setPosition(position);
+	mAnimation.setAngle(velocity.angle());
+	mAnimation.render();
 }
 
 void bullet::update() {
@@ -42,7 +50,7 @@ bool bullet::isDead() {
 }
 
 Vector2f getShortestDiffVectorBullet(Vector2f v1, Vector2f v2){//Shortest vector that points from v1 to v2, with respect to the world construction
-	Vector2f dv = v2-v1;
+	Vector2f dv = v2-v1;//Difference vector from v1 to v2.
 	if (dv.x < -CHUNK_SIZE*WORLD_SIZE/2){
 		dv.x += CHUNK_SIZE*WORLD_SIZE;
 	} else if(dv.x > CHUNK_SIZE*WORLD_SIZE/2){
@@ -62,4 +70,3 @@ bool bullet::outOfBounds(){
 void bullet::kill() {
 	dead = true;
 }
-

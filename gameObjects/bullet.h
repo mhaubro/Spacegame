@@ -15,7 +15,7 @@ private:
 
 	double startTime;
 	bool dead = false;
-	Animation anim;
+	Animation mAnimation;
 
 public:
 

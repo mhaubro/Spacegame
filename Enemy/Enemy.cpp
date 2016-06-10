@@ -17,7 +17,8 @@
 std::vector<std::tr1::shared_ptr<Enemy> > enemies;
 
 Enemy::Enemy(Vector2f pos, Vector2f vel) :
-Entity(),PhysicsObject(1,pos,vel) ,height(pos.y), health(100), isDead(false), lastShot(0), birthTime(timer.getRunTime()) {
+Entity(),PhysicsObject(1,pos,vel) ,height(pos.y), health(100), lastShot(0), birthTime(timer.getRunTime()),
+braking(false), aiming(false), shooting(false), orientRight(true){
 	// Auto-generated constructor stub
 	std::vector<Vector2f> shape;
 	shape.push_back(Vector2f(-.5, -.5));
@@ -31,7 +32,8 @@ Entity(),PhysicsObject(1,pos,vel) ,height(pos.y), health(100), isDead(false), la
 }
 
 
-Enemy::Enemy() : Entity(),PhysicsObject(1) ,height(0), health(100), isDead(false), lastShot(0), birthTime(timer.getRunTime()){
+Enemy::Enemy() : Entity(),PhysicsObject(1) ,height(0), health(100), lastShot(0), birthTime(timer.getRunTime()),
+		braking(false), aiming(false), shooting(false), orientRight(true){
 	position = generatePosition();
 	height = position.y;
 	std::vector<Vector2f> shape;
@@ -42,6 +44,9 @@ Enemy::Enemy() : Entity(),PhysicsObject(1) ,height(0), health(100), isDead(false
 	angle = 0;
 
 	collisionBox = new Polygon(&position, &angle, 4, shape);
+//		sprite = new SpriteTemplate(SPACESHIPS_HANDLE, 32, 32, 0);
+//		exhaust = new SpriteTemplate(SPRITESHEET_HANDLE, 8, 8, 9);
+//		anim = new AnimationTemplate(SPRITESHEET_HANDLE,8,8,9,2,0.1);
 }
 
 Enemy::~Enemy() {
@@ -116,7 +121,8 @@ bool Enemy::enemyOnScreen(){
 	return (x && y);
 }
 
-void Enemy::enemyShot(float angle){
+void Enemy::enemyShot(){
+	float angle = aimVector.angle();
 	Vector2f startpos = getShotPos();
 	Vector2f startvel = getShotVel(10, angle);//10 er værdien for friendlyshots as well. Se player::update (righttouch).
 	bullet b = bullet(startpos, startvel,.1, 0xffffff);
@@ -138,9 +144,9 @@ float Enemy::calcAngleToPlayer(){
 
 Vector2f Enemy::getShotPos(){
 	if (orientRight){
-		return position + Vector2f(.5, 0);
+		return this->getPosition() + Vector2f(.5, 0);
 	} else {
-		return position+ Vector2f(-.5, 0);
+		return this->getPosition() + Vector2f(-.5, 0);
 	}
 }
 
@@ -175,59 +181,70 @@ void Enemy::kill(){
 }
 
 void Enemy::bestMove(){
-	//Calculates the delta-vector:
-	Vector2f VectorToPlayer = player.getPosition() - position;
+	//Considers what to do:
 
-	//Checks whether the player is in range:
-	Vector2f shotVector;
-	if (VectorToPlayer.x > 0 && orientRight){
-		shotVector = VectorToPlayer + shotOffset;
-	} else {
-		shotVector = VectorToPlayer + shotOffset;
-	}
-	if (braking){
+	if (braking){//If the enemy is braking.
 		brake();
 	}
-
-	float angle = shotVector.angle();
-
-	if (aiming){//If it's aiming it'll only aim
-		if (aimStart + aimTime < timer.getRunTime()){
-			enemyShot(angle);
-			aiming = false;
-			shotAction();
-		}
+	if (aiming){//If the enemy is aiming.
+		aim();
+		return;
+	}
+	if (shooting){
+		 shoot();
 		return;
 	}
 
-	if (shooting){
-		if (shotStart + shotTime < timer.getRunTime() ){
-			shooting = false;
-			return;
-		} else if (lastShot + shotDT < timer.getRunTime() ){
-			enemyShot(shotAngle);
-			lastShot = timer.getRunTime();
-			return;
-		}
+	Vector2f VectorToPlayer = player.getPosition() - position;
+	//Calculated the vector from the enemy shotmouth to the player
+	Vector2f shotVector;
+	if (orientRight){
+		shotVector = VectorToPlayer + shotOffset;
+	} else {
+		shotVector = VectorToPlayer - shotOffset;
 	}
 
-	if (shotInRange(VectorToPlayer) && !aiming && !shooting){//If the shot is in range, a shotAction will start. The enemy will spend time adjusting the gun, and .5 sec initialising, and then it'll fire.
-		if (orientRight && shotVector.x < 0){
-			turn();
-		} else if (!orientRight && shotVector.x > 0){
-			turn();
+	//Checks whether it's possible to start a shot.
+	if (checkShot(shotVector)){//It's possible, checkshot will start it.
+		return;
+	} else {//Moves the enemy.
+		if ((VectorToPlayer.x > 0) != orientRight){//Turns around the enemy.
+				turn();
 		}
-		shotAngle = angle;
-		shotAction(angle);
-	} else if (!braking) {//If it isn't in range, the enemy will try to get the player in range.
-		moveAction(VectorToPlayer);
+		moveAction(VectorToPlayer);//Moves the enemy
 	}
 }
 
-void Enemy::shotAction(){
-	shooting = true;
-	shotStart = timer.getRunTime();
-	enemyShot(shotAngle);
+void Enemy::aim(){
+	if (aimStart + aimTime < timer.getRunTime()){
+		shotStart = timer.getRunTime();
+		shooting = true;//Starts shooting.//TODO MAYBE INSTEAD OF AIM, JUST MAKE A WAIT-FUNCTION?
+		aiming = false;//Stops aiming
+	}
+}
+
+void Enemy::shoot(){
+
+	if (shotStart + shotTime < timer.getRunTime()){
+		shooting = false;
+		return;
+	}
+	if (lastShot + shotDT < timer.getRunTime()){
+		lastShot = timer.getRunTime();
+		enemyShot();
+	}
+}
+
+bool Enemy::checkShot(Vector2f shotVector){
+	if (shotInRange(shotVector)){
+		//position.x += 2;//Used for debugging.
+		aiming = true;
+		aimStart = timer.getRunTime();
+		aimVector = shotVector;
+		brakeAction();
+		return true;
+	}
+	return false;
 }
 
 void Enemy::brake(){
@@ -249,7 +266,6 @@ void Enemy::brake(){
 
 void Enemy::checkBounds(){
 	Vector2f dvec = getShortestDiffVector(position, player.getPosition());
-
 	//
 	if (dvec.length() > CHUNK_SIZE*1.6){//Maybe make 1.6 a define value, easier editable?//TODO
 		kill();
@@ -270,7 +286,7 @@ void Enemy::turn(){//Turns the orientation of the enemy ship
 	orientRight^=1;//Bitflip of boolean true -> f and f-> true.
 }
 
-void Enemy::shotAction(float angle){
+void Enemy::aimAction(){
 	brakeAction();
 	aimStart = timer.getRunTime();
 	aiming = true;
@@ -333,5 +349,3 @@ Enemy& Enemy::operator=(const Enemy & enemy){//
 
 	return *this;
 }
-
-

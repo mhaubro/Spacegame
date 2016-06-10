@@ -5,9 +5,9 @@
 #include "Vector2f.h"
 #include "Entity.h"
 #include "RigidBody.h"
-#include "Animation.h"
 #include "Polygon.h"
 #include "Sprite.h"
+#include "Animation.h"
 
 
 
@@ -18,10 +18,11 @@ protected:
 	float startT;
 	Vector2f getShotPos();
 	Vector2f getShotVel(float velocity);
+
 	void checkHits();
-	Sprite* sprite;
-	Sprite* exhaust;
-	Animation* anim;
+	Sprite sprite;
+	Animation exhaust1;
+	Animation exhaust2;
 
 	const double shotInterval = .2;
 	double lastShot = 0;

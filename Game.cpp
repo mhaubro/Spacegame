@@ -1,11 +1,12 @@
 
 #include "Game.h"
 
+
 Game game;
 unsigned int score;
 
 Game::Game() :
-		running(false), isGameOver(false), ui(), background(), score(0) {
+		running(false), isGameOver(false), ui(), background(), score(0), mEffectManager() {
 }
 
 Game::~Game() {
@@ -46,8 +47,6 @@ void Game::run() {
 		update();
 		render();
 
-		poly3.render();
-
 		GD.swap();
 	}
 
@@ -59,8 +58,8 @@ score++;
 	world.update(player.getPosition().x);
 	player.update();
 	updateEnemies();
+	mEffectManager.update();
 	cam.follow(player.getPosition(), player.getVelocity());
-
 }
 
 void Game::render() {
@@ -69,33 +68,8 @@ void Game::render() {
 	player.render();
 	renderEnemies();
 	world.render();
+	mEffectManager.render();
 	ui.render();
-
-	static float a = 0;
-	a += .01;
-
-	while (a > PI * 2)
-		a -= PI * 2;
-
-	Vector2f dir = Vector2f(2, 3);
-	Vector2f x = FromAngle(4,a);
-	Vector2f y = x.rightNormal();
-
-	Vector2f px = dir.projectAt(x);
-	Vector2f py = dir.projectAt(y);
-
-	GD.RestoreContext();
-	renderVector2f(dir, 10, 10, 1);
-
-	GD.ColorRGB(GREY);
-	renderVector2f(x, 10, 10, 1);
-	renderVector2f(y, 10, 10, 1);
-
-	GD.ColorRGB(RED);
-	renderVector2f(px, 10, 10, 1);
-
-	GD.ColorRGB(BLUE);
-	renderVector2f(py, px.x + 10, px.y + 10, 1);
 
 }
 
@@ -134,28 +108,6 @@ void Game::updateEnemies(){
 }
 
 void Game::generateEnemy(){//Generates an enemy at a random position relative to the camera position
-//	Vector2f startV = Vector2f();
-//	int maxX = WORLD_SIZE*CHUNK_SIZE;
-//	//float ranVal = ran.Float(player.getPosition().x);
-//	//float dx = CHUNK_SIZE*ran.Float(ranVal);
-//	float x = cam.getX()+CHUNK_SIZE;
-//
-//	//Decides whether the enemy will be generated to the right or left of cam.
-//	//if (ranVal < .5){
-//	//	x += 2*(CHUNK_SIZE + dx);
-//	//} else {
-//	//	x -= 2*(CHUNK_SIZE + dx);
-//	//}
-////	if (x < 0){
-////		x+= maxX;
-////	} else {
-//		x=(int)(x) % maxX;
-////	}
-//
-//	//y is calculated
-//	float y = world.getHeight(x)+5;
-//
-//	Vector2f startPos = Vector2f(x,y);
 	enemies.push_back(std::tr1::shared_ptr<Enemy>(new Enemy()));
 }
 

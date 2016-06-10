@@ -18,6 +18,8 @@
 #include "bullet.h"
 #include "enemy.h"
 
+#include "EffectManager.h"
+
 class Game
 {
 protected:
@@ -36,6 +38,9 @@ protected:
     void generateEnemy();
 
 public:
+
+    EffectManager mEffectManager;
+
     Game();
     ~Game();
 
@@ -46,7 +51,6 @@ public:
 
     bool isOver();
     void setGameOver();
-
 
 };
 

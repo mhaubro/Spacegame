@@ -8,10 +8,12 @@
 #include "Graphics.h"
 #include "Input.h"
 #include "bullet.h"
+#include "StaticAnimationEffect.h"
 
-//Vector2f EMPTYVEC = Vector2f();
-//Vector2f STARTPOSVEC = Vector2f(0, 10);
-//Vector2f STARTVELVEC = Vector2f(6, 4);
+static SpriteTemplate SpaceShipTemplate = SpriteTemplate(SPACESHIPS_HANDLE, 32,
+		32, 0);
+static AnimationTemplate ExhaustAnimationTemplate = AnimationTemplate(
+SPRITESHEET_HANDLE, 8, 8, 9, 2, .1);
 
 Player player = Player(Vector2f(2, 10), Vector2f(0, 0));
 
@@ -23,7 +25,10 @@ Vector2f impulseN = Vector2f();
 Vector2f impulseF = Vector2f();
 
 Player::Player(Vector2f pos, Vector2f vel) :
-		Entity(), RigidBody(1, 1, pos, 0, vel), height(0) {
+		Entity(), RigidBody(1, 1, pos, 0, vel), height(0), sprite(
+				Sprite(SpaceShipTemplate, pos, angle, 1)), exhaust1(
+				Animation(ExhaustAnimationTemplate, pos, angle, 1)), exhaust2(
+				Animation(ExhaustAnimationTemplate, pos, angle, 1)) {
 
 	std::vector<Vector2f> shape;
 	shape.push_back(Vector2f(-1, 0));
@@ -32,16 +37,10 @@ Player::Player(Vector2f pos, Vector2f vel) :
 	shape.push_back(Vector2f(-.5, -.8));
 
 	collisionBox = new Polygon(&position, &angle, 4, shape);
-	sprite = new Sprite(SPACESHIPS_HANDLE, 32, 32, 0);
-	exhaust = new Sprite(SPRITESHEET_HANDLE, 8, 8, 9);
-	anim = new Animation(SPRITESHEET_HANDLE, 8, 8, 9, 2, 0.1);
 }
 
 Player::~Player() {
 	delete collisionBox;
-	delete sprite;
-	delete exhaust;
-	delete anim;
 }
 
 void Player::update() {
@@ -91,6 +90,11 @@ void Player::update() {
 		impulseF = -pointVel.projectAt(tangent).normalized() * impuls * fcoff;
 
 		addImpulse(impulseN + impulseF, collisionPoint);
+
+		if (impuls > 5) {
+			StaticAnimationEffect* effect = new StaticAnimationEffect(collisionPoint, 1,ExhaustAnimationTemplate, normal.angle()-PI/2, 8);
+			game.mEffectManager.addEffect(effect);
+		}
 	}
 
 	energy += .2;
@@ -130,24 +134,26 @@ void Player::render() {
 
 	if (enginesOn) {
 		enginesOn = false;
-		anim->render(Vector2f(-1.2, .2).vertexTransformed(position, angle),
-				angle + PI / 2, 1);
-		anim->render(Vector2f(-1.2, -.2).vertexTransformed(position, angle),
-				angle + PI / 2, 1);
+
+		exhaust1.setPosition(
+				Vector2f(-1.2, .2).vertexTransformed(position, angle));
+		exhaust1.setAngle(angle + PI / 2);
+		exhaust1.render();
+
+		exhaust2.setPosition(
+				Vector2f(-1.2, -.2).vertexTransformed(position, angle));
+		exhaust2.setAngle(angle + PI / 2);
+		exhaust2.render();
 	}
-	sprite->render(position.x, position.y, angle + PI / 2, 1);
+
+	sprite.setPosition(position);
+	sprite.setAngle(angle);
+	sprite.render();
 
 	GD.Begin(POINTS);
 	GD.ColorRGB(WHITE);
 	GD.PointSize(16 * 4);
 	cam.Vertex2f(collisionPoint);
-
-	GD.Begin(LINES);
-	renderVector2f(impulseN, collisionPoint.x, collisionPoint.y, 1);
-	renderVector2f(impulseF, collisionPoint.x, collisionPoint.y, 1);
-
-	Vector2f inAngle = FromAngle(2, input.getRotation());
-	renderVector2f(inAngle, 0, 10, 1);
 
 }
 
