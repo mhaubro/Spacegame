@@ -20,6 +20,11 @@ void PhysicsObject::updatePhysics() {
 	accelerations += forces * (1 / mass);
 	velocity += accelerations * dt;
 	position += velocity * dt;
+	if (position.x > CHUNK_SIZE*WORLD_SIZE){
+		position.x -= CHUNK_SIZE*WORLD_SIZE;
+	} else if (position.x < 0){
+		position.x += CHUNK_SIZE*WORLD_SIZE;
+	}
 	accelerations = 0;
 	forces = 0;
 

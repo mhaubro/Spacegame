@@ -1,23 +1,36 @@
-#ifndef SPRITE_H_
-#define SPRITE_H_
+/*
+ * Sprite.h
+ *
+ *  Created on: Jun 9, 2016
+ *      Author: mathi
+ */
 
-#include "Vector2f.h"
+#ifndef SRC_GRAPHICS_SPRITE_H_
+#define SRC_GRAPHICS_SPRITE_H_
 
-class Sprite
-{
+#include "SpriteTemplate.h"
+
+class Sprite {
 protected:
-    const unsigned char id;
-    const unsigned short width, height;
-    const unsigned char cell;
-    
-    const float offsetX, offsetY;
+	SpriteTemplate & mTemplate;
+	Vector2f mPosition;
+	float mAngle;
+	float mScale;
 
 public:
+	Sprite(SpriteTemplate & _template, Vector2f _position, float _angle,
+			float _scale);
+	virtual ~Sprite();
 
-    Sprite(unsigned char BitMapHandle, unsigned short imageWidth, unsigned short imageHeight, unsigned char cell);
-    virtual ~Sprite();
-    void render(const float x, const float y, const float angle, const float scale);//draws a sprite at x,y acording to its center, rotated around the center.
-    void render(const Vector2f pos, const float angle, const float scale);
+	virtual void render();
+
+	void setPosition(Vector2f _position);
+	void setAngle(float _angle);
+	void setScale(float _scale);
+	Vector2f getPosition();
+	float getAngle();
+	float getScale();
+
 };
 
-#endif
+#endif /* SRC_GRAPHICS_SPRITE_H_ */
