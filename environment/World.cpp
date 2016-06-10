@@ -57,7 +57,7 @@ void World::checkBullets() { //Should be made to one function called twice, but 
 	for (std::vector<bullet>::iterator it = friendlybullets.begin();
 			it != friendlybullets.end(); ++it) {
 		bullet & b = *it;
-		if (b.checkEarthCollision()) {
+		if (b.checkEarthCollision()||b.outOfBounds()) {
 			b.kill();
 		}
 		b.update();
@@ -66,9 +66,8 @@ void World::checkBullets() { //Should be made to one function called twice, but 
 	for (std::vector<bullet>::iterator it = foebullets.begin();
 			it != foebullets.end(); ++it) {
 		bullet & b = *it;
-		if (b.checkEarthCollision()) {
+		if (b.checkEarthCollision()|| b.outOfBounds()) {
 			b.kill();
-
 		}
 		b.update();
 	}

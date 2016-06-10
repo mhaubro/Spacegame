@@ -22,6 +22,7 @@ public:
 	float radius;
 	unsigned int color;
 
+	bool outOfBounds();
 
 	bullet& operator=(const bullet& b);
 

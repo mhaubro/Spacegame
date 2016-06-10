@@ -1,8 +1,5 @@
-src/Physics/RigidBody.o: src/Physics/RigidBody.cpp \
- src/Physics/RigidBody.h src/Physics/PhysicsObject.h \
- src/Physics/PhysicsConstants.h src/math/Vector2f.h \
- src/environment/World.h src/environment/Chunk.h src/math/Random.h \
- src/GameTimer.h mbed/mbed.h mbed/platform.h \
+src/math/Vector2f.o: src/math/Vector2f.cpp src/math/Vector2f.h \
+ Gameduino2/GD2.h mbed/mbed.h mbed/platform.h \
  mbed/TARGET_NUCLEO_L476RG/TARGET_STM/TARGET_STM32L4/TARGET_NUCLEO_L476RG/device.h \
  mbed/TARGET_NUCLEO_L476RG/TARGET_STM/TARGET_STM32L4/TARGET_NUCLEO_L476RG/objects.h \
  mbed/TARGET_NUCLEO_L476RG/cmsis.h mbed/TARGET_NUCLEO_L476RG/stm32l4xx.h \
@@ -99,23 +96,11 @@ src/Physics/RigidBody.o: src/Physics/RigidBody.cpp \
  mbed/LowPowerTimeout.h mbed/LowPowerTicker.h mbed/LowPowerTimer.h \
  mbed/LocalFileSystem.h mbed/InterruptIn.h mbed/gpio_irq_api.h \
  mbed/wait_api.h mbed/sleep_api.h mbed/rtc_time.h \
- Gameduino2/arduino/arduino.h
-
-src/Physics/RigidBody.h:
-
-src/Physics/PhysicsObject.h:
-
-src/Physics/PhysicsConstants.h:
+ Gameduino2/arduino/arduino.h Gameduino2/GDTransport.h
 
 src/math/Vector2f.h:
 
-src/environment/World.h:
-
-src/environment/Chunk.h:
-
-src/math/Random.h:
-
-src/GameTimer.h:
+Gameduino2/GD2.h:
 
 mbed/mbed.h:
 
@@ -396,3 +381,5 @@ mbed/sleep_api.h:
 mbed/rtc_time.h:
 
 Gameduino2/arduino/arduino.h:
+
+Gameduino2/GDTransport.h:

@@ -23,7 +23,7 @@ Vector2f impulseN = Vector2f();
 Vector2f impulseF = Vector2f();
 
 Player::Player(Vector2f pos, Vector2f vel) :
-		Entity(), RigidBody(1,1,pos,0,vel) , height(0) {
+		Entity(), RigidBody(1, 1, pos, 0, vel), height(0) {
 
 	std::vector<Vector2f> shape;
 	shape.push_back(Vector2f(-1, 0));
@@ -45,35 +45,20 @@ Player::~Player() {
 }
 
 void Player::update() {
-
-	if (!game.isOver()) {
-
-		player.aVelocity += input.getRotation();
-		player.aVelocity *= .99;
-
-		if (input.getLeftTouch()) {
-			Vector2f throttle = FromAngle(getMaxThrottle(), angle); //Tilføjer en kraft på 30 newton i den vinkel
-
-			addForce(throttle, position);
-			enginesOn = true;
-			if (energy >= 1){
-				energy -= 1;
-			}
-
-		}
-		if (input.getRightTouch() && timer.getRunTime() > lastShot + shotInterval) { //Shooting //&&
+	if (!isDead) {
+		updateSteering();
+		if (input.getRightTouch()
+				&& timer.getRunTime() > lastShot + shotInterval) { //Shooting //&&
 			lastShot = timer.getRunTime();
 			Vector2f bulletpos = player.getShotPos();
 			Vector2f bulletv = player.getShotVel(20); //10 = startvelocity of bullet
-			bullet b = bullet(bulletpos, bulletv, 2, WHITE); //Param: pos, vel, Radius, color
+			bullet b = bullet(bulletpos, bulletv, .1, WHITE); //Param: pos, vel, Radius, color
 			friendlybullets.push_back(b);
 		}
 	}
 
+	player.aVelocity *= .99;
 	addAcceleration(Vector2f(0, -GRAVITY));
-
-
-
 	updatePhysics();
 
 	float groundHeight = world.getHeight(position.x);
@@ -96,23 +81,16 @@ void Player::update() {
 		float fcoff = .25;
 
 		Vector2f diff = collisionPoint - position;
-		Vector2f pointVel = velocity + diff.rightNormal().normalized() * ((diff).length() * aVelocity);
+		Vector2f pointVel = velocity
+				+ diff.rightNormal().normalized()
+						* ((diff).length() * aVelocity);
 
-		float impuls = ((pointVel * -(1 + ecoff)).dotProduct(normal))/(1/mass + powf((diff).crossproduct(normal),2)/inertia);
+		float impuls = ((pointVel * -(1 + ecoff)).dotProduct(normal))
+				/ (1 / mass + powf((diff).crossproduct(normal), 2) / inertia);
 		impulseN = normal * impuls;
 		impulseF = -pointVel.projectAt(tangent).normalized() * impuls * fcoff;
 
-		addImpulse(impulseN + impulseF,collisionPoint);
-
-
-//		tangent = normal.leftNormal();
-//
-//		velocity = velocity
-//				- (normal * (velocity.dotProduct(normal) * 2));
-//
-//		velocity *= .4;
-		//velocity = (velocity * terrainNormal * .4) + (velocity * terrainTangent*.99);
-
+		addImpulse(impulseN + impulseF, collisionPoint);
 	}
 
 	energy += .2;
@@ -137,7 +115,7 @@ void Player::checkHits(){
 	for(std::vector<bullet>::iterator it = foebullets.begin(); it != foebullets.end(); ++it) {
 		bullet & b = *it;
 		Vector2f MTD;
-		if (collisionBox->Collide(*collisionBox, b.getPosition(),  b.radius, MTD)){
+		if (collisionBox->Collide(*collisionBox, b.getPosition(),  b.radius, MTD) && !b.isDead()){
 			b.kill();
 			health -= 100;
 		}
@@ -168,8 +146,8 @@ void Player::render() {
 	renderVector2f(impulseN, collisionPoint.x, collisionPoint.y, 1);
 	renderVector2f(impulseF, collisionPoint.x, collisionPoint.y, 1);
 
-	Vector2f inAngle = FromAngle(2,input.getRotation());
-	renderVector2f(inAngle,0,10,1);
+	Vector2f inAngle = FromAngle(2, input.getRotation());
+	renderVector2f(inAngle, 0, 10, 1);
 
 }
 
@@ -188,6 +166,25 @@ float Player::getMaxThrottle() {
 					/ (maxHeight - minHeight));
 
 	return max;
+}
+
+void Player::updateSteering() {
+	float targetAngVel = input.getRotation() * 8;
+	if (aVelocity < targetAngVel - .1) {
+		addTorque(5);
+	}
+	if (aVelocity > targetAngVel + .1) {
+		addTorque(-5);
+	}
+
+	if (input.getLeftTouch()) {
+		Vector2f throttle = FromAngle(getMaxThrottle(), angle); //Tilføjer en kraft på 30 newton i den vinkel
+		addForce(throttle, position);
+		enginesOn = true;
+		if (energy >= 1)
+			energy -= 1;
+
+	}
 }
 
 Vector2f Player::getShotPos() {

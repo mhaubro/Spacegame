@@ -10,7 +10,7 @@
 
 #define FIRERATE (float) 1.5
 #include <vector>
-#include <memory>//USE SMART POINTERS FOR ENEMY-ARRAY INSTEAD OF CLASSICAL//TODO
+#include <tr1/memory>//USE SMART POINTERS FOR ENEMY-ARRAY INSTEAD OF CLASSICAL//TODO
 #include "Entity.h"
 #include "graphics.h"
 #include "Sprite.h"
@@ -24,10 +24,8 @@ class Enemy : public Entity, public PhysicsObject{
 protected:
 	int height;
 
-	Sprite* sprite;
-	Sprite* exhaust;
-	Animation* anim;
 	Polygon* collisionBox;
+	float angle;
 
 	Vector2f shotOffset = Vector2f(.5, 0);//Marks offset from center of object to shooting mound. Both positive as well as negativ
 	int health;
@@ -66,6 +64,9 @@ protected:
 	void shotAction();
 	void updatePh();
 	bool enemyOnScreen();
+	Vector2f generatePosition();
+	Vector2f getShortestDiffVector(Vector2f v1, Vector2f v2);
+	void checkBounds();
 
 
 public:
@@ -74,6 +75,7 @@ public:
 
 
 	Enemy(Vector2f pos, Vector2f vel);
+	Enemy();
 	Enemy& operator=(const Enemy & enemy);
 	virtual ~Enemy();
 
@@ -81,5 +83,5 @@ public:
 	void render();
 	bool collide(Entity entity);
 };
-extern std::vector<Enemy*> enemies;
+extern std::vector<std::tr1::shared_ptr<Enemy> > enemies;
 #endif /* SRC_ENEMY_ENEMY_H_ */

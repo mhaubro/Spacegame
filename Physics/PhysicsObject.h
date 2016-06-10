@@ -20,6 +20,7 @@ protected:
 public:
 
 	PhysicsObject(float mass, Vector2f& position, Vector2f& velocity);
+	PhysicsObject(float mass);
 	virtual ~PhysicsObject();
 
 	virtual void addAcceleration(Vector2f v);

@@ -2,6 +2,7 @@
 #include "bullet.h"
 #include "Vector2f.h"
 #include "animation.h"
+#include "Enemy.h"
 
 std::vector<bullet> friendlybullets;
 std::vector<bullet> foebullets;
@@ -9,11 +10,6 @@ std::vector<bullet> foebullets;
 bullet::bullet(Vector2f& pos, Vector2f& vel, float radius, int col) :
 		PhysicsObject(1, pos, vel), startTime(timer.getRunTime()), anim(
 		SPRITESHEET_HANDLE, 8, 8, 11, 2, 0.1), radius(radius), color(col) {
-//	visible = true;
-//	color = col;
-//	radius = rad;
-	//position = Vector2f(pos.x, pos.y);
-	//velocity = Vector2f(vel.x, vel.y);
 }
 bullet& bullet::operator=(const bullet& b){
 	this->velocity = b.velocity;
@@ -27,13 +23,7 @@ bullet& bullet::operator=(const bullet& b){
 }
 
 void bullet::render() {
-//	GD.ColorRGB(color);
-//	GD.Begin(POINTS);
-//	GD.PointSize(16 * radius);
-//	cam.Vertex2f(position.x, position.y);
 	anim.render(position, velocity.angle(), 2);
-
-	//GD.cmd_text(40, 40, 16, OPT_SIGNED, "BULLETS");
 }
 
 void bullet::update() {
@@ -49,6 +39,24 @@ bool bullet::checkEarthCollision() {	//Simplified
 
 bool bullet::isDead() {
 	return dead;
+}
+
+Vector2f getShortestDiffVectorBullet(Vector2f v1, Vector2f v2){//Shortest vector that points from v1 to v2, with respect to the world construction
+	Vector2f dv = v2-v1;
+	if (dv.x < -CHUNK_SIZE*WORLD_SIZE/2){
+		dv.x += CHUNK_SIZE*WORLD_SIZE;
+	} else if(dv.x > CHUNK_SIZE*WORLD_SIZE/2){
+		dv.x -= CHUNK_SIZE*WORLD_SIZE;
+	}
+	return dv;
+}
+
+bool bullet::outOfBounds(){
+	Vector2f camv = Vector2f();
+	camv.x = cam.getX();
+	camv.y = cam.getY();
+	Vector2f diff = getShortestDiffVectorBullet(camv, position);
+	return diff.length() > CHUNK_SIZE*1.4;
 }
 
 void bullet::kill() {

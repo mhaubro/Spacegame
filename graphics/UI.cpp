@@ -138,6 +138,22 @@ void UI::render() {
 		GD.cmd_number(430, 80, 16, OPT_SIGNED, enemies.back()->getPosition().y);
 
 
+		//Tries to print RAM:https://developer.mbed.org/questions/6994/How-to-print-Free-RAM-available-RAM-or-u/,
+		//BROKEN
+//		char   stackVariable;
+//		void   *heap;
+//		unsigned long result;
+//		char* heapc = (char*) heap;
+//		heap  = malloc(4);
+//		int * result2  = &stackVariable;
+//		free(heap);
+		GD.cmd_text(350, 150, 16, OPT_SIGNED, "Enemies size:");
+		GD.cmd_number(350, 180, 16, OPT_SIGNED, enemies.size());
+		GD.cmd_text(100, 150, 16, OPT_SIGNED, "Friendlybullets size:");
+		GD.cmd_number(100, 180, 16, OPT_SIGNED, friendlybullets.size());
+		GD.cmd_text(350, 210, 16, OPT_SIGNED, "Enemybullets size:");
+		GD.cmd_number(350, 240, 16, OPT_SIGNED, foebullets.size());
+
 	}
 
 	GD.RestoreContext();

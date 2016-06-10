@@ -58,5 +58,5 @@ bool Input::getRightTouch() {
 }
 
 float Input::getRotation() {
-	return ((float) ax)*-0.0065;
+	return ((float) ax)*0.0065;
 }

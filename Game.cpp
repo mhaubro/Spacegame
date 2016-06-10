@@ -36,10 +36,10 @@ void Game::run() {
 	Vector2f pos2 = Vector2f(25,15);
 	Vector2f vel = Vector2f(0,0);
 	player.startTime();
-	Enemy * e = new Enemy(pos, vel);
-	Enemy * e2 = new Enemy(pos2, vel);
-	enemies.push_back(e);
-	enemies.push_back(e2);
+	std::tr1::shared_ptr<Enemy>  e = std::tr1::shared_ptr<Enemy>(new Enemy(pos, vel));
+	std::tr1::shared_ptr<Enemy> e2 = std::tr1::shared_ptr<Enemy>(new Enemy(pos2, vel));
+	enemies.push_back((e));
+	enemies.push_back((e2));
 	while (running) {
 
 		input.pull();
@@ -54,11 +54,8 @@ void Game::run() {
 }
 
 void Game::update() {
-
+score++;
 	timer.update();
-
-	//score = score + 1;
-
 	world.update(player.getPosition().x);
 	player.update();
 	updateEnemies();
@@ -112,7 +109,7 @@ void Game::setGameOver() {
 
 void Game::renderEnemies(){
 	GD.RestoreContext();
-	for(std::vector<Enemy*>::iterator it = enemies.begin(); it != enemies.end(); ++it) {
+	for(std::vector<std::tr1::shared_ptr<Enemy> >::iterator it = enemies.begin(); it != enemies.end(); ++it) {
 		Enemy & e = **it;//Derefences the iterator to a pointer -> Dereferences the pointer to a the enemy-object.
 		if (!e.isDead)//Might end up being unused since always true.
 			e.render();
@@ -121,7 +118,7 @@ void Game::renderEnemies(){
 
 void Game::updateEnemies(){
 
-	for(std::vector<Enemy*>::iterator it = enemies.begin(); it != enemies.end(); ++it) {
+	for(std::vector<std::tr1::shared_ptr<Enemy> >::iterator it = enemies.begin(); it != enemies.end(); ++it) {
 		Enemy & e = **it;//Derefences the iterator to a pointer -> Dereferences the pointer to a the enemy-object.
 		if (!e.isDead){//Might end up being unused since always true.
 			e.update();
@@ -137,35 +134,33 @@ void Game::updateEnemies(){
 }
 
 void Game::generateEnemy(){//Generates an enemy at a random position relative to the camera position
-	Vector2f startV = Vector2f();
-	int maxX = WORLD_SIZE*CHUNK_SIZE;
-	float ranVal = ran.Float(player.getPosition().x);
-	float dx = CHUNK_SIZE*ran.Float(ranVal);
-	float x = cam.getX();
-
-	//Decides whether the enemy will be generated to the right or left of cam.
-	if (ranVal < .5){
-		x += 2*(CHUNK_SIZE + dx);
-	} else {
-		x -= 2*(CHUNK_SIZE + dx);
-	}
-	if (x < 0){
-		x+= maxX;
-	} else {
-		x=(int)(x) % maxX;
-	}
-
-	//y is calculated
-	float y = world.getHeight(x)+3+12*ran.Float(player.getPosition().y);
-
-	Vector2f startPos = Vector2f(x,y);
-
-	Enemy * e = new Enemy(startPos, startV);
-	enemies.push_back(e);
+//	Vector2f startV = Vector2f();
+//	int maxX = WORLD_SIZE*CHUNK_SIZE;
+//	//float ranVal = ran.Float(player.getPosition().x);
+//	//float dx = CHUNK_SIZE*ran.Float(ranVal);
+//	float x = cam.getX()+CHUNK_SIZE;
+//
+//	//Decides whether the enemy will be generated to the right or left of cam.
+//	//if (ranVal < .5){
+//	//	x += 2*(CHUNK_SIZE + dx);
+//	//} else {
+//	//	x -= 2*(CHUNK_SIZE + dx);
+//	//}
+////	if (x < 0){
+////		x+= maxX;
+////	} else {
+//		x=(int)(x) % maxX;
+////	}
+//
+//	//y is calculated
+//	float y = world.getHeight(x)+5;
+//
+//	Vector2f startPos = Vector2f(x,y);
+	enemies.push_back(std::tr1::shared_ptr<Enemy>(new Enemy()));
 }
 
-bool isEDead(Enemy * e){
-	return (e->isDead);
+bool isEDead(std::tr1::shared_ptr<Enemy> e){//NOTE: MUST BE DEFINED BEFORE REMOVEENEMIES OR IN THE TOP OF THE .CPP-file. Predicate-function.
+	return e->isDead;
 }
 
 void Game::removeEnemies(){//Same concept as removebullets//TODO CAUSES CRASH

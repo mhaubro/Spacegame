@@ -24,7 +24,6 @@ protected:
     bool running;
     bool isGameOver;
 
-
     UI ui;
 
     BackGround background;

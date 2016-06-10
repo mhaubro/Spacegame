@@ -7,17 +7,17 @@
 
 #include "Enemy.h"
 
+
 //#define RIGHTVECTOR Vector2f(10, 0);
 //#define LEFTVECTOR 	Vector2f(-10, 0);
 //#define UPVECTOR 	Vector2f(0, 10);
 //#define DOWNVECTOR	Vector2f(0, -10);
 #define ENEMYACCELERATION 1.5
 
-
-std::vector<Enemy*> enemies;
+std::vector<std::tr1::shared_ptr<Enemy> > enemies;
 
 Enemy::Enemy(Vector2f pos, Vector2f vel) :
-Entity(),PhysicsObject(1,pos,vel) ,height(pos.y), health(100), isDead(false), collisionBox(), lastShot(0), birthTime(timer.getRunTime()) {
+Entity(),PhysicsObject(1,pos,vel) ,height(pos.y), health(100), isDead(false), lastShot(0), birthTime(timer.getRunTime()) {
 	// Auto-generated constructor stub
 	std::vector<Vector2f> shape;
 	shape.push_back(Vector2f(-.5, -.5));
@@ -25,27 +25,59 @@ Entity(),PhysicsObject(1,pos,vel) ,height(pos.y), health(100), isDead(false), co
 	shape.push_back(Vector2f(.5, .5));
 	shape.push_back(Vector2f(.5, -.5));
 
-	float angle = 0;
+	angle = 0;
 
 	collisionBox = new Polygon(&position, &angle, 4, shape);
+}
 
-	sprite = new Sprite(SPACESHIPS_HANDLE, 32, 32, 0);
-	exhaust = new Sprite(SPRITESHEET_HANDLE, 8, 8, 9);
-	anim = new Animation(SPRITESHEET_HANDLE,8,8,9,2,0.1);
+
+Enemy::Enemy() : Entity(),PhysicsObject(1) ,height(0), health(100), isDead(false), lastShot(0), birthTime(timer.getRunTime()){
+	position = generatePosition();
+	height = position.y;
+	std::vector<Vector2f> shape;
+	shape.push_back(Vector2f(-.5, -.5));
+	shape.push_back(Vector2f(-.5, .5));
+	shape.push_back(Vector2f(.5, .5));
+	shape.push_back(Vector2f(.5, -.5));
+	angle = 0;
+
+	collisionBox = new Polygon(&position, &angle, 4, shape);
 }
 
 Enemy::~Enemy() {
 	// Auto-generated destructor stub
-	if (sprite) delete sprite;
-	if (exhaust) delete exhaust;
-	if (anim) delete anim;
+	if (collisionBox) delete collisionBox;
+}
+
+Vector2f Enemy::generatePosition(){
+	Vector2f startV = Vector2f(cam.getX(), cam.getY());
+	int maxX = WORLD_SIZE*CHUNK_SIZE;
+	float ranVal = ran.Float(player.getPosition().x);
+	float dx = 0.6*CHUNK_SIZE*ran.Float(ranVal);
+	float x = cam.getX();
+	//Decides whether the enemy will be generated to the right or left of cam.
+	if (ranVal < .5){
+		x += (CHUNK_SIZE + dx);
+	} else {
+		x -= (CHUNK_SIZE + dx);
+	}
+	if (x < 0){
+		x+= maxX;
+	} else {
+		x=(int)(x) % maxX;
+	}
+		//y is calculated
+	float y = world.getHeight(x)+3+12*ran.Float(player.getPosition().y);
+	Vector2f startPos = Vector2f(x,y);
+	return startPos;
 }
 
 void Enemy::render(){
 	//collisionBox->render();
+	GD.RestoreContext();
 	GD.Begin(POINTS);
-	GD.PointSize(16*10);
-	GD.ColorA(BLUE);
+	GD.PointSize(collisionBox->getHitradius()*16*16);
+	GD.ColorRGB(BLUE);
 	cam.Vertex2f(position);
 	GD.RestoreContext();
 }
@@ -87,7 +119,7 @@ bool Enemy::enemyOnScreen(){
 void Enemy::enemyShot(float angle){
 	Vector2f startpos = getShotPos();
 	Vector2f startvel = getShotVel(10, angle);//10 er værdien for friendlyshots as well. Se player::update (righttouch).
-	bullet b = bullet(startpos, startvel, 2, 0xffffff);
+	bullet b = bullet(startpos, startvel,.1, 0xffffff);
 	foebullets.push_back(b);
 }
 
@@ -135,6 +167,7 @@ void Enemy::checkAlive(){
 		kill();
 		game.score += 2500;
 	}
+	checkBounds();//Checks if the enemy is far away.
 }
 
 void Enemy::kill(){
@@ -214,6 +247,25 @@ void Enemy::brake(){
 	}
 }
 
+void Enemy::checkBounds(){
+	Vector2f dvec = getShortestDiffVector(position, player.getPosition());
+
+	//
+	if (dvec.length() > CHUNK_SIZE*1.6){//Maybe make 1.6 a define value, easier editable?//TODO
+		kill();
+	}
+}
+
+Vector2f Enemy::getShortestDiffVector(Vector2f v1, Vector2f v2){//Shortest vector that points from v1 to v2, with respect to the world construction
+	Vector2f dv = v2-v1;
+	if (dv.x < -CHUNK_SIZE*WORLD_SIZE/2){
+		dv.x += CHUNK_SIZE*WORLD_SIZE;
+	} else if(dv.x > CHUNK_SIZE*WORLD_SIZE/2){
+		dv.x -= CHUNK_SIZE*WORLD_SIZE;
+	}
+	return dv;
+}
+
 void Enemy::turn(){//Turns the orientation of the enemy ship
 	orientRight^=1;//Bitflip of boolean true -> f and f-> true.
 }
@@ -262,10 +314,6 @@ void Enemy::updatePh(){
 Enemy& Enemy::operator=(const Enemy & enemy){//
 	isDead = enemy.isDead;
 	height = enemy.height;
-	sprite = enemy.sprite;
-	exhaust = enemy.exhaust;
-	anim = enemy.anim;
-	collisionBox = enemy.collisionBox;
 	shotOffset = enemy.shotOffset;
 	health = enemy.health;
 	birthTime = enemy.birthTime;
