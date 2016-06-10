@@ -109,11 +109,15 @@ void UI::render() {
 				"Height");
 		// GD.cmd_number(SCREEN_WIDTH/2-4, SCREEN_HEIGHT - 16, 16, OPT_CENTERX + 4, player.height);
 		GD.cmd_number(SCREEN_WIDTH / 2 - 4, SCREEN_HEIGHT - 16, 16,
-				OPT_CENTERX + 4, player.height);
+		OPT_CENTERX + 4, player.height);
 
 		//prints FPS
 		GD.cmd_text(4, 50, 16, OPT_SIGNED, "FPS:");
 		GD.cmd_number(36, 50, 16, OPT_SIGNED, 1 / timer.getDeltaTime());
+
+		//prints speed
+		GD.cmd_text(4, 70, 16, OPT_SIGNED, "UPS:");// units per sec
+		GD.cmd_number(36, 70, 16, OPT_SIGNED, player.getVelocity().length());
 
 		if (button1->isPressed()) {
 			GD.cmd_text(350, 200, 16, OPT_CENTER, "Digital3");
