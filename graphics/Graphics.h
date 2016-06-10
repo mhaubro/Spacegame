@@ -45,7 +45,7 @@
 
 #define OFFSET_FACTOR 11
 
-#define CAM_GROUND_OFFSET 10
+#define CAM_GROUND_OFFSET 8
 
 class Cam
 {

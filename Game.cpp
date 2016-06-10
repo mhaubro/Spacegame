@@ -7,7 +7,7 @@ Game game;
 unsigned int score;
 
 Game::Game() :
-		running(false), isGameOver(false), ui(), background(), score(42), mEffectManager() {
+		running(false), isGameOver(false), ui(), background(), score(42), mEffectManager(), mBulletManager() {
 }
 
 Game::~Game() {
@@ -56,6 +56,7 @@ void Game::update() {
 	world.update(player.getPosition().x);
 	player.update();
 	updateEnemies();
+	mBulletManager.update();
 	mEffectManager.update();
 	cam.follow(player.getPosition(), player.getVelocity());
 
@@ -66,8 +67,9 @@ void Game::render() {
 	background.render();
 	player.render();
 	renderEnemies();
-	world.render();
+	mBulletManager.render();
 	mEffectManager.render();
+	world.render();
 	ui.render();
 
 }

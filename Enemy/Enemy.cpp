@@ -6,6 +6,7 @@
  */
 
 #include "Enemy.h"
+#include "Game.h"
 std::vector<Enemy> enemies;
 
 Enemy::Enemy(Vector2f pos, Vector2f vel) :
@@ -33,7 +34,7 @@ bool Enemy::collide(Entity entity){//TODO
 }
 void Enemy::update(){
 	//Check if being hit/dead
-	checkHits();
+
 
 
 
@@ -59,8 +60,8 @@ void Enemy::update(){
 void Enemy::enemyShot(float angle){
 	Vector2f startpos = getShotPos();
 	Vector2f startvel = getShotVel(10, angle);//10 er værdien for friendlyshots as well. Se player::update (righttouch).
-	bullet b = bullet(startpos, startvel, 2, 0xffffff);
-	foebullets.push_back(b);
+
+	game.mBulletManager.addBullet(new Bullet(startpos, startvel, .2,false));
 }
 
 float Enemy::calcAngleToPlayer(){
@@ -90,17 +91,6 @@ Vector2f Enemy::getShotVel(float velocity, float angle){
 	return FromAngle(velocity, randangle*3.14/180+angle);//Returnerer//
 }
 
-void Enemy::checkHits(){
-	for(std::vector<bullet>::iterator it = friendlybullets.begin(); it != friendlybullets.end(); ++it) {
-		bullet b = *it;
-		Vector2f MTD;
-		if (collisionBox->Collide(*collisionBox, b.getPosition(), b.radius, MTD)){
-			game.score = game.score + 10000;
-		}
-
-
-	}
-}
 void Enemy::bestMove(){
 
 }

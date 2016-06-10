@@ -17,18 +17,19 @@ EffectManager::EffectManager() {
 EffectManager::~EffectManager() {
 }
 
-bool isDead(std::tr1::shared_ptr<Effect> _effect) {
+bool isDead(Effect * _effect) {
 	if (_effect->isDead()) {
+		delete _effect;
 		return true;
 	}
 	return false;
 }
 
-void updateEffect(std::tr1::shared_ptr<Effect> _effect){
+void updateEffect(Effect * _effect){
 	_effect->update();
 }
 
-void renderEffect(std::tr1::shared_ptr<Effect> _effect){
+void renderEffect(Effect * _effect){
 	_effect->render();
 }
 
@@ -57,6 +58,6 @@ void EffectManager::render() {
 }
 
 void EffectManager::addEffect(Effect * _effect) {
-	mEffects.push_back(std::tr1::shared_ptr<Effect>(_effect));
+	mEffects.push_back(_effect);
 }
 

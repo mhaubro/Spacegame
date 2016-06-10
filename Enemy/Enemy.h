@@ -36,7 +36,6 @@ protected:
 	int health;
 	bool orientRight = true;//Boolean value that marks if the enemy is oriented toward right. If false, it is oriented towards the left.
 
-	void checkHits();
 	void bestMove();
 	void updatePosition();
 
@@ -49,6 +48,7 @@ protected:
 public:
 
 	bool isDead = false;
+
 
 
 	Enemy(Vector2f pos, Vector2f vel);

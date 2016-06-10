@@ -34,8 +34,6 @@ void World::update(float x) {
 	for (int i = 0; i < NUMBER_OF_CHUNKS_LOADED; i++) {
 		chunks[i]->update(x);
 	}
-
-	checkBullets();
 }
 
 void World::render() {
@@ -44,86 +42,6 @@ void World::render() {
 
 	for (int var = 0; var < NUMBER_OF_CHUNKS_LOADED; ++var) {
 		chunks[var]->render();
-	}
-
-	//Renders bullets
-	GD.ColorA(255);
-	GD.ColorRGB(WHITE);
-	GD.Begin(BITMAPS);
-	renderBullets();
-}
-
-//OBS: Bullet collisions with players/enemies/targets are handled by those objects.
-void World::checkBullets() { //Should be made to one function called twice, but this demands inclusion of bullet in the header, which for some unknown reason triggers compiler-errors in player.h.
-	//Friendly bullets
-	Vector2f normal = Vector2f();
-	for (std::vector<bullet>::iterator it = friendlybullets.begin();
-			it != friendlybullets.end(); ++it) {
-		bullet & b = *it;
-		if (b.checkEarthCollision()) {
-			world.getNormal(b.getPosition().x, normal);
-
-			StaticAnimationEffect* effect = new StaticAnimationEffect(
-					b.getPosition() + normal, .8, GroundCollisionAnimation32,
-					normal.angle() + PI / 2, 1);
-			game.mEffectManager.addEffect(effect);
-			b.kill();
-		}
-		b.update();
-
-	}
-
-	for (std::vector<bullet>::iterator it = foebullets.begin();
-			it != foebullets.end(); ++it) {
-		bullet & b = *it;
-		if (b.checkEarthCollision()) {
-			b.kill();
-
-		}
-		b.update();
-	}
-	removeBullets();
-}
-
-void World::removeBullets() {//See comment to update-bullets about double code.
-
-	//TODO fix problem with remove. wrong bullets is removed
-
-	std::vector<bullet>::iterator i = friendlybullets.begin();
-	while (i != friendlybullets.end()) {
-		bullet & b = *i;
-		if (b.isDead()) {//If a bullet is to be deleted, it is swapped with the last element, which is then deleted, since order doesn't matter
-			b = friendlybullets[friendlybullets.size() - 1];
-			friendlybullets.erase(friendlybullets.end());
-		} else {
-			++i;
-		}
-
-	}
-
-	i = foebullets.begin();
-	while (i != foebullets.end()) {
-		bullet & b = *i;
-		if (b.isDead()) {//If a bullet is to be deleted, it is swapped with the last element, which is then deleted, since order doesn't matter
-			b = foebullets[foebullets.size() - 1];
-			foebullets.erase(foebullets.end());
-		} else {
-			++i;
-		}
-
-	}
-}
-
-void World::renderBullets() {
-	for (std::vector<bullet>::iterator it = friendlybullets.begin();
-			it != friendlybullets.end(); ++it) {
-		bullet & b = *it;
-		b.render();
-	}
-	for (std::vector<bullet>::iterator it = foebullets.begin();
-			it != foebullets.end(); ++it) {
-		bullet & b = *it;
-		b.render();
 	}
 }
 

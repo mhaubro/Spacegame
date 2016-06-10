@@ -13,13 +13,6 @@
 
 Player player = Player(Vector2f(2, 10), Vector2f(0, 0));
 
-Vector2f normal = Vector2f();
-Vector2f tangent = Vector2f();
-Vector2f collisionPoint = Vector2f(10, 10);
-
-Vector2f impulseN = Vector2f();
-Vector2f impulseF = Vector2f();
-
 Player::Player(Vector2f pos, Vector2f vel) :
 		Entity(), RigidBody(1, .5, pos, 0, vel), height(0), sprite(
 				Sprite(SpaceShipSprite32, pos, angle, 1)), exhaust1(
@@ -46,10 +39,11 @@ void Player::update() {
 			lastShot = timer.getRunTime();
 			Vector2f bulletpos = player.getShotPos();
 			Vector2f bulletv = player.getShotVel(20); //10 = startvelocity of bullet
-			bullet b = bullet(bulletpos, bulletv, 2, WHITE); //Param: pos, vel, Radius, color
-			friendlybullets.push_back(b);
 
-			addImpulse(-bulletv*b.getMass(),bulletpos);
+			Bullet * bullet = new Bullet(bulletpos, bulletv, .2, true);
+			game.mBulletManager.addBullet(bullet);
+
+			addImpulse(-bulletv * bullet->getMass(), bulletpos);
 		}
 	}
 
@@ -64,14 +58,17 @@ void Player::update() {
 
 	Vector2f mtd = Vector2f();
 
+	Vector2f normal = Vector2f();
+	Vector2f tangent = Vector2f();
+	Vector2f collisionPoint = Vector2f(10, 10);
+
 	if (Polygon::TerrainCollide(*collisionBox, mtd, normal, collisionPoint)) {
 		normal = normal.normalized();
 		tangent = normal.rightNormal();
 
-		float damage = abs(velocity.scalarProjectAt(normal));
-		if (damage > 1) {
-			health -= damage * damage;
-		}
+		Vector2f impulseN = Vector2f();
+		Vector2f impulseF = Vector2f();
+
 		position += mtd;
 
 		float ecoff = .5;
@@ -89,14 +86,19 @@ void Player::update() {
 
 		addImpulse(impulseN + impulseF, collisionPoint);
 
+		float damage = (impuls-5);
+		if (damage > 0) {
+			health -= damage * damage;
+		}
+
 		if (impuls > 5) {
 			StaticAnimationEffect* effect = new StaticAnimationEffect(
-					collisionPoint + normal, .8,
-					GroundCollisionAnimation32, normal.angle() + PI / 2, 1);
+					collisionPoint + normal, .8, GroundCollisionAnimation32,
+					normal.angle() + PI / 2, 1);
 			game.mEffectManager.addEffect(effect);
 		} else if (impuls > 2) {
 			StaticAnimationEffect* effect = new StaticAnimationEffect(
-					collisionPoint + normal*.5, 1.2,
+					collisionPoint + normal * .5, 1.2,
 					GroundCollisionAnimation16, normal.angle() + PI / 2, 1);
 			game.mEffectManager.addEffect(effect);
 		}
@@ -138,11 +140,6 @@ void Player::render() {
 	sprite.setAngle(angle);
 	sprite.render();
 
-	GD.Begin(POINTS);
-	GD.ColorRGB(WHITE);
-	GD.PointSize(16 * 4);
-	cam.Vertex2f(collisionPoint);
-
 }
 
 float Player::getMaxThrottle() {
@@ -165,10 +162,10 @@ float Player::getMaxThrottle() {
 void Player::updateSteering() {
 	float targetAngVel = input.getRotation() * 8;
 	if (aVelocity < targetAngVel - .1) {
-		addTorque(5);
+		addTorque(3);
 	}
 	if (aVelocity > targetAngVel + .1) {
-		addTorque(-5);
+		addTorque(-3);
 	}
 
 	if (input.getLeftTouch()) {

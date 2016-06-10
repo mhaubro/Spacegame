@@ -13,10 +13,11 @@
 #include "Input.h"
 #include "World.h"
 #include "GameTimer.h"
-#include "bullet.h"
+#include "Bullet.h"
 #include "enemy.h"
 
 #include "EffectManager.h"
+#include "BulletManager.h"
 
 class Game
 {
@@ -38,6 +39,7 @@ protected:
 public:
 
     EffectManager mEffectManager;
+    BulletManager mBulletManager;
 
     Game();
     ~Game();
