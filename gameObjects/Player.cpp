@@ -21,7 +21,7 @@ Vector2f impulseN = Vector2f();
 Vector2f impulseF = Vector2f();
 
 Player::Player(Vector2f pos, Vector2f vel) :
-		Entity(), RigidBody(1, 1, pos, 0, vel), height(0), sprite(
+		Entity(), RigidBody(1, .5, pos, 0, vel), height(0), sprite(
 				Sprite(SpaceShipSprite32, pos, angle, 1)), exhaust1(
 				Animation(ExhaustAnimation8, pos, angle, 1)), exhaust2(
 				Animation(ExhaustAnimation8, pos, angle, 1)) {
@@ -48,6 +48,8 @@ void Player::update() {
 			Vector2f bulletv = player.getShotVel(20); //10 = startvelocity of bullet
 			bullet b = bullet(bulletpos, bulletv, 2, WHITE); //Param: pos, vel, Radius, color
 			friendlybullets.push_back(b);
+
+			addImpulse(-bulletv*b.getMass(),bulletpos);
 		}
 	}
 

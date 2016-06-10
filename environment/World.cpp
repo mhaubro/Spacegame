@@ -10,6 +10,10 @@
 #include "myassets.h"
 #include "bullet.h"
 
+#include "GraphicsTemplates.h"
+#include "Animation.h"
+#include "StaticAnimationEffect.h"
+
 World world;
 
 World::World() {
@@ -52,12 +56,18 @@ void World::render() {
 //OBS: Bullet collisions with players/enemies/targets are handled by those objects.
 void World::checkBullets() { //Should be made to one function called twice, but this demands inclusion of bullet in the header, which for some unknown reason triggers compiler-errors in player.h.
 	//Friendly bullets
+	Vector2f normal = Vector2f();
 	for (std::vector<bullet>::iterator it = friendlybullets.begin();
 			it != friendlybullets.end(); ++it) {
 		bullet & b = *it;
 		if (b.checkEarthCollision()) {
-			b.kill();
+			world.getNormal(b.getPosition().x, normal);
 
+			StaticAnimationEffect* effect = new StaticAnimationEffect(
+					b.getPosition() + normal, .8, GroundCollisionAnimation32,
+					normal.angle() + PI / 2, 1);
+			game.mEffectManager.addEffect(effect);
+			b.kill();
 		}
 		b.update();
 
@@ -134,6 +144,6 @@ Vector2f& World::getNormal(float x, Vector2f &vec) {
 			return chunks[i]->getNormal((x - index * CHUNK_SIZE), vec);
 		}
 	}
-	return vec = Vector2f(0,1);
+	return vec = Vector2f(0, 1);
 }
 

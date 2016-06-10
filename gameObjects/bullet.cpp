@@ -8,7 +8,7 @@ std::vector<bullet> foebullets;
 
 
 bullet::bullet(Vector2f& pos, Vector2f& vel, float radius, int col) :
-		PhysicsObject(1, pos, vel), startTime(timer.getRunTime()), mAnimation(
+		PhysicsObject(0.02, pos, vel), startTime(timer.getRunTime()), mAnimation(
 				BulletTemplate, pos, 0, 2), radius(radius), color(col) {
 
 }
