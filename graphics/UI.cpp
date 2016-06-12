@@ -70,7 +70,7 @@ void UI::render() {
 		GD.ColorRGB(COLOR_HEALTH);
 		GD.Vertex2f(16 * 4, 16 * (SCREEN_HEIGHT - 4));
 		GD.Vertex2f(
-				((16 * (SCREEN_WIDTH / 2 - 16)) / player.maxHealth)
+				((16 * (SCREEN_WIDTH / 2 - 16)) / MAX_PLAYER_HEALTH)
 						* player.health, 16 * (SCREEN_HEIGHT - 4));
 		GD.cmd_text(4, SCREEN_HEIGHT - 26, 16, OPT_SIGNED, "Health");
 		GD.cmd_number(4, SCREEN_HEIGHT - 16, 16, OPT_SIGNED + 4, player.health);
@@ -88,7 +88,7 @@ void UI::render() {
 		GD.Vertex2f(16 * (SCREEN_WIDTH - 4), 16 * (SCREEN_HEIGHT - 4));
 		GD.Vertex2f(
 				(16 * SCREEN_WIDTH)
-						- (16 * (SCREEN_WIDTH / 2 - 16) / player.maxEnergy)
+						- (16 * (SCREEN_WIDTH / 2 - 16) / MAX_PLAYER_ENERGY)
 								* player.energy, 16 * (SCREEN_HEIGHT - 4));
 		GD.cmd_text( SCREEN_WIDTH - 4, SCREEN_HEIGHT - 26, 16, OPT_RIGHTX,
 				"Energy");
