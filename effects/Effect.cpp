@@ -7,7 +7,7 @@
 
 #include "Effect.h"
 
-Effect::Effect(Vector2f position) : position(position){
+Effect::Effect(Vector2f position) : Entity(), position(position){
 
 }
 

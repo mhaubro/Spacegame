@@ -7,7 +7,7 @@
 
 #include "Entity.h"
 
-Entity::Entity() {
+Entity::Entity(): mIsDead(false) {
 }
 
 Entity::~Entity() {
@@ -22,5 +22,9 @@ void Entity::render() {
 
 bool Entity::collide(Entity entity) {
 	return false;
+}
+
+bool Entity::isDead(){
+	return mIsDead;
 }
 

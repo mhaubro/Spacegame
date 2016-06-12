@@ -24,7 +24,7 @@ private:
 	};
 
 	Node* mHead;
-	int size;
+	int mSize;
 
 public:
 	LinkedEntityList();
@@ -34,6 +34,8 @@ public:
 	void renderAll();
 	void removeDead();
 	void add(Entity* e);
+
+	int size();
 };
 
 #endif /* SRC_LINKEDLIST_LINKEDENTITYLIST_H_ */
