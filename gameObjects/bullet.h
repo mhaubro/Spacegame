@@ -5,6 +5,7 @@
 
 #include "PhysicsConstants.h"
 #include "PhysicsObject.h"
+#include "Entity.h"
 #include "GD2.h"
 #include "Animation.h"
 
@@ -12,11 +13,10 @@
 
 #define Lifespan 10
 
-class Bullet: public PhysicsObject {
+class Bullet : public Entity, public PhysicsObject {
 private:
 
 	const double startTime;
-	bool mDead;
 	bool mFriendly;
 	float mRadius;
 	Animation mAnimation;

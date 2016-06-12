@@ -8,14 +8,13 @@
 #ifndef SRC_GAMEOBJECTS_BULLETMANAGER_H_
 #define SRC_GAMEOBJECTS_BULLETMANAGER_H_
 
-#include <vector>
-
 #include "Bullet.h"
+#include "LinkedEntityList.h"
 
 class BulletManager {
 protected:
 
-	std::vector<Bullet*> mBullets;
+	LinkedEntityList mBullets;
 
 public:
 	BulletManager();

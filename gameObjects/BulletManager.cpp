@@ -6,7 +6,6 @@
  */
 
 #include "BulletManager.h"
-#include <algorithm>
 
 BulletManager::BulletManager() {
 }
@@ -14,28 +13,9 @@ BulletManager::BulletManager() {
 BulletManager::~BulletManager() {
 }
 
-bool isBulletDead(Bullet * _bullet) {
-	if (_bullet->isDead()) {
-		delete _bullet;
-		return true;
-	}
-	return false;
-}
-
-void updateBullet(Bullet * _bullet) {
-	_bullet->update();
-}
-
-void renderBullet(Bullet * _bullet) {
-	_bullet->render();
-}
-
 void BulletManager::update() {
-
-	for_each(mBullets.begin(), mBullets.end(), updateBullet);
-
-	mBullets.erase(std::remove_if(mBullets.begin(), mBullets.end(), isBulletDead),
-			mBullets.end());
+	mBullets.updateAll();
+	mBullets.removeDead();
 }
 
 void BulletManager::render() {
@@ -43,7 +23,7 @@ void BulletManager::render() {
 	GD.RestoreContext();
 	GD.Begin(BITMAPS);
 
-	for_each(mBullets.begin(), mBullets.end(), renderBullet);
+	mBullets.renderAll();
 
 	GD.RestoreContext();
 	GD.cmd_text(4, 120, 16, OPT_SIGNED, "bullets:");
@@ -51,5 +31,5 @@ void BulletManager::render() {
 }
 
 void BulletManager::addBullet(Bullet * _bullet) {
-	mBullets.push_back(_bullet);
+	mBullets.add(_bullet);
 }

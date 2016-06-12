@@ -37,6 +37,8 @@ void LinkedEntityList::renderAll() {
 }
 
 void LinkedEntityList::removeDead() {
+
+	// TODO crash in removeDead;
 	if (mHead) {
 		Node* prev = mHead;
 		Node* tmp = mHead->mNext;
@@ -47,10 +49,13 @@ void LinkedEntityList::removeDead() {
 				tmp = next;
 				prev->mNext = tmp;
 				mSize--;
+			} else {
+				prev = tmp;
+				tmp = tmp->mNext;
 			}
 		}
-		if (mHead->mData->isDead()){
-			tmp = mHead;
+		if (mHead->mData->isDead()) {
+			tmp = mHead->mNext;
 			delete mHead;
 			mHead = tmp;
 			mSize--;
@@ -63,7 +68,7 @@ void LinkedEntityList::add(Entity * e) {
 	mSize++;
 }
 
-int LinkedEntityList::size(){
+int LinkedEntityList::size() {
 	return mSize;
 }
 
