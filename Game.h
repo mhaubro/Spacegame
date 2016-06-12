@@ -2,7 +2,8 @@
 #ifndef GAME_H_
 #define GAME_H_
 
-#include <vector>
+#define DEBUG true
+
 #include "BackGround.h"
 #include "UI.h"
 #include "Entity.h"
@@ -38,6 +39,8 @@ protected:
 
 public:
 
+    unsigned int score;
+
     EffectManager mEffectManager;
     BulletManager mBulletManager;
 
@@ -46,8 +49,6 @@ public:
 
     bool init();
     void run();
-
-    unsigned int score;
 
     bool isOver();
     void setGameOver();

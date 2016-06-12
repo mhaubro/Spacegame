@@ -2,7 +2,6 @@
 
 #include "Game.h"
 
-
 Game game;
 unsigned int score;
 
@@ -103,7 +102,7 @@ void Game::removeEnemies() { //Same concept as removebullets
 	std::vector<Enemy>::iterator i = enemies.begin();
 	while (i != enemies.end()) {
 		Enemy & e = *i;
-		if (e.isDead) { //If a bullet is to be deleted, it is swapped with the last element, which is then deleted, since order doesn't matter
+		if (e.isDead()) { //If a bullet is to be deleted, it is swapped with the last element, which is then deleted, since order doesn't matter
 			e = enemies[enemies.size() - 1];
 			enemies.erase(enemies.end());
 		} else {

@@ -40,9 +40,11 @@ void Chunk::render() {
 				(heightMap[var]));
 	}
 
+#if DEBUG
 	GD.Begin(POINTS);
 	GD.ColorRGB(BLUE);
 	cam.Vertex2f(index * CHUNK_SIZE, heightMap[0]);
+#endif
 
 	// TODO render details in chunks
 //	GD.ColorRGB(WHITE);

@@ -57,8 +57,6 @@ void UI::render() {
 		// prints gameinfo in upper left corner
 		GD.ColorRGB(WHITE);
 		GD.cmd_text(4, 4, 16, OPT_SIGNED, "SPACE GAME");
-		GD.cmd_number(4, 4 + 12, 16, OPT_SIGNED, player.getPosition().x);
-		GD.cmd_number(4, 4 + 24, 16, OPT_SIGNED, player.getPosition().y);
 
 		// prints the score in the upper right corner.
 		GD.cmd_text(SCREEN_WIDTH - 4, 4, 16, OPT_RIGHTX, "SCORE");
@@ -108,6 +106,13 @@ void UI::render() {
 		GD.cmd_number(SCREEN_WIDTH / 2 - 4, SCREEN_HEIGHT - 16, 16,
 		OPT_CENTERX + 4, player.height);
 
+#if DEBUG
+		GD.ColorRGB(WHITE);
+		GD.ColorA(255);
+
+		GD.cmd_number(4, 4 + 12, 16, OPT_SIGNED, player.getPosition().x);
+		GD.cmd_number(4, 4 + 24, 16, OPT_SIGNED, player.getPosition().y);
+
 		//prints FPS
 		GD.cmd_text(4, 50, 16, OPT_SIGNED, "FPS:");
 		GD.cmd_number(36, 50, 16, OPT_SIGNED, 1 / timer.getDeltaTime());
@@ -119,7 +124,6 @@ void UI::render() {
 		if (input.getButton1()) {
 			GD.cmd_text(350, 200, 16, OPT_CENTER, "B1");
 		}
-
 		if (input.getButton2()) {
 			GD.cmd_text(350, 220, 16, OPT_CENTER, "B2");
 		}
@@ -129,7 +133,7 @@ void UI::render() {
 		if (input.getButton4()) {
 			GD.cmd_text(350, 260, 16, OPT_CENTER, "B4");
 		}
-
+#endif
 	}
 
 	GD.RestoreContext();

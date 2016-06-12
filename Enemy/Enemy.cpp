@@ -10,7 +10,7 @@
 std::vector<Enemy> enemies;
 
 Enemy::Enemy(Vector2f pos, Vector2f vel) :
-Entity(),PhysicsObject(1,pos,vel) ,height(pos.y), health(100), lastShot(0) {
+Entity(),PhysicsObject(1,pos,vel) ,height(pos.y), health(100), lastShot(0), shotOffset(Vector2f(.5, 0)), orientRight(true) {
 	// Auto-generated constructor stub
 	Vector2f shape1[] = { Vector2f(-.5, -.5), Vector2f(-.5, .5), Vector2f(.5, .5),
 				Vector2f(.5, -.5) };

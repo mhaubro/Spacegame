@@ -26,9 +26,11 @@ void EffectManager::render() {
 
 	mEffects.renderAll();
 
+#if DEBUG
 	GD.RestoreContext();
 	GD.cmd_text(4, 100, 16, OPT_SIGNED, "effects:");
 	GD.cmd_number(70, 100, 16, OPT_SIGNED, mEffects.size());
+#endif
 }
 
 void EffectManager::addEffect(Effect * _effect) {
