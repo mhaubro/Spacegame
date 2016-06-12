@@ -6,6 +6,7 @@
  */
 
 #include "BulletManager.h"
+#include "Game.h"
 
 BulletManager::BulletManager() {
 }
@@ -27,7 +28,7 @@ void BulletManager::render() {
 
 #if DEBUG
 	GD.RestoreContext();
-	GD.cmd_text(4, 120, 16, OPT_SIGNED, "bullets:");
+	GD.cmd_text(4, 120, 16, OPT_SIGNED, "Bullets:");
 	GD.cmd_number(70, 120, 16, OPT_SIGNED, mBullets.size());
 #endif
 }
