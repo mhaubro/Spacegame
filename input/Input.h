@@ -11,9 +11,16 @@
 #include "Accelerometer.h"
 #include "Button.h"
 
+#define USE_BUTTONS true
+
 class Input {
 protected:
-	//Button b1 = new Button();
+
+	Button * button1;
+	Button * button2;
+	Button * button3;
+	Button * button4;
+
 	int ax = 0, ay = 0, az = 0;
 	float angle;
 
@@ -28,6 +35,11 @@ public:
 
 	bool getLeftTouch();
 	bool getRightTouch();
+
+	bool getButton1();
+	bool getButton2();
+	bool getButton3();
+	bool getButton4();
 
 	float calculateAngle();
 

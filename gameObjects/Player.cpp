@@ -33,21 +33,10 @@ void Player::update() {
 
 	if (!isDead) {
 		updateSteering();
-
-		if (input.getRightTouch()
-				&& timer.getRunTime() > lastShot + shotInterval) { //Shooting //&&
-			lastShot = timer.getRunTime();
-			Vector2f bulletpos = player.getShotPos();
-			Vector2f bulletv = player.getShotVel(20); //10 = startvelocity of bullet
-
-			Bullet * bullet = new Bullet(bulletpos, bulletv, .2, true);
-			game.mBulletManager.addBullet(bullet);
-
-			addImpulse(-bulletv * bullet->getMass(), bulletpos);
-		}
+		updateCannon();
 	}
 
-	player.aVelocity *= .99;
+	player.aVelocity *= .999;
 	addAcceleration(Vector2f(0, -GRAVITY));
 
 	updatePhysics();
@@ -86,7 +75,7 @@ void Player::update() {
 
 		addImpulse(impulseN + impulseF, collisionPoint);
 
-		float damage = (impuls-5);
+		float damage = (impuls - 5);
 		if (damage > 0) {
 			health -= damage * damage;
 		}
@@ -168,13 +157,26 @@ void Player::updateSteering() {
 		addTorque(-3);
 	}
 
-	if (input.getLeftTouch()) {
+	if (input.getButton1()) {
 		Vector2f throttle = FromAngle(getMaxThrottle(), angle); //Tilføjer en kraft på 30 newton i den vinkel
 		addForce(throttle, position);
 		enginesOn = true;
 		if (energy >= 1)
 			energy -= 1;
 
+	}
+}
+
+void Player::updateCannon() {
+	if (input.getButton3() && timer.getRunTime() > lastShot + shotInterval) { //Shooting //&&
+		lastShot = timer.getRunTime();
+		Vector2f bulletpos = player.getShotPos();
+		Vector2f bulletv = player.getShotVel(20); //10 = startvelocity of bullet
+
+		Bullet * bullet = new Bullet(bulletpos, bulletv, .2, true);
+		game.mBulletManager.addBullet(bullet);
+
+		addImpulse(-bulletv * bullet->getMass(), bulletpos);
 	}
 }
 

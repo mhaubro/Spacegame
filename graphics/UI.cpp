@@ -8,10 +8,7 @@
 #include "pinnames.h"
 
 UI::UI() {
-	button1 = new Button(PB_13);
-	button2 = new Button(PB_14);
-	button3 = new Button(PB_15);
-	button4 = new Button(PB_1);
+
 }
 
 void UI::render() {
@@ -119,18 +116,18 @@ void UI::render() {
 		GD.cmd_text(4, 70, 16, OPT_SIGNED, "UPS:");// units per sec
 		GD.cmd_number(36, 70, 16, OPT_SIGNED, player.getVelocity().length());
 
-		if (button1->isPressed()) {
-			GD.cmd_text(350, 200, 16, OPT_CENTER, "Digital3");
+		if (input.getButton1()) {
+			GD.cmd_text(350, 200, 16, OPT_CENTER, "B1");
 		}
 
-		if (button2->isPressed()) {
-			GD.cmd_text(350, 220, 16, OPT_CENTER, "Digital4");
+		if (input.getButton2()) {
+			GD.cmd_text(350, 220, 16, OPT_CENTER, "B2");
 		}
-		if (button3->isPressed()) {
-			GD.cmd_text(350, 240, 16, OPT_CENTER, "Digital5");
+		if (input.getButton3()) {
+			GD.cmd_text(350, 240, 16, OPT_CENTER, "B3");
 		}
-		if (button4->isPressed()) {
-			GD.cmd_text(350, 260, 16, OPT_CENTER, "Digital6");
+		if (input.getButton4()) {
+			GD.cmd_text(350, 260, 16, OPT_CENTER, "B4");
 		}
 
 	}
