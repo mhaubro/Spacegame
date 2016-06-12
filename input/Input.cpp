@@ -9,7 +9,7 @@
 
 Input input;
 
-Input::Input() {
+Input::Input(): ax(0), ay(0), az(0), angle(0) {
 	resetAcceleration();
 	button1 = new Button(PB_13);
 	button2 = new Button(PB_14);

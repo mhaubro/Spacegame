@@ -7,7 +7,8 @@
 #include "utils.h"
 #include "pinnames.h"
 
-UI::UI() {
+UI::UI() :
+		youDied(new SpriteTemplate(YOU_DIED_HANDLE, 60, 33, 0)) {
 
 }
 
@@ -57,8 +58,6 @@ void UI::render() {
 		// prints gameinfo in upper left corner
 		GD.ColorRGB(WHITE);
 		GD.cmd_text(4, 4, 16, OPT_SIGNED, "SPACE GAME");
-		GD.cmd_number(4, 4 + 12, 16, OPT_SIGNED, player.getPosition().x);
-		GD.cmd_number(4, 4 + 24, 16, OPT_SIGNED, player.getPosition().y);
 
 		// prints the score in the upper right corner.
 		GD.cmd_text(SCREEN_WIDTH - 4, 4, 16, OPT_RIGHTX, "SCORE");
@@ -72,7 +71,7 @@ void UI::render() {
 		GD.ColorRGB(COLOR_HEALTH);
 		GD.Vertex2f(16 * 4, 16 * (SCREEN_HEIGHT - 4));
 		GD.Vertex2f(
-				((16 * (SCREEN_WIDTH / 2 - 16)) / player.maxHealth)
+				((16 * (SCREEN_WIDTH / 2 - 16)) / MAX_PLAYER_HEALTH)
 						* player.health, 16 * (SCREEN_HEIGHT - 4));
 		GD.cmd_text(4, SCREEN_HEIGHT - 26, 16, OPT_SIGNED, "Health");
 		GD.cmd_number(4, SCREEN_HEIGHT - 16, 16, OPT_SIGNED + 4, player.health);
@@ -90,7 +89,7 @@ void UI::render() {
 		GD.Vertex2f(16 * (SCREEN_WIDTH - 4), 16 * (SCREEN_HEIGHT - 4));
 		GD.Vertex2f(
 				(16 * SCREEN_WIDTH)
-						- (16 * (SCREEN_WIDTH / 2 - 16) / player.maxEnergy)
+						- (16 * (SCREEN_WIDTH / 2 - 16) / MAX_PLAYER_ENERGY)
 								* player.energy, 16 * (SCREEN_HEIGHT - 4));
 		GD.cmd_text( SCREEN_WIDTH - 4, SCREEN_HEIGHT - 26, 16, OPT_RIGHTX,
 				"Energy");
@@ -107,30 +106,52 @@ void UI::render() {
 		// GD.cmd_number(SCREEN_WIDTH/2-4, SCREEN_HEIGHT - 16, 16, OPT_CENTERX + 4, player.height);
 		GD.cmd_number(SCREEN_WIDTH / 2 - 4, SCREEN_HEIGHT - 16, 16,
 		OPT_CENTERX + 4, player.height);
-
-		//prints FPS
-		GD.cmd_text(4, 50, 16, OPT_SIGNED, "FPS:");
-		GD.cmd_number(36, 50, 16, OPT_SIGNED, 1 / timer.getDeltaTime());
-
-		//prints speed
-		GD.cmd_text(4, 70, 16, OPT_SIGNED, "UPS:");// units per sec
-		GD.cmd_number(36, 70, 16, OPT_SIGNED, player.getVelocity().length());
-
-		if (input.getButton1()) {
-			GD.cmd_text(350, 200, 16, OPT_CENTER, "B1");
-		}
-
-		if (input.getButton2()) {
-			GD.cmd_text(350, 220, 16, OPT_CENTER, "B2");
-		}
-		if (input.getButton3()) {
-			GD.cmd_text(350, 240, 16, OPT_CENTER, "B3");
-		}
-		if (input.getButton4()) {
-			GD.cmd_text(350, 260, 16, OPT_CENTER, "B4");
-		}
-
 	}
+#if DEBUG
+	GD.ColorRGB(WHITE);
+	GD.ColorA(255);
+
+	GD.cmd_text(4, 16, 16, OPT_SIGNED, "X:");
+	GD.cmd_text(4, 28, 16, OPT_SIGNED, "Y:");
+	GD.cmd_number(20, 4 + 12, 16, OPT_SIGNED, player.getPosition().x);
+	GD.cmd_number(20, 4 + 24, 16, OPT_SIGNED, player.getPosition().y);
+
+	//prints FPS
+	GD.cmd_text(4, 50, 16, OPT_SIGNED, "FPS:");
+	GD.cmd_number(36, 50, 16, OPT_SIGNED, 1 / timer.getDeltaTime());
+
+	//prints speed
+	GD.cmd_text(4, 70, 16, OPT_SIGNED, "UPS:"); // units per sec
+	GD.cmd_number(36, 70, 16, OPT_SIGNED, player.getVelocity().length());
+
+	GD.cmd_text(4, 150, 16, OPT_SIGNED, "B1: ");
+	if (input.getButton1()) {
+		GD.cmd_text(30, 150, 16, OPT_SIGNED, "TRUE");
+	} else {
+		GD.cmd_text(30, 150, 16, OPT_SIGNED, "FALSE");
+	}
+
+	GD.cmd_text(4, 170, 16, OPT_SIGNED, "B2: ");
+	if (input.getButton2()) {
+		GD.cmd_text(30, 170, 16, OPT_SIGNED, "TRUE");
+	} else {
+		GD.cmd_text(30, 170, 16, OPT_SIGNED, "FALSE");
+	}
+
+	GD.cmd_text(4, 190, 16, OPT_SIGNED, "B3: ");
+	if (input.getButton3()) {
+		GD.cmd_text(30, 190, 16, OPT_SIGNED, "TRUE");
+	} else {
+		GD.cmd_text(30, 190, 16, OPT_SIGNED, "FALSE");
+	}
+
+	GD.cmd_text(4, 210, 16, OPT_SIGNED, "B4: ");
+	if (input.getButton4()) {
+		GD.cmd_text(30, 210, 16, OPT_SIGNED, "TRUE");
+	} else {
+		GD.cmd_text(30, 210, 16, OPT_SIGNED, "FALSE");
+	}
+#endif
 
 	GD.RestoreContext();
 }

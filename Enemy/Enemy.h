@@ -21,20 +21,18 @@
 class Enemy : public Entity, public PhysicsObject{
 protected:
 	int height;
+	int health;
+	double lastShot;
 
 	SpriteTemplate* sprite;
 	SpriteTemplate* exhaust;
 	AnimationTemplate* anim;
 
-	double lastShot = 0;
-
-
-
 	Polygon* collisionBox;
 
-	Vector2f shotOffset = Vector2f(.5, 0);//Marks offset from center of object to shooting mound. Both positive as well as negativ
-	int health;
-	bool orientRight = true;//Boolean value that marks if the enemy is oriented toward right. If false, it is oriented towards the left.
+	Vector2f shotOffset;//Marks offset from center of object to shooting mound. Both positive as well as negativ
+
+	bool orientRight;//Boolean value that marks if the enemy is oriented toward right. If false, it is oriented towards the left.
 
 	void bestMove();
 	void updatePosition();
@@ -46,10 +44,6 @@ protected:
 
 
 public:
-
-	bool isDead = false;
-
-
 
 	Enemy(Vector2f pos, Vector2f vel);
 	virtual ~Enemy();

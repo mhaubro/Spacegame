@@ -14,10 +14,10 @@
 Player player = Player(Vector2f(2, 10), Vector2f(0, 0));
 
 Player::Player(Vector2f pos, Vector2f vel) :
-		Entity(), RigidBody(1, .5, pos, 0, vel), height(0), sprite(
+		Entity(), RigidBody(1, .5, pos, 0, vel), sprite(
 				Sprite(SpaceShipSprite32, pos, angle, 1)), exhaust1(
 				Animation(ExhaustAnimation8, pos, angle, 1)), exhaust2(
-				Animation(ExhaustAnimation8, pos, angle, 1)) {
+				Animation(ExhaustAnimation8, pos, angle, 1)),shotInterval(.2), lastShot(0),enginesOn(false), height(0), health(MAX_PLAYER_HEALTH), energy(MAX_PLAYER_ENERGY) {
 
 	Vector2f shape1[] = { Vector2f(-1, 0), Vector2f(-.5, .8), Vector2f(1, 0),
 			Vector2f(-.5, -.8) };
@@ -94,14 +94,14 @@ void Player::update() {
 	}
 
 	energy += .2;
-	energy = clamp(energy, 0, maxEnergy);
+	energy = clamp(energy, 0, MAX_PLAYER_ENERGY);
 
 	health += .01;
 	if (health <= 0) {
 		mIsDead = true;
 		game.setGameOver();
 	}
-	health = clamp(health, 0, maxHealth);
+	health = clamp(health, 0, MAX_PLAYER_HEALTH);
 
 }
 
