@@ -9,8 +9,9 @@
 #define SRC_EFFECT_H_
 
 #include "Vector2f.h"
+#include "Entity.h"
 
-class Effect {
+class Effect : public Entity {
 protected:
 	Effect(Vector2f position);
 

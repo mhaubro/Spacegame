@@ -31,7 +31,7 @@ Player::~Player() {
 
 void Player::update() {
 
-	if (!isDead) {
+	if (!mIsDead) {
 		updateSteering();
 		updateCannon();
 	}
@@ -98,7 +98,7 @@ void Player::update() {
 
 	health += .01;
 	if (health <= 0) {
-		isDead = true;
+		mIsDead = true;
 		game.setGameOver();
 	}
 	health = clamp(health, 0, maxHealth);

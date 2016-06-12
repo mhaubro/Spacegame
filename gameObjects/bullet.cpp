@@ -11,8 +11,7 @@ std::vector<Bullet> friendlybullets;
 std::vector<Bullet> foebullets;
 
 Bullet::Bullet(Vector2f& pos, Vector2f& vel, float radius, bool _friendly) :
-		PhysicsObject(BULLET_MASS, pos, vel), startTime(timer.getRunTime()), mDead(
-				false), mFriendly(_friendly), mRadius(radius), mAnimation(
+		Entity(), PhysicsObject(BULLET_MASS, pos, vel), startTime(timer.getRunTime()), mFriendly(_friendly), mRadius(radius), mAnimation(
 				BulletTemplate, pos, 0, 2) {
 
 }
@@ -27,7 +26,7 @@ void Bullet::render() {
 void Bullet::update() {
 	this->PhysicsObject::updatePhysics();
 	if (timer.getRunTime() > startTime + Lifespan) {
-		mDead = true;
+		mIsDead = true;
 	}
 
 	if (checkEarthCollision()) {
@@ -54,11 +53,11 @@ void Bullet::operator=(const Bullet& b) {
 }
 
 bool Bullet::isDead() {
-	return mDead;
+	return mIsDead;
 }
 
 void Bullet::kill() {
-	mDead = true;
+	mIsDead = true;
 }
 
 bool Bullet::getFriendly() {
