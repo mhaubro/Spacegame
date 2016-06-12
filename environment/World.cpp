@@ -14,6 +14,7 @@
 #include "GraphicsTemplates.h"
 #include "Animation.h"
 #include "StaticAnimationEffect.h"
+#include "game.h"
 
 World world;
 bool isBDead(bullet b);
@@ -112,7 +113,7 @@ void World::renderBullets() {
 
 float World::getHeight(float x) {
 	int index = ((int) (x / CHUNK_SIZE));
-	for (int i = 0; i < NUMBER_OF_CHUNKS_LOADED; i++) {
+	for (int i = 0; i < NUMBER_OF_CHUNKS_LOADED; ++i) {
 		if (chunks[i]->getIndex() == index) {
 			return chunks[i]->getHeight((x - index * CHUNK_SIZE));
 		}

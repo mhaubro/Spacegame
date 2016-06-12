@@ -133,15 +133,16 @@ void UI::render() {
 			//GD.cmd_text(350, 260, 16, OPT_CENTER, "Digital6");
 		}
 		//Prints enemy location:
-		int j = 50;
-		for (std::vector<std::tr1::shared_ptr<Enemy> >::iterator i = enemies.begin(); i != enemies.end(); ++i){
-			GD.cmd_text(350, j, 16, OPT_SIGNED, "Enemy:");
-			Enemy & e = **i;
-			GD.cmd_number(400, j, 16, OPT_SIGNED, e.getPosition().x-player.getPosition().x);
-			GD.cmd_number(445, j, 16, OPT_SIGNED, e.getPosition().y-player.getPosition().y);
-			j += 30;
-		}
-
+//		int j = 50;
+//		for (std::vector<std::tr1::shared_ptr<Enemy> >::iterator i = enemies.begin(); i != enemies.end(); ++i){
+//			GD.cmd_text(350, j, 16, OPT_SIGNED, "Enemy:");
+//			Enemy & e = **i;
+//			GD.cmd_number(400, j, 16, OPT_SIGNED, e.getPosition().x-player.getPosition().x);
+//			GD.cmd_number(445, j, 16, OPT_SIGNED, e.getPosition().y-player.getPosition().y);
+//			j += 30;
+//		}
+		GD.cmd_text(100, 100, 16, OPT_SIGNED, "Enemies:");
+		GD.cmd_number(100, 120, 16, OPT_SIGNED, game.mEnemyManager.size());
 
 		//Tries to print RAM:https://developer.mbed.org/questions/6994/How-to-print-Free-RAM-available-RAM-or-u/,
 		//BROKEN
@@ -152,8 +153,8 @@ void UI::render() {
 //		heap  = malloc(4);
 //		int * result2  = &stackVariable;
 //		free(heap);
-		GD.cmd_text(350, 150, 16, OPT_SIGNED, "Enemies size:");
-		GD.cmd_number(350, 180, 16, OPT_SIGNED, enemies.size());
+//		GD.cmd_text(350, 150, 16, OPT_SIGNED, "Enemies size:");
+//		GD.cmd_number(350, 180, 16, OPT_SIGNED, enemies.size());
 		//GD.cmd_text(100, 150, 16, OPT_SIGNED, "Friendlybullets size:");
 		//GD.cmd_number(100, 180, 16, OPT_SIGNED, friendlybullets.size());
 		//GD.cmd_text(350, 210, 16, OPT_SIGNED, "Enemybullets size:");

@@ -10,6 +10,7 @@
 #include "Input.h"
 #include "bullet.h"
 #include "StaticAnimationEffect.h"
+#include "world.h"
 
 Player player = Player(Vector2f(2, 10), Vector2f(0, 0));
 
@@ -40,7 +41,7 @@ Player::~Player() {
 }
 
 void Player::update() {
-	if (!isDead) {
+	if (!isDead()) {
 		updateSteering();
 		if (input.getRightTouch()
 				&& timer.getRunTime() > lastShot + shotInterval) { //Shooting //&&
@@ -58,7 +59,7 @@ void Player::update() {
 	addAcceleration(Vector2f(0, -GRAVITY));
 	updatePhysics();
 
-	float groundHeight = world.getHeight(position.x);
+	float groundHeight = 2;//world.getHeight(position.x);
 
 	player.height = position.y - groundHeight;
 
@@ -110,7 +111,7 @@ void Player::update() {
 	checkHits();//To place here, or maybe before regen?
 
 	if (health <= 0) {
-		isDead = true;
+		kill();
 		game.setGameOver();
 	}
 	health = clamp(health, 0, maxHealth);

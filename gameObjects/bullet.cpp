@@ -2,6 +2,9 @@
 #include "bullet.h"
 #include "Vector2f.h"
 #include "GraphicsTemplates.h"
+#include "game.h"
+#include "PhysicsConstants.h"
+
 
 std::vector<bullet> friendlybullets;
 std::vector<bullet> foebullets;

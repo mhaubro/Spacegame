@@ -6,10 +6,12 @@
  */
 
 #include "Enemy.h"
+#include "graphics.h"
+#include "game.h"
+#include "GD2.h"
+#include "World.h"
 
 #define ENEMYACCELERATION 1.5
-
-std::vector<std::tr1::shared_ptr<Enemy> > enemies;
 
 Enemy::Enemy(Vector2f pos, Vector2f vel) :
 Entity(),PhysicsObject(1,pos,vel) ,height(pos.y), health(100), lastShot(0), birthTime(timer.getRunTime()),
@@ -25,51 +27,49 @@ braking(false), aiming(false), shooting(false), orientRight(true){
 	collisionBox = new Polygon(&position, &angle, 4, shape);
 }
 
+Enemy::Enemy() : Entity(), PhysicsObject(1),height(0), health(100), lastShot(0), birthTime(timer.getRunTime()),
+				braking(false), aiming(false), shooting(false), orientRight(true){
+		position = generatePosition();
+		height = position.y;
+		std::vector<Vector2f> shape;
+			shape.push_back(Vector2f(-.5, -.5));
+			shape.push_back(Vector2f(-.5, .5));
+			shape.push_back(Vector2f(.5, .5));
+			shape.push_back(Vector2f(.5, -.5));
+			angle = 0;
 
-Enemy::Enemy() : Entity(),PhysicsObject(1) ,height(0), health(100), lastShot(0), birthTime(timer.getRunTime()),
-		braking(false), aiming(false), shooting(false), orientRight(true){
-	position = generatePosition();
-	height = position.y;
-	std::vector<Vector2f> shape;
-	shape.push_back(Vector2f(-.5, -.5));
-	shape.push_back(Vector2f(-.5, .5));
-	shape.push_back(Vector2f(.5, .5));
-	shape.push_back(Vector2f(.5, -.5));
-	angle = 0;
-
-	collisionBox = new Polygon(&position, &angle, 4, shape);
+			collisionBox = new Polygon(&position, &angle, 4, shape);
 }
 
 Enemy::~Enemy() {
 	// Auto-generated destructor stub
 	if (collisionBox) delete collisionBox;
+	if (sprite) delete sprite;
+	if (exhaust) delete exhaust;
+	if (anim) delete anim;
 }
 
 Vector2f Enemy::generatePosition(){
 	Vector2f startV = Vector2f(cam.getX(), cam.getY());
 	int maxX = WORLD_SIZE*CHUNK_SIZE;
-	float ranVal = ran.Float(player.getPosition().x);
-	float dx = 0.6*CHUNK_SIZE*ran.Float(ranVal);
-	float x = cam.getX();
-	//Decides whether the enemy will be generated to the right or left of cam.
-	if (ranVal < .5){
-		x += (CHUNK_SIZE + dx);
-	} else {
-		x -= (CHUNK_SIZE + dx);
+
+	int x = random(CHUNK_SIZE, CHUNK_SIZE+CHUNK_SIZE/2) + cam.getX();
+
+	if (((int) (player.getPosition().x)) % 2 == 0){//Approx 50 % chance
+		x *=-1;
 	}
 	if (x < 0){
-		x+= maxX;
-	} else {
-		x=(int)(x) % maxX;
+		x += maxX;
+	} else if (x >= CHUNK_SIZE*WORLD_SIZE){
+		x -= CHUNK_SIZE*WORLD_SIZE;
 	}
 		//y is calculated
-	float y = world.getHeight(x)+3+12*ran.Float(player.getPosition().y);
+	float y = world.getHeight(x) + random(3,6);//TODO MAKE RELATIVE TO WORLD.GETHEIGHT() (WHICH IS BUGGED)//HELP, MATHIAS.
 	Vector2f startPos = Vector2f(x,y);
 	return startPos;
 }
 
 void Enemy::render(){
-	//collisionBox->render();
 	GD.RestoreContext();
 	GD.Begin(POINTS);
 	GD.PointSize(collisionBox->getHitradius()*16*16);
@@ -77,9 +77,12 @@ void Enemy::render(){
 	cam.Vertex2f(position);
 	GD.RestoreContext();
 }
+
+
 bool Enemy::collide(Entity entity){//TODO
 	return false;
 }
+
 void Enemy::update(){
 	//Check if being hit/dead
 	checkHits();
@@ -135,9 +138,9 @@ float Enemy::calcAngleToPlayer(){
 
 Vector2f Enemy::getShotPos(){
 	if (orientRight){
-		return this->getPosition() + Vector2f(.5, 0);
+		return this->getPosition() + Vector2f(.1, 0);
 	} else {
-		return this->getPosition() + Vector2f(-.5, 0);
+		return this->getPosition() + Vector2f(-.1, 0);
 	}
 }
 
@@ -165,10 +168,6 @@ void Enemy::checkAlive(){
 		game.score += 2500;
 	}
 	checkBounds();//Checks if the enemy is far away.
-}
-
-void Enemy::kill(){
-	isDead = true;
 }
 
 void Enemy::bestMove(){
@@ -319,7 +318,7 @@ void Enemy::updatePh(){
 
 
 Enemy& Enemy::operator=(const Enemy & enemy){//TODO MAYBE DELETE THIS? Easily editable, but still useless code atm.
-	isDead = enemy.isDead;
+	isEDead = enemy.isEDead;
 	height = enemy.height;
 	shotOffset = enemy.shotOffset;
 	health = enemy.health;

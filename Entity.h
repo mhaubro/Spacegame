@@ -14,6 +14,7 @@ class Entity{
 protected:
 
 	Entity();
+	bool isEDead;//is Entity Dead.
 
 public:
 	virtual ~Entity();
@@ -23,7 +24,8 @@ public:
 
 	virtual bool collide(Entity entity);
 
-	bool isDead = false;
+	virtual void kill();
+	virtual bool isDead();
 };
 
 #endif /* SRC_ENTITY_H_ */

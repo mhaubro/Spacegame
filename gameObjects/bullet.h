@@ -3,8 +3,6 @@
 
 #include<vector>
 
-#include "game.h"
-#include "PhysicsConstants.h"
 #include "PhysicsObject.h"
 #include "Animation.h"
 

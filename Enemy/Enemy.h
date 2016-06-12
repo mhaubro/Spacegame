@@ -9,12 +9,10 @@
 #define SRC_ENEMY_ENEMY_H_
 
 #define FIRERATE (float) 1.5
-#include <vector>
-#include <tr1/memory>//USE SMART POINTERS FOR ENEMY-ARRAY INSTEAD OF CLASSICAL//TODO
 #include "Entity.h"
-#include "graphics.h"
-#include "Sprite.h"
-#include "Animation.h"
+#include "PhysicsObject.h"
+#include "SpriteTemplate.h"
+#include "AnimationTemplate.h"
 #include "Polygon.h"
 #include "myassets.h"
 #include "bullet.h"
@@ -22,6 +20,7 @@
 
 class Enemy : public Entity, public PhysicsObject{
 protected:
+
 	int height;
 	SpriteTemplate* sprite;
 	SpriteTemplate* exhaust;
@@ -49,44 +48,49 @@ protected:
 	float shotDT = .2;
 	float shotTime = .3;//Sends out bullets every shotDT in a time of shotTime (DT = .2 & time = .3 -> 2 shots with .2 sec between).
 
-	void checkHits();
-	void bestMove();
-	void updatePosition();
 
-	float calcAngleToPlayer();
-	void enemyShot();
+
+	Vector2f generatePosition();//TODO CLEAN AS WELL AS GIVE BETTER METHOD NAMES
+	Vector2f getShortestDiffVector(Vector2f v1, Vector2f v2);
 	Vector2f getShotPos();
 	Vector2f getShotVel(float velocity, float angle);
-	void checkAlive();
-	void kill();
-	bool shotInRange(Vector2f shotVector);
-	void shotAction(float angle);
-	void moveAction(Vector2f vectorToPlayer);
+
+	float calcAngleToPlayer();
 	float getHeight();
+
+	bool checkShot(Vector2f VectorToPlayer);
+	bool enemyOnScreen();
+	bool shotInRange(Vector2f shotVector);
+
+	void checkBounds();
+	void shoot();
+	void aim();
 	void turn();
 	void brakeAction();
 	void brake();
 	void aimAction();
+	void enemyShot();
 	void updatePh();
-	bool enemyOnScreen();
-	Vector2f generatePosition();//TODO CLEAN AS WELL AS GIVE BETTER METHOD NAMES
-	Vector2f getShortestDiffVector(Vector2f v1, Vector2f v2);
-	void checkBounds();
+	void checkAlive();
+	void shotAction(float angle);
+	void moveAction(Vector2f vectorToPlayer);
+	void checkHits();
+	void bestMove();
+	void updatePosition();
 
-	void shoot();
-	void aim();
-	bool checkShot(Vector2f VectorToPlayer);
+
 
 public:
 
 	Enemy(Vector2f pos, Vector2f vel);
 	Enemy();
+
 	Enemy& operator=(const Enemy & enemy);
 	virtual ~Enemy();
 
 	void update();
 	void render();
-	bool collide(Entity entity);
+	bool collide(Entity entity);//TODO Maybe delete.
 };
-extern std::vector<std::tr1::shared_ptr<Enemy> > enemies;
+
 #endif /* SRC_ENEMY_ENEMY_H_ */

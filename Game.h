@@ -19,6 +19,7 @@
 #include "enemy.h"
 
 #include "EffectManager.h"
+#include "EnemyManager.h"
 
 class Game
 {
@@ -35,10 +36,10 @@ protected:
     void render();
     void renderEnemies();
     void removeEnemies();
-    void generateEnemy();
 
 public:
-
+    unsigned long frames;//Used as random seed, increment -> always different. Maybe not necessary.
+    EnemyManager mEnemyManager;
     EffectManager mEffectManager;
 
     Game();
