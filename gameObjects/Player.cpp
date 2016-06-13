@@ -177,7 +177,7 @@ void Player::updateSteering() {
 		addTorque(-3);
 	}
 
-	if (input.getLeftTouch()) {
+	if (input.getButton1()) {
 		Vector2f throttle = FromAngle(getMaxThrottle(), angle); //Tilføjer en kraft på 30 newton i den vinkel
 		addForce(throttle, position);
 		enginesOn = true;
@@ -188,7 +188,7 @@ void Player::updateSteering() {
 }
 
 void Player::updateCannon() {
-	if (input.getRightTouch() && timer.getRunTime() > lastShot + shotInterval) { //Shooting //&&
+	if (input.getButton3() && timer.getRunTime() > lastShot + shotInterval) { //Shooting //&&
 		lastShot = timer.getRunTime();
 		Vector2f bulletpos = player.getShotPos();
 		Vector2f bulletv = player.getShotVel(20); //10 = startvelocity of bullet
