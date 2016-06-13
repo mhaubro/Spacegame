@@ -15,9 +15,8 @@ protected:
 	struct Node {
 		T* mData;
 		Node * mNext;
-		bool mShouldRemove;
 		Node(T* _data, Node* _next) :
-				mData(_data), mNext(_next), mShouldRemove(false) {
+				mData(_data), mNext(_next) {
 		}
 		~Node() {
 			delete mData;
@@ -26,6 +25,10 @@ protected:
 
 	Node* mHead;
 	int mSize;
+
+	virtual bool shouldRemove(Node* node){
+		return false;
+	}
 
 public:
 
@@ -60,7 +63,7 @@ template<class T> void LinkedList<T>::clean() {
 		Node* prev = mHead;
 		Node* tmp = mHead->mNext;
 		while (tmp) {
-			if (tmp->mShouldRemove) {
+			if (shouldRemove(tmp)) {
 				Node* next = tmp->mNext;
 				delete tmp;
 				tmp = next;
@@ -71,7 +74,7 @@ template<class T> void LinkedList<T>::clean() {
 				tmp = tmp->mNext;
 			}
 		}
-		if (mHead->mShouldRemove) {
+		if (shouldRemove(mHead)) {
 			tmp = mHead->mNext;
 			delete mHead;
 			mHead = tmp;

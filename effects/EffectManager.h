@@ -9,12 +9,22 @@
 #define SRC_EFFECTS_EFFECTMANAGER_H_
 
 #include "Effect.h"
-#include "LinkedEntityList.h"
+#include "LinkedList.h"
 
 class EffectManager {
 protected:
 
-	LinkedEntityList mEffects;
+	class EffectList: public LinkedList<Effect> {
+	public:
+		EffectList();
+		virtual ~EffectList();
+
+		virtual void updateAll();
+		virtual void renderAll();
+		virtual bool shouldRemove(Node* node);
+	};
+
+	EffectList mEffects;
 
 public:
 	EffectManager();

@@ -38,6 +38,10 @@ LinkedList<Enemy>() {
 EnemyManager::EnemyList::~EnemyList() {
 }
 
+bool EnemyManager::EnemyList::shouldRemove(Node* node){
+	return node->mData->isDead();
+}
+
 void EnemyManager::EnemyList::updateAll() {
 	Node* tmp = mHead;
 	while (tmp) {
