@@ -55,8 +55,8 @@ Vector2f Enemy::generatePosition(){
 
 	int x = (rand() % (CHUNK_SIZE+CHUNK_SIZE/2)) + CHUNK_SIZE + cam.getX();
 
-	if (((int) (player.getPosition().x)) % 2 == 0){//Approx 50 % chance
-		x *=-1;
+	if (rand() % 2 == 0){//Approx 50 % chance
+		x  = x*(-1);
 	}
 	if (x < 0){
 		x += maxX;
