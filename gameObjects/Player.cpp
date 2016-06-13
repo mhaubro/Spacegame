@@ -11,26 +11,24 @@
 #include "bullet.h"
 #include "StaticAnimationEffect.h"
 #include "world.h"
+#include "CollisionDetection.h"
 
 Player player = Player(Vector2f(2, 10), Vector2f(0, 0));
+
+static Vector2f arr[] = {Vector2f(-1, 0),Vector2f(-.5, .8), Vector2f(1, 0), Vector2f(-.5, -.8)};
+static std::vector<Vector2f> shape(arr, arr + 4);
+static Polygon _collisionBox = Polygon(4, shape);
 
 Player::Player(Vector2f pos, Vector2f vel) :
 		Entity(), RigidBody(1, .5, pos, 0, vel), sprite(
 				Sprite(SpaceShipSprite32, pos, angle, 1)), exhaust1(
 				Animation(ExhaustAnimation8, pos, angle, 1)), exhaust2(
-				Animation(ExhaustAnimation8, pos, angle, 1)),shotInterval(.2), lastShot(0),enginesOn(false), height(0), health(MAX_PLAYER_HEALTH), energy(MAX_PLAYER_ENERGY) {
-
-	std::vector<Vector2f> shape;
-	shape.push_back(Vector2f(-1, 0));
-	shape.push_back(Vector2f(-.5, .8));
-	shape.push_back(Vector2f(1, 0));
-	shape.push_back(Vector2f(-.5, -.8));
-
-	collisionBox = new Polygon(&position, &angle, 4, shape);
+				Animation(ExhaustAnimation8, pos, angle, 1)),shotInterval(.2), lastShot(0),enginesOn(false),
+				collisionBox(&_collisionBox), height(0), health(MAX_PLAYER_HEALTH), energy(MAX_PLAYER_ENERGY) {
 }
 
 Player::~Player() {
-	delete collisionBox;
+
 }
 
 void Player::update() {
@@ -54,7 +52,7 @@ void Player::update() {
 	Vector2f tangent = Vector2f();
 	Vector2f collisionPoint = Vector2f(10, 10);
 
-	if (Polygon::TerrainCollide(*collisionBox, mtd, normal, collisionPoint)) {
+	if (TerrainCollide(collisionBox, position, angle, normal, collisionPoint, mtd)) {
 		normal = normal.normalized();
 		tangent = normal.rightNormal();
 

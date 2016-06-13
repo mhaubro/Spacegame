@@ -11,6 +11,7 @@
 #include "GD2.h"
 #include "World.h"
 #include "GraphicsTemplates.h"
+#include "CollisionDetection.h"
 
 #define ENEMYACCELERATION 1.5
 //Enemies are only randomly generated. Outcomment this if it is wished they are not.
@@ -28,26 +29,16 @@
 //	collisionBox = new Polygon(&position, &angle, 4, shape);
 //}
 
-Enemy::Enemy(Vector2f _position, Vector2f _velocity) :
+Enemy::Enemy(Polygon * _collisionBox, Vector2f _position, Vector2f _velocity) :
 		Entity(), RigidBody(1, .5, _position, 0, _velocity), sprite(
 				Enemy2Sprite32, _position, angle, 1), exhaust(
 				Animation(ExhaustAnimation8, _position, angle, 1)), height(0), health(
-				100), lastShot(0), birthTime(timer.getRunTime()), braking(
+				100), collisionBox(_collisionBox), lastShot(0), birthTime(timer.getRunTime()), braking(
 				false), aiming(false), shooting(false) {
-	std::vector<Vector2f> shape;
-	shape.push_back(Vector2f(-.5, -.5));
-	shape.push_back(Vector2f(-.5, .5));
-	shape.push_back(Vector2f(.5, .5));
-	shape.push_back(Vector2f(.5, -.5));
-	angle = 0;
-
-	collisionBox = new Polygon(&position, &angle, 4, shape);
 }
 
 Enemy::~Enemy() {
 	// Auto-generated destructor stub
-	if (collisionBox)
-		delete collisionBox;
 //	if (sprite) delete sprite;
 //	if (exhaust) delete exhaust;
 //	if (anim) delete anim;
@@ -63,10 +54,6 @@ void Enemy::render() {
 	sprite.setAngle(angle);
 	sprite.render();
 
-}
-
-bool Enemy::collide(Entity entity) { //TODO
-	return false;
 }
 
 void Enemy::update() {
@@ -261,12 +248,16 @@ Enemy& Enemy::operator=(const Enemy & enemy) {//TODO MAYBE DELETE THIS? Easily e
 	return *this;
 }
 
+//getPolySize is used for debugging, to test the collisionbox object.
+//int Enemy::getPolySize(){
+//	return collisionBox.getHitradius();
+//}
+
 bool Enemy::checkHit(Bullet* _bullet) {
 	Vector2f MTD = Vector2f();
-	if (collisionBox->Collide(*collisionBox, _bullet->getPosition(),
-			_bullet->getRadius(), MTD)) {
+	if (collide(collisionBox, position, angle, _bullet->getPosition(), _bullet->getRadius(), MTD)) {
 		_bullet->kill();
-		//game.score += 100;
+		game.score += 100;
 		health -= 50;
 		return true;
 	}

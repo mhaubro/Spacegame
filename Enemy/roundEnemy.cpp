@@ -12,8 +12,14 @@
 
 #define ENEMYACCELERATION 1.5
 
+	static Vector2f arr[] = {Vector2f(-.5, -.5),Vector2f(-.5, .5), Vector2f(.5, .5), Vector2f(.5, -.5)};
+
+	static std::vector<Vector2f> shape(arr, arr + 4);
+
+static Polygon collisionBox = Polygon(4, shape);
+
 //Stats for the squareEnemy
-RoundEnemy::RoundEnemy(Vector2f _position, Vector2f _velocity) : Enemy(_position,_velocity)
+RoundEnemy::RoundEnemy(Vector2f _position, Vector2f _velocity) : Enemy(collisionBox, _position,_velocity)
 {
 	//Fields from Enemy that must be declared//TODO MAYBE FIND BETTER SOLUTION?
 	brakeTime = 1;
