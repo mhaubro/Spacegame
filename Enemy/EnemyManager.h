@@ -12,11 +12,13 @@
 #include <algorithm>
 #include "Enemy.h"
 #include "SquareEnemy.h"
+#include "RoundEnemy.h"
+#include "LinkedEntityList.h"
 
 class EnemyManager {
 
 protected:
-	std::vector<squareEnemy *> enemies;
+	LinkedEntityList enemies;
 	unsigned int enemy_number;
 
 public:
@@ -25,7 +27,6 @@ public:
 	virtual ~EnemyManager();
 	virtual void update();
 	virtual void render();
-//	virtual void addEnemy(SquareEnemy * enemy);
 };
 
 #endif /* SRC_ENEMY_ENEMYMANAGER_H_ */

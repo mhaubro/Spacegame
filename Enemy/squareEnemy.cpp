@@ -93,7 +93,7 @@ void squareEnemy::moveAction(Vector2f vectorToPlayer){//Maybe use defined vector
 		addAcceleration(Vector2f(ENEMYACCELERATION, 0));
 	}
 
-	if (getHeight() < 8){//If it's flying low, it want to go up
+	if (getHeight() < 3){//If it's flying low, it want to go up
 		addAcceleration(Vector2f(0, ENEMYACCELERATION));
 	} else if (vectorToPlayer.y < 0){//If it's placed above the player
 		addAcceleration(Vector2f(0, -ENEMYACCELERATION));

@@ -8,43 +8,26 @@
 #include "EnemyManager.h"
 
 EnemyManager::EnemyManager() : enemy_number(3) {
-	std::vector<squareEnemy *> enemies;
+	LinkedEntityList enemies;
 }
 
 EnemyManager::~EnemyManager() {
 	//Only delete if a new is done. No new.
 }
 
-bool isEnemyDead(squareEnemy * e){//NOTE: MUST BE DEFINED BEFORE REMOVEENEMIES OR IN THE TOP OF THE .CPP-file. Predicate-function.
-	if (e->isDead()){
-		delete e;
-		return true;
-	}
-	return false;
-}
-
 void EnemyManager::update(){
-	for (std::vector<squareEnemy*>::iterator i = enemies.begin(); i != enemies.end(); ++i){
-		(*i)->update();
-	}
-	enemies.erase(std::remove_if(enemies.begin(), enemies.end(), isEnemyDead),enemies.end());
+	enemies.updateAll();
+	enemies.removeDead();
 
 	if (enemies.size() < enemy_number+1){
 		squareEnemy * e = new squareEnemy();
-		enemies.push_back(e);
+		enemies.add(e);
 	}
 }
 void EnemyManager::render(){
-	for (std::vector<squareEnemy *>::iterator i = enemies.begin(); i != enemies.end(); ++i){
-		(*i)->render();
-	}
+	enemies.renderAll();
 }
 
 unsigned int EnemyManager::size(){
 	return enemies.size();
 }
-
-//void EnemyManager::addEnemy(Enemy * enemy){
-//	enemies.push_back(enemy);
-//}
-
