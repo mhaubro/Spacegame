@@ -4,12 +4,10 @@
 #include "graphics.h"
 #include "GameTimer.h"
 
-PhysicsObject::PhysicsObject(float mass, Vector2f& position, Vector2f& velocity) :
+PhysicsObject::PhysicsObject(float mass, Vector2f position, Vector2f velocity) :
 		mass(mass), position(position), velocity(velocity) {
 }
-PhysicsObject::PhysicsObject(float mass) : mass(mass), position(Vector2f()), velocity(Vector2f()){
 
-}
 
 PhysicsObject::~PhysicsObject(){
 

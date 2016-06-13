@@ -6,6 +6,7 @@
  */
 
 #include "EnemyManager.h"
+#include "Graphics.h"
 
 EnemyManager::EnemyManager() :
 		enemies(), enemy_number(3) {
@@ -20,12 +21,17 @@ void EnemyManager::update() {
 	enemies.clean();
 
 	if (enemies.size() < enemy_number + 1) {
-		squareEnemy * e = new squareEnemy();
+		squareEnemy * e = new squareEnemy(generatePosition());
 		enemies.add(e);
 	}
 }
 void EnemyManager::render() {
+
+	GD.RestoreContext();
+	GD.Begin(BITMAPS);
+
 	enemies.renderAll();
+
 }
 
 int EnemyManager::size() {
@@ -72,4 +78,24 @@ void EnemyManager::EnemyList::checkBulletCollision(Bullet* bullet) {
 		}
 		tmp = tmp->mNext;
 	}
+}
+
+Vector2f EnemyManager::generatePosition() {
+	Vector2f startV = Vector2f(cam.getX(), cam.getY());
+	int maxX = WORLD_SIZE * CHUNK_SIZE;
+
+	int x = (rand() % (CHUNK_SIZE + CHUNK_SIZE / 2)) + CHUNK_SIZE + cam.getX();
+
+	if (rand() % 2 == 0) { //Approx 50 % chance
+		x = x * (-1);
+	}
+	if (x < 0) {
+		x += maxX;
+	} else if (x >= CHUNK_SIZE * WORLD_SIZE) {
+		x -= CHUNK_SIZE * WORLD_SIZE;
+	}
+	//y is calculated
+	float y = world.getHeight(x) + 5 + (rand() % 5);
+	Vector2f startPos = Vector2f(x, y);
+	return startPos;
 }

@@ -10,16 +10,20 @@
 
 #define FIRERATE (float) 1.5
 #include "Entity.h"
-#include "PhysicsObject.h"
-#include "SpriteTemplate.h"
-#include "AnimationTemplate.h"
+#include "RigidBody.h"
 #include "Polygon.h"
 #include "myassets.h"
 #include "bullet.h"
 #include "random.h"
+#include "Sprite.h"
+#include "Animation.h"
+
 //TODO CLEAN UP IN METHODS AS WELL AS MEMBER-VALUES.
-class Enemy : public Entity, public PhysicsObject{
+class Enemy : public Entity, public RigidBody{
 protected:
+
+	Sprite sprite;
+	Animation exhaust;
 
 	int height;
 	int health;
@@ -52,7 +56,6 @@ protected:
 	float shotDT;
 	float shotTime;//Sends out bullets every shotDT in a time of shotTime (DT = .2 & time = .3 -> 2 shots with .2 sec between).
 
-	Vector2f generatePosition();
 	Vector2f getShortestDiffVector(Vector2f v1, Vector2f v2);
 	Vector2f getShotVel(float velocity, float angle);
 
@@ -82,8 +85,7 @@ protected:
 
 public:
 
-	Enemy(Vector2f pos, Vector2f vel);
-	Enemy();
+	Enemy(Vector2f pos, Vector2f vel = Vector2f());
 
 	Enemy& operator=(const Enemy & enemy);
 	virtual ~Enemy();

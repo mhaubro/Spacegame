@@ -14,6 +14,9 @@
 
 static SpriteTemplate SpaceShipSprite32 = SpriteTemplate(SPRITESHEET32_HANDLE, 32,	32, 0);
 
+static SpriteTemplate Enemy1Sprite32 = SpriteTemplate(SPRITESHEET32_HANDLE, 32,	32, 1);
+static SpriteTemplate Enemy2Sprite32 = SpriteTemplate(SPRITESHEET32_HANDLE, 32,	32, 2);
+
 static AnimationTemplate GroundCollisionAnimation32 = AnimationTemplate(SPRITESHEET32_HANDLE, 32, 32, 4, 4, .2);
 
 static AnimationTemplate GroundCollisionAnimation16 = AnimationTemplate(SPRITESHEET16_HANDLE, 16, 16, 0, 6, .2);
