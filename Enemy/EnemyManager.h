@@ -8,8 +8,6 @@
 #ifndef SRC_ENEMY_ENEMYMANAGER_H_
 #define SRC_ENEMY_ENEMYMANAGER_H_
 
-#include <vector>
-#include <algorithm>
 #include "Enemy.h"
 #include "SquareEnemy.h"
 #include "RoundEnemy.h"
@@ -28,7 +26,7 @@ protected:
 		virtual void renderAll();
 		virtual bool firstInternalCollisionForTheRest(Node* current, Enemy* collided);
 		virtual void checkBulletCollision(Bullet* bullet);
-
+		virtual bool shouldRemove(Node* node);
 	};
 	EnemyList enemies;
 	unsigned int enemy_number;

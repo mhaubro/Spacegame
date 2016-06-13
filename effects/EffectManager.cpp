@@ -9,7 +9,7 @@
 #include "GD2.h"
 #include "Game.h"
 
-EffectManager::EffectManager() {
+EffectManager::EffectManager(): mEffects() {
 }
 
 EffectManager::~EffectManager() {
@@ -36,5 +36,31 @@ void EffectManager::render() {
 
 void EffectManager::addEffect(Effect * _effect) {
 	mEffects.add(_effect);
+}
+
+EffectManager::EffectList::EffectList(): LinkedList<Effect>(){
+}
+
+EffectManager::EffectList::~EffectList(){
+}
+
+bool EffectManager::EffectList::shouldRemove(Node* node){
+	return node->mData->isDead();
+}
+
+void EffectManager::EffectList::updateAll() {
+	Node* tmp = mHead;
+	while (tmp) {
+		tmp->mData->update();
+		tmp = tmp->mNext;
+	}
+}
+
+void EffectManager::EffectList::renderAll(){
+	Node* tmp = mHead;
+	while (tmp){
+		tmp->mData->render();
+		tmp = tmp->mNext;
+	}
 }
 

@@ -37,3 +37,29 @@ void BulletManager::render() {
 void BulletManager::addBullet(Bullet * _bullet) {
 	mBullets.add(_bullet);
 }
+
+BulletManager::BulletList::BulletList(): LinkedList<Bullet>(){
+}
+
+BulletManager::BulletList::~BulletList(){
+}
+
+bool BulletManager::BulletList::shouldRemove(Node* node){
+	return node->mData->isDead();
+}
+
+void BulletManager::BulletList::updateAll(){
+	Node* tmp = mHead;
+	while (tmp){
+		tmp->mData->update();
+		tmp = tmp->mNext;
+	}
+}
+
+void BulletManager::BulletList::renderAll(){
+	Node* tmp = mHead;
+	while (tmp){
+		tmp->mData->render();
+		tmp = tmp->mNext;
+	}
+}

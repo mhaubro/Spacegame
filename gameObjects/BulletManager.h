@@ -9,12 +9,21 @@
 #define SRC_GAMEOBJECTS_BULLETMANAGER_H_
 
 #include "Bullet.h"
-#include "LinkedEntityList.h"
+#include "LinkedList.h"
 
 class BulletManager {
 protected:
 
-	LinkedEntityList mBullets;
+	class BulletList: public LinkedList<Bullet> {
+	public:
+		BulletList();
+		virtual ~BulletList();
+		virtual void updateAll();
+		virtual void renderAll();
+		virtual bool shouldRemove(Node* node);
+	};
+
+	BulletList mBullets;
 
 public:
 	BulletManager();
