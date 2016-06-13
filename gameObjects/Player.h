@@ -32,6 +32,7 @@ protected:
 	Polygon* collisionBox;
 
 	void updateSteering();
+	void updateCannon();
 
 
 public:

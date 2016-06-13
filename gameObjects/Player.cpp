@@ -14,13 +14,6 @@
 
 Player player = Player(Vector2f(2, 10), Vector2f(0, 0));
 
-Vector2f normal = Vector2f();
-Vector2f tangent = Vector2f();
-Vector2f collisionPoint = Vector2f(10, 10);
-
-Vector2f impulseN = Vector2f();
-Vector2f impulseF = Vector2f();
-
 Player::Player(Vector2f pos, Vector2f vel) :
 		Entity(), RigidBody(1, .5, pos, 0, vel), height(0), sprite(
 				Sprite(SpaceShipSprite32, pos, angle, 1)), exhaust1(
@@ -43,19 +36,10 @@ Player::~Player() {
 void Player::update() {
 	if (!isDead()) {
 		updateSteering();
-		if (input.getRightTouch()
-				&& timer.getRunTime() > lastShot + shotInterval) { //Shooting //&&
-			lastShot = timer.getRunTime();
-			Vector2f bulletpos = player.getShotPos();
-			Vector2f bulletv = player.getShotVel(20); //10 = startvelocity of bullet
-			bullet b = bullet(bulletpos, bulletv, .1, WHITE); //Param: pos, vel, Radius, color
-			friendlybullets.push_back(b);
-
-			addImpulse(-bulletv*b.getMass(),bulletpos);
-		}
+		updateCannon();
 	}
 
-	player.aVelocity *= .99;
+	player.aVelocity *= .999;
 	addAcceleration(Vector2f(0, -GRAVITY));
 	updatePhysics();
 
@@ -65,14 +49,17 @@ void Player::update() {
 
 	Vector2f mtd = Vector2f();
 
+	Vector2f normal = Vector2f();
+	Vector2f tangent = Vector2f();
+	Vector2f collisionPoint = Vector2f(10, 10);
+
 	if (Polygon::TerrainCollide(*collisionBox, mtd, normal, collisionPoint)) {
 		normal = normal.normalized();
 		tangent = normal.rightNormal();
 
-		float damage = abs(velocity.scalarProjectAt(normal));
-		if (damage > 1) {
-			health -= damage * damage;
-		}
+		Vector2f impulseN = Vector2f();
+		Vector2f impulseF = Vector2f();
+
 		position += mtd;
 
 		float ecoff = .5;
@@ -90,14 +77,19 @@ void Player::update() {
 
 		addImpulse(impulseN + impulseF, collisionPoint);
 
+		float damage = (impuls - 5);
+		if (damage > 0) {
+			health -= damage * damage;
+		}
+
 		if (impuls > 5) {
 			StaticAnimationEffect* effect = new StaticAnimationEffect(
-					collisionPoint + normal, .8,
-					GroundCollisionAnimation32, normal.angle() + PI / 2, 1);
+					collisionPoint + normal, .8, GroundCollisionAnimation32,
+					normal.angle() + PI / 2, 1);
 			game.mEffectManager.addEffect(effect);
 		} else if (impuls > 2) {
 			StaticAnimationEffect* effect = new StaticAnimationEffect(
-					collisionPoint + normal*.5, 1.2,
+					collisionPoint + normal * .5, 1.2,
 					GroundCollisionAnimation16, normal.angle() + PI / 2, 1);
 			game.mEffectManager.addEffect(effect);
 		}
@@ -119,17 +111,17 @@ void Player::update() {
 }
 
 void Player::checkHits(){
-	if (startT + 5 > timer.getRunTime()){//Grants invulnerability the first five seconds.
-		return;
-	}
-	for(std::vector<bullet>::iterator it = foebullets.begin(); it != foebullets.end(); ++it) {
-		bullet & b = *it;
-		Vector2f MTD;
-		if (collisionBox->Collide(*collisionBox, b.getPosition(),  b.radius, MTD) && !b.isDead()){
-			b.kill();
-			health -= 100;
-		}
-	}
+//	if (startT + 5 > timer.getRunTime()){//Grants invulnerability the first five seconds.
+//		return;
+//	}
+//	for(std::vector<Bullet>::iterator it = foebullets.begin(); it != foebullets.end(); ++it) {
+//		bullet & b = *it;
+//		Vector2f MTD;
+//		if (collisionBox->Collide(*collisionBox, b.getPosition(),  b.radius, MTD) && !b.isDead()){
+//			b.kill();
+//			health -= 100;
+//		}
+//	}
 }
 
 void Player::render() {
@@ -156,11 +148,6 @@ void Player::render() {
 	sprite.setAngle(angle);
 	sprite.render();
 
-	GD.Begin(POINTS);
-	GD.ColorRGB(WHITE);
-	GD.PointSize(16 * 4);
-	cam.Vertex2f(collisionPoint);
-
 }
 
 float Player::getMaxThrottle() {
@@ -183,10 +170,10 @@ float Player::getMaxThrottle() {
 void Player::updateSteering() {
 	float targetAngVel = input.getRotation() * 8;
 	if (aVelocity < targetAngVel - .1) {
-		addTorque(5);
+		addTorque(3);
 	}
 	if (aVelocity > targetAngVel + .1) {
-		addTorque(-5);
+		addTorque(-3);
 	}
 
 	if (input.getLeftTouch()) {
@@ -196,6 +183,19 @@ void Player::updateSteering() {
 		if (energy >= 1)
 			energy -= 1;
 
+	}
+}
+
+void Player::updateCannon() {
+	if (input.getRightTouch() && timer.getRunTime() > lastShot + shotInterval) { //Shooting //&&
+		lastShot = timer.getRunTime();
+		Vector2f bulletpos = player.getShotPos();
+		Vector2f bulletv = player.getShotVel(20); //10 = startvelocity of bullet
+
+		Bullet * bullet = new Bullet(bulletpos, bulletv, .2, true);
+		game.mBulletManager.addBullet(bullet);
+
+		addImpulse(-bulletv * bullet->getMass(), bulletpos);
 	}
 }
 

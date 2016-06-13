@@ -8,10 +8,6 @@
 class UI
 {
 protected:
-	Button * button1;
-	Button * button2;
-	Button * button3;
-	Button * button4;
     
 	SpriteTemplate * youDied = new SpriteTemplate(YOU_DIED_HANDLE, 60, 33, 0);
 

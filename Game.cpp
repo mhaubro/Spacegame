@@ -42,6 +42,7 @@ score++;
 	world.update(player.getPosition().x);
 	player.update();
 	mEnemyManager.update();
+	mBulletManager.update();
 	mEffectManager.update();
 	cam.follow(player.getPosition(), player.getVelocity());
 
@@ -52,10 +53,11 @@ void Game::render() {
 	background.render();
 
 	player.render();
-
 	mEnemyManager.render();
 	world.render();
+	mBulletManager.render();
 	mEffectManager.render();
+	world.render();
 	ui.render();
 
 }

@@ -1,4 +1,3 @@
-#include <vector>
 #include "bullet.h"
 #include "Vector2f.h"
 #include "GraphicsTemplates.h"
@@ -6,48 +5,60 @@
 #include "PhysicsConstants.h"
 
 
-std::vector<bullet> friendlybullets;
-std::vector<bullet> foebullets;
+#include <vector>
+#include <algorithm>
 
+#include "StaticAnimationEffect.h"
 
-bullet::bullet(Vector2f& pos, Vector2f& vel, float radius, int col) :
-		PhysicsObject(0.02, pos, vel), startTime(timer.getRunTime()), mAnimation(
-				BulletTemplate, pos, 0, 2), radius(radius), color(col) {
+std::vector<Bullet> friendlybullets;
+std::vector<Bullet> foebullets;
+
+Bullet::Bullet(Vector2f& pos, Vector2f& vel, float radius, bool _friendly) :
+		PhysicsObject(BULLET_MASS, pos, vel), startTime(timer.getRunTime()), mDead(
+				false), mFriendly(_friendly), mRadius(radius), mAnimation(
+				BulletTemplate, pos, 0, 2) {
+
 }
 
-bullet& bullet::operator=(const bullet& b){
+
+Bullet& Bullet::operator=(const Bullet& b){//PROBABLY UNNECESSARY DUE TO DECISION TO USE POINTERS
 	this->velocity = b.velocity;
 	this->position.x = b.position.x;
 	this->position.y = b.position.y;
-	this->radius = b.radius;
-	this->color = b.color;
-	this->startTime = b.startTime;
-	this->dead = b.dead;
+	this->mDead = b.mDead;
 	this->mass = b.mass;
-	//this->mAnimation = b.mAnimation;//TODO ENSURE THIS IS COPYIED OKAY OR NOT AT ALL
 	return *this;
 }
 
-void bullet::render() {
+void Bullet::render() {
 	mAnimation.setPosition(position);
 	mAnimation.setAngle(velocity.angle());
 	mAnimation.render();
 }
 
-void bullet::update() {
+void Bullet::update() {
 	this->PhysicsObject::updatePhysics();
 	if (timer.getRunTime() > startTime + Lifespan) {
+		mDead = true;
+	}
+
+	if (checkEarthCollision()) {
+		Vector2f normal;
+		world.getNormal(position.x, normal);
+
+		StaticAnimationEffect* effect = new StaticAnimationEffect(
+				Vector2f(position.x,world.getHeight(position.x)) + normal, .8, GroundCollisionAnimation32,
+				normal.angle() + PI / 2, 1);
+		game.mEffectManager.addEffect(effect);
 		kill();
 	}
+
 }
 
-bool bullet::checkEarthCollision() {	//Simplified
-	return (position.y < world.getHeight(position.x));
+bool Bullet::checkEarthCollision() {	//Simplified
+	return (position.y < world.getHeight(position.x) + mRadius);
 }
 
-bool bullet::isDead() {
-	return dead;
-}
 
 Vector2f getShortestDiffVectorBullet(Vector2f v1, Vector2f v2){//Shortest vector that points from v1 to v2, with respect to the world construction
 	Vector2f dv = v2-v1;//Difference vector from v1 to v2.
@@ -59,7 +70,7 @@ Vector2f getShortestDiffVectorBullet(Vector2f v1, Vector2f v2){//Shortest vector
 	return dv;
 }
 
-bool bullet::outOfBounds(){
+bool Bullet::outOfBounds(){
 	Vector2f camv = Vector2f();
 	camv.x = cam.getX();
 	camv.y = cam.getY();
@@ -67,6 +78,24 @@ bool bullet::outOfBounds(){
 	return diff.length() > CHUNK_SIZE*1.4;
 }
 
-void bullet::kill() {
-	dead = true;
+void Bullet::kill() {
+	mDead = true;
+}
+
+//void Bullet::operator=(const Bullet& b) {
+//	this->velocity = b.velocity;
+//	this->position = b.position;
+//	this->mRadius = b.mRadius;
+//}
+
+bool Bullet::isDead() {
+	return mDead;
+}
+
+bool Bullet::getFriendly() {
+	return mFriendly;
+}
+
+float Bullet::getRadius() {
+	return mRadius;
 }

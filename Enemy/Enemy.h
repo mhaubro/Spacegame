@@ -17,67 +17,71 @@
 #include "myassets.h"
 #include "bullet.h"
 #include "random.h"
-
+//TODO CLEAN UP IN METHODS AS WELL AS MEMBER-VALUES.
 class Enemy : public Entity, public PhysicsObject{
 protected:
 
 	int height;
-	SpriteTemplate* sprite;
-	SpriteTemplate* exhaust;
-	AnimationTemplate* anim;
+	int health;
+	int enemyValue;
+
+//	SpriteTemplate* sprite;
+//	SpriteTemplate* exhaust;
+//	AnimationTemplate* anim;
+	Polygon* collisionBox;
+
+	Vector2f shotOffset;//Marks offset from center of object to shooting mound. Both positive as well as negativ//TODO Maybe delete? - Or make float?
+	Vector2f aimVector;
 
 	double lastShot = 0;
 
-	Polygon* collisionBox;
-	float angle;
-
-	Vector2f shotOffset = Vector2f(.5, 0);//Marks offset from center of object to shooting mound. Both positive as well as negativ
-	Vector2f aimVector;
-	int health;
-	float birthTime;
-	bool orientRight;//Boolean value that marks if the enemy is oriented toward right. If false, it is oriented towards the left.
 	bool braking;
-	float brakeStart;
-	float brakeTime = 1;
 	bool aiming;
-	float aimStart;
-	float aimTime = 1.75;
 	bool shooting;
+
+	float maxV;//Sets the units max velocity in units.
+
+	float angle;
+	float birthTime;
+	float brakeStart;
+	float aimStart;
 	float shotStart;
 	float shotAngle;
-	float shotDT = .2;
-	float shotTime = .3;//Sends out bullets every shotDT in a time of shotTime (DT = .2 & time = .3 -> 2 shots with .2 sec between).
+	float brakeTime;//D
+	float aimTime;
+	float shotDT;
+	float shotTime;//Sends out bullets every shotDT in a time of shotTime (DT = .2 & time = .3 -> 2 shots with .2 sec between).
 
 
 
-	Vector2f generatePosition();//TODO CLEAN AS WELL AS GIVE BETTER METHOD NAMES
+	Vector2f generatePosition();
 	Vector2f getShortestDiffVector(Vector2f v1, Vector2f v2);
-	Vector2f getShotPos();
 	Vector2f getShotVel(float velocity, float angle);
 
-	float calcAngleToPlayer();
 	float getHeight();
 
-	bool checkShot(Vector2f VectorToPlayer);
 	bool enemyOnScreen();
-	bool shotInRange(Vector2f shotVector);
 
-	void checkBounds();
+	void checkBounds();//Checks if the enemy is more than 1.6 chunk-length away. If yes, it's killed.
 	void shoot();
 	void aim();
 	void turn();
-	void brakeAction();
 	void brake();
+	void hitBrake();
 	void aimAction();
 	void enemyShot();
 	void updatePh();
 	void checkAlive();
 	void shotAction(float angle);
-	void moveAction(Vector2f vectorToPlayer);
 	void checkHits();
 	void bestMove();
 	void updatePosition();
 
+	virtual Vector2f getShotPos();
+	virtual void moveAction(Vector2f vectorToPlayer);
+	virtual float calcAngleToPlayer();
+	virtual bool shotInRange(Vector2f shotVector);
+	virtual bool checkShot(Vector2f VectorToPlayer);
 
 
 public:

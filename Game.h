@@ -15,11 +15,12 @@
 #include "Input.h"
 #include "World.h"
 #include "GameTimer.h"
-#include "bullet.h"
+#include "Bullet.h"
 #include "enemy.h"
 
 #include "EffectManager.h"
 #include "EnemyManager.h"
+#include "BulletManager.h"
 
 class Game
 {
@@ -41,6 +42,7 @@ public:
     unsigned long frames;//Used as random seed, increment -> always different. Maybe not necessary.
     EnemyManager mEnemyManager;
     EffectManager mEffectManager;
+    BulletManager mBulletManager;
 
     Game();
     ~Game();

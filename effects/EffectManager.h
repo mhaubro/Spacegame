@@ -16,7 +16,7 @@
 class EffectManager {
 protected:
 
-	std::vector<std::tr1::shared_ptr<Effect> > mEffects;
+	std::vector<Effect *> mEffects;
 
 public:
 	EffectManager();
