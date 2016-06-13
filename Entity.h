@@ -23,8 +23,6 @@ public:
 	virtual void update();
 	virtual void render();
 
-	virtual bool collide(Entity entity);
-
 	virtual void kill();
 	virtual bool isDead();
 

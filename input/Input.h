@@ -11,7 +11,7 @@
 #include "Accelerometer.h"
 #include "Button.h"
 
-#define USE_BUTTONS true
+#define USE_BUTTONS false
 
 class Input {
 protected:

@@ -29,10 +29,7 @@ protected:
 	int health;
 	int enemyValue;
 
-//	SpriteTemplate* sprite;
-//	SpriteTemplate* exhaust;
-//	AnimationTemplate* anim;
-	Polygon* collisionBox;
+	Polygon * collisionBox;
 
 	Vector2f shotOffset;//Marks offset from center of object to shooting mound. Both positive as well as negativ//TODO Maybe delete? - Or make float?
 	Vector2f aimVector;
@@ -85,14 +82,14 @@ protected:
 
 public:
 
-	Enemy(Vector2f pos, Vector2f vel = Vector2f());
+	Enemy(Polygon * collisionBox, Vector2f pos, Vector2f vel = Vector2f());
 
 	Enemy& operator=(const Enemy & enemy);
 	virtual ~Enemy();
 
 	void update();
 	void render();
-	bool collide(Entity entity);//TODO Maybe delete.
+	//int getPolySize();//USED FOR DEBUGGING
 	bool checkHit(Bullet * _bullet);
 };
 

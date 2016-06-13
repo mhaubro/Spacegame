@@ -12,8 +12,11 @@
 
 #define ENEMYACCELERATION 1.5
 
+	static Vector2f arr[] = {Vector2f(-.5, -.5),Vector2f(-.5, .5), Vector2f(.5, .5), Vector2f(.5, -.5)};
+	static std::vector<Vector2f> shape(arr, arr + 4);
+	static Polygon collBox = Polygon(4, shape);
 //Stats for the squareEnemy
-squareEnemy::squareEnemy(Vector2f _position, Vector2f _velocity) : Enemy(_position,_velocity), orientRight(true)
+squareEnemy::squareEnemy(Vector2f _position, Vector2f _velocity) : Enemy(&collBox, _position,_velocity), orientRight(true)
 {
 	//Fields from Enemy that must be declared//TODO MAYBE FIND BETTER SOLUTION?
 	brakeTime = 1;

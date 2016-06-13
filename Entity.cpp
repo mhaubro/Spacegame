@@ -20,9 +20,6 @@ void Entity::render() {
 
 }
 
-bool Entity::collide(Entity entity) {
-	return false;
-}
 
 void Entity::kill(){
 	mIsDead = true;
