@@ -8,7 +8,7 @@
 #include "LinkedEntityList.h"
 
 LinkedEntityList::LinkedEntityList() :
-		mHead(), mSize(0) {
+		LinkedList<Entity>() {
 
 }
 
@@ -24,6 +24,9 @@ void LinkedEntityList::updateAll() {
 	Node* tmp = mHead;
 	while (tmp) {
 		tmp->mData->update();
+		if (tmp->mData->isDead()){
+			tmp->mShouldRemove = true;
+		}
 		tmp = tmp->mNext;
 	}
 }
@@ -34,41 +37,5 @@ void LinkedEntityList::renderAll() {
 		tmp->mData->render();
 		tmp = tmp->mNext;
 	}
-}
-
-void LinkedEntityList::removeDead() {
-
-	// TODO crash in removeDead;
-	if (mHead) {
-		Node* prev = mHead;
-		Node* tmp = mHead->mNext;
-		while (tmp) {
-			if (tmp->mData->isDead()) {
-				Node* next = tmp->mNext;
-				delete tmp;
-				tmp = next;
-				prev->mNext = tmp;
-				mSize--;
-			} else {
-				prev = tmp;
-				tmp = tmp->mNext;
-			}
-		}
-		if (mHead->mData->isDead()) {
-			tmp = mHead->mNext;
-			delete mHead;
-			mHead = tmp;
-			mSize--;
-		}
-	}
-}
-
-void LinkedEntityList::add(Entity * e) {
-	mHead = new Node(e, mHead);
-	mSize++;
-}
-
-int LinkedEntityList::size() {
-	return mSize;
 }
 

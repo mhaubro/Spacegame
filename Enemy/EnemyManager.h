@@ -13,20 +13,38 @@
 #include "Enemy.h"
 #include "SquareEnemy.h"
 #include "RoundEnemy.h"
-#include "LinkedEntityList.h"
+#include "LinkedList.h"
 
 class EnemyManager {
 
 protected:
-	LinkedEntityList enemies;
+
+	class EnemyList: public LinkedList<Enemy> {
+	public:
+		EnemyList();
+		virtual ~EnemyList();
+
+		virtual void updateAll();
+		virtual void renderAll();
+		virtual bool firstInternalCollisionForTheRest(Node* current, Enemy* collided);
+		virtual void checkBulletCollision(Bullet* bullet);
+
+	};
+	EnemyList enemies;
 	unsigned int enemy_number;
 
 public:
+
 	EnemyManager();
-	unsigned int size();
 	virtual ~EnemyManager();
+
 	virtual void update();
 	virtual void render();
+	int size();
+
+	void checkBulletCollision(Bullet * _bullet){
+		enemies.checkBulletCollision(_bullet);
+	}
 };
 
 #endif /* SRC_ENEMY_ENEMYMANAGER_H_ */

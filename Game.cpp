@@ -35,7 +35,7 @@ void Game::run() {
 }
 
 void Game::update() {
-score++;
+
 	timer.update();
 	world.update(player.getPosition().x);
 	player.update();

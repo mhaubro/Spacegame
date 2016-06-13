@@ -108,6 +108,7 @@ void UI::render() {
 		OPT_CENTERX + 4, player.height);
 	}
 #if DEBUG
+	GD.RestoreContext();
 	GD.ColorRGB(WHITE);
 	GD.ColorA(255);
 

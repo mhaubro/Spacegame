@@ -71,7 +71,6 @@ protected:
 	void updatePh();
 	void checkAlive();
 	void shotAction(float angle);
-	void checkHits();
 	void bestMove();
 	void updatePosition();
 
@@ -92,6 +91,7 @@ public:
 	void update();
 	void render();
 	bool collide(Entity entity);//TODO Maybe delete.
+	bool checkHit(Bullet * _bullet);
 };
 
 #endif /* SRC_ENEMY_ENEMY_H_ */

@@ -9,33 +9,17 @@
 #define SRC_LINKEDLIST_LINKEDENTITYLIST_H_
 
 #include "Entity.h"
+#include "LinkedList.h"
 
-class LinkedEntityList {
-private:
-	struct Node {
-		Entity * mData;
-		Node * mNext;
-		Node(Entity* _data, Node* _next) :
-				mData(_data), mNext(_next) {
-		}
-		~Node(){
-			delete mData;
-		}
-	};
-
-	Node* mHead;
-	int mSize;
+class LinkedEntityList : public LinkedList<Entity> {
 
 public:
 	LinkedEntityList();
 	virtual ~LinkedEntityList();
 
-	void updateAll();
-	void renderAll();
-	void removeDead();
-	void add(Entity* e);
+	virtual void updateAll();
+	virtual void renderAll();
 
-	int size();
 };
 
 #endif /* SRC_LINKEDLIST_LINKEDENTITYLIST_H_ */

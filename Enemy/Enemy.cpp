@@ -134,7 +134,7 @@ Vector2f Enemy::getShotVel(float velocity, float angle){//Makes sure shots are s
 void Enemy::checkAlive(){
 	if (health <= 0){
 		kill();
-		game.score += enemyValue;
+		//game.score += enemyValue;
 	}
 	checkBounds();//Checks if the enemy is far away.
 }
@@ -272,4 +272,15 @@ Enemy& Enemy::operator=(const Enemy & enemy){//TODO MAYBE DELETE THIS? Easily ed
 	shotTime = enemy.shotTime;
 
 	return *this;
+}
+
+bool Enemy::checkHit(Bullet* _bullet){
+	Vector2f MTD = Vector2f();
+	if (collisionBox->Collide(* collisionBox, _bullet->getPosition(), _bullet->getRadius(), MTD)){
+		_bullet->kill();
+		//game.score += 100;
+		health -= 50;
+		return true;
+	}
+	return false;
 }

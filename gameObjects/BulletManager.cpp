@@ -17,7 +17,7 @@ BulletManager::~BulletManager() {
 
 void BulletManager::update() {
 	mBullets.updateAll();
-	mBullets.removeDead();
+	mBullets.clean();
 }
 
 void BulletManager::render() {

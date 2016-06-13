@@ -41,6 +41,8 @@ void Bullet::update() {
 		mIsDead = true;
 	}
 
+	game.mEnemyManager.checkBulletCollision(this);
+
 	if (checkEarthCollision()) {
 		Vector2f normal;
 		world.getNormal(position.x, normal);

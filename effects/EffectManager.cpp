@@ -17,7 +17,7 @@ EffectManager::~EffectManager() {
 
 void EffectManager::update() {
 	mEffects.updateAll();
-	mEffects.removeDead();
+	mEffects.clean();
 }
 
 void EffectManager::render() {
