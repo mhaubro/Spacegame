@@ -27,7 +27,7 @@ protected:
 
 
 public:
-	RoundEnemy();
+	RoundEnemy(Vector2f _position, Vector2f _velocity = Vector2f());
 	RoundEnemy& operator=(const RoundEnemy & enemy);
 	virtual ~RoundEnemy();
 };

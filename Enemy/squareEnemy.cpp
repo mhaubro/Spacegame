@@ -13,7 +13,7 @@
 #define ENEMYACCELERATION 1.5
 
 //Stats for the squareEnemy
-squareEnemy::squareEnemy() : Enemy(), orientRight(true)
+squareEnemy::squareEnemy(Vector2f _position, Vector2f _velocity) : Enemy(_position,_velocity), orientRight(true)
 {
 	//Fields from Enemy that must be declared//TODO MAYBE FIND BETTER SOLUTION?
 	brakeTime = 1;

@@ -19,8 +19,7 @@ protected:
 
 public:
 
-	PhysicsObject(float mass, Vector2f& position, Vector2f& velocity);
-	PhysicsObject(float mass);
+	PhysicsObject(float mass, Vector2f position, Vector2f velocity = Vector2f());
 	virtual ~PhysicsObject();
 
 	virtual void addAcceleration(Vector2f v);

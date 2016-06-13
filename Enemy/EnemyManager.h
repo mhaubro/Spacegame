@@ -30,6 +30,7 @@ protected:
 	};
 	EnemyList enemies;
 	unsigned int enemy_number;
+	Vector2f generatePosition();
 
 public:
 

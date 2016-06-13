@@ -25,7 +25,7 @@ protected:
 
 
 public:
-	squareEnemy();
+	squareEnemy(Vector2f _position, Vector2f _velocity = Vector2f());
 	squareEnemy& operator=(const squareEnemy & squareenemy);
 	virtual ~squareEnemy();
 };
