@@ -13,6 +13,7 @@
 class Entity{
 protected:
 
+	bool mIsDead;
 	Entity();
 	bool isEDead;//is Entity Dead.
 
@@ -26,6 +27,8 @@ public:
 
 	virtual void kill();
 	virtual bool isDead();
+
+
 };
 
 #endif /* SRC_ENTITY_H_ */

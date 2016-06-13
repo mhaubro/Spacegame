@@ -5,6 +5,7 @@
 
 #include "PhysicsConstants.h"
 #include "PhysicsObject.h"
+#include "Entity.h"
 #include "GD2.h"
 #include "Animation.h"
 
@@ -12,7 +13,7 @@
 
 #define Lifespan 10
 
-class Bullet: public PhysicsObject {
+class Bullet : public Entity, public PhysicsObject {
 private:
 
 	const double startTime;//Make non-const? - Depends on vector of bullets or bullet *

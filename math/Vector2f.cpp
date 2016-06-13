@@ -60,7 +60,7 @@ float Vector2f::length() {
 	return sqrtf((x * x) + (y * y));
 }
 
-float Vector2f::angle() {
+float Vector2f::angle() {//Vinkel i klassiske radianer + 90 grader -> 0-punkt i (0,1), 90 grader i (-1, 0) etc.
 	if (x == 0 && y == 0)
 		return 0;
 	float a = atan2f(-y, x);

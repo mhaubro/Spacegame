@@ -1,7 +1,6 @@
 
 #include "Game.h"
 
-
 Game game;
 unsigned int score;
 
@@ -31,7 +30,6 @@ void Game::run() {
 		render();
 
 		GD.swap();
-		frames++;
 	}
 
 }

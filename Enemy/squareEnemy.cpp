@@ -34,15 +34,10 @@ bool squareEnemy::shotInRange(Vector2f shotVector){
 	if (!enemyOnScreen()){
 		return false;
 	}
-	if (orientRight){
-		return ((angle > (PI+PI/6)) && (angle < (PI + 5*PI/6)));
-
+	if (orientRight){//Vinkel enten mindre end pi/3 eller større end 5pi/3
+		return (((angle < PI/3) && (angle >= 0)) or ((angle <= 2*PI) && (angle > 5*PI/3)));
 	} else {
-//		GD.Clear();//FOR DEBUGGING
-//		GD.cmd_number(50, 50, 16, OPT_SIGNED, angle*100);
-//		GD.swap();
-//		wait(.3);
-		return ((angle > (PI/6)) && (angle < (5*PI/6)));
+		return ((angle > (2*PI/3)) && (angle < (4*PI/3)));
 	}
 }
 

@@ -9,41 +9,40 @@
 #include "Sprite.h"
 #include "Animation.h"
 
-
+#define MAX_PLAYER_HEALTH 1000
+#define MAX_PLAYER_ENERGY 1000
 
 class Player: public Entity, public RigidBody {
 protected:
 
-	float getMaxThrottle();
 	float startT;
-	Vector2f getShotPos();
-	Vector2f getShotVel(float velocity);
 
-	void checkHits();
 	Sprite sprite;
 	Animation exhaust1;
 	Animation exhaust2;
 
-	const double shotInterval = .2;
-	double lastShot = 0;
+	const double shotInterval;
+	double lastShot;
 
-	bool enginesOn = false;
+	bool enginesOn;
 
 	Polygon* collisionBox;
 
+	void checkHits();
+
+	float getMaxThrottle();
 	void updateSteering();
 	void updateCannon();
 
+	Vector2f getShotPos();
+	Vector2f getShotVel(float velocity);
 
 public:
 
 	float height;
 
-	float maxHealth = 1000;
-	float maxEnergy = 1000;
-
-	float health = maxHealth;
-	float energy = maxEnergy;
+	float health;
+	float energy;
 
 	Player(Vector2f pos, Vector2f vel); //float mass, Vector2f startpos, Vector2f startvel);
 	virtual ~Player();

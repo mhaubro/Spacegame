@@ -9,12 +9,12 @@ class UI
 {
 protected:
     
-	SpriteTemplate * youDied = new SpriteTemplate(YOU_DIED_HANDLE, 60, 33, 0);
-
+	SpriteTemplate * youDied;
 
 public:
     UI();
     void render();
+
 };
 
 #endif

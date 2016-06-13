@@ -2,6 +2,8 @@
 #ifndef GAME_H_
 #define GAME_H_
 
+#define DEBUG true
+
 #include <vector>
 #include <memory>
 #include <algorithm>
@@ -39,18 +41,18 @@ protected:
     void removeEnemies();
 
 public:
-    unsigned long frames;//Used as random seed, increment -> always different. Maybe not necessary.
-    EnemyManager mEnemyManager;
+
+    unsigned int score;
+
     EffectManager mEffectManager;
     BulletManager mBulletManager;
+    EnemyManager mEnemyManager;
 
     Game();
     ~Game();
 
     bool init();
     void run();
-
-    unsigned int score;
 
     bool isOver();
     void setGameOver();

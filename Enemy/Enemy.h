@@ -52,8 +52,6 @@ protected:
 	float shotDT;
 	float shotTime;//Sends out bullets every shotDT in a time of shotTime (DT = .2 & time = .3 -> 2 shots with .2 sec between).
 
-
-
 	Vector2f generatePosition();
 	Vector2f getShortestDiffVector(Vector2f v1, Vector2f v2);
 	Vector2f getShotVel(float velocity, float angle);
@@ -82,7 +80,6 @@ protected:
 	virtual float calcAngleToPlayer();
 	virtual bool shotInRange(Vector2f shotVector);
 	virtual bool checkShot(Vector2f VectorToPlayer);
-
 
 public:
 

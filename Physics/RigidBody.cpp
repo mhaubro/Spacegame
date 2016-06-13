@@ -4,7 +4,8 @@
 
 RigidBody::RigidBody(float mass, float inertia, Vector2f position, float angle,
 		Vector2f velocity) :
-		PhysicsObject(mass, position, velocity), inertia(inertia), angle(angle) {
+		PhysicsObject(mass, position, velocity), inertia(inertia), angle(angle), aVelocity(
+				0), aAcceleration(0), aTorque(0) {
 }
 
 RigidBody::~RigidBody() {

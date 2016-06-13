@@ -21,7 +21,7 @@ protected:
 	Button * button3;
 	Button * button4;
 
-	int ax = 0, ay = 0, az = 0;
+	int ax, ay, az;
 	float angle;
 
 public:

@@ -12,20 +12,20 @@
 #include "World.h"
 
 #define ENEMYACCELERATION 1.5
-
-Enemy::Enemy(Vector2f pos, Vector2f vel) :
-Entity(),PhysicsObject(1,pos,vel) ,height(pos.y), health(100), lastShot(0), birthTime(timer.getRunTime()),
-braking(false), aiming(false), shooting(false){
-	// Auto-generated constructor stub
-	std::vector<Vector2f> shape;
-	shape.push_back(Vector2f(-.5, -.5));
-	shape.push_back(Vector2f(-.5, .5));
-	shape.push_back(Vector2f(.5, .5));
-	shape.push_back(Vector2f(.5, -.5));
-	angle = 0;
-
-	collisionBox = new Polygon(&position, &angle, 4, shape);
-}
+//Enemies are only randomly generated. Outcomment this if it is wished they are not.
+//Enemy::Enemy(Vector2f pos, Vector2f vel) :
+//Entity(),PhysicsObject(1,pos,vel) ,height(pos.y), health(100), lastShot(0), birthTime(timer.getRunTime()),
+//braking(false), aiming(false), shooting(false){
+//	// Auto-generated constructor stub
+//	std::vector<Vector2f> shape;
+//	shape.push_back(Vector2f(-.5, -.5));
+//	shape.push_back(Vector2f(-.5, .5));
+//	shape.push_back(Vector2f(.5, .5));
+//	shape.push_back(Vector2f(.5, -.5));
+//	angle = 0;
+//
+//	collisionBox = new Polygon(&position, &angle, 4, shape);
+//}
 
 Enemy::Enemy() : Entity(), PhysicsObject(1),height(0), health(100), lastShot(0), birthTime(timer.getRunTime()),
 				braking(false), aiming(false), shooting(false){

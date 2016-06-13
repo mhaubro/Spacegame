@@ -9,14 +9,12 @@
 #define SRC_EFFECTS_EFFECTMANAGER_H_
 
 #include "Effect.h"
-
-#include <vector>
-#include <tr1/memory>
+#include "LinkedEntityList.h"
 
 class EffectManager {
 protected:
 
-	std::vector<Effect *> mEffects;
+	LinkedEntityList mEffects;
 
 public:
 	EffectManager();
