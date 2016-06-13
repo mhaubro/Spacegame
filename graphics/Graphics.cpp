@@ -1,4 +1,8 @@
 #include "Graphics.h"
+#include "mbed.h"
+#include "GD2.h"
+#include "World.h"
+#include "Game.h"
 
 Cam cam;
 

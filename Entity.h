@@ -15,6 +15,7 @@ protected:
 
 	bool mIsDead;
 	Entity();
+	bool isEDead;//is Entity Dead.
 
 public:
 	virtual ~Entity();
@@ -24,6 +25,7 @@ public:
 
 	virtual bool collide(Entity entity);
 
+	virtual void kill();
 	virtual bool isDead();
 
 

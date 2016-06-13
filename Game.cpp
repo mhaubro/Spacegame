@@ -1,4 +1,3 @@
-#include <vector>
 
 #include "Game.h"
 
@@ -6,7 +5,7 @@ Game game;
 unsigned int score;
 
 Game::Game() :
-		running(false), isGameOver(false), ui(), background(), score(42), mEffectManager(), mBulletManager() {
+		running(false), isGameOver(false), ui(), background(), score(0), mEffectManager(), mEnemyManager() {
 }
 
 Game::~Game() {
@@ -23,18 +22,7 @@ bool Game::init() {
 void Game::run() {
 	running = true;
 
-	float angle = 0;
-	Vector2f poly2Pos = Vector2f(20, 10);
-	Vector2f shape3[] = { Vector2f(-1, -1), Vector2f(-1, 1), Vector2f(0, 2),
-			Vector2f(1, 1), Vector2f(1, -1) };
-	Polygon poly3 = Polygon(poly2Pos, angle, 5, shape3);
-
-	score = 300;
-	Vector2f pos = Vector2f(15, 15);
-	Vector2f vel = Vector2f(0, 0);
-	Enemy e = Enemy(pos, vel);
-	enemies.push_back(e);
-
+	player.startTime();//TODO Maybe delete?
 	while (running) {
 
 		input.pull();
@@ -47,14 +35,11 @@ void Game::run() {
 }
 
 void Game::update() {
-
+score++;
 	timer.update();
-
-	score = score + 1;
-
 	world.update(player.getPosition().x);
 	player.update();
-	updateEnemies();
+	mEnemyManager.update();
 	mBulletManager.update();
 	mEffectManager.update();
 	cam.follow(player.getPosition(), player.getVelocity());
@@ -64,8 +49,10 @@ void Game::update() {
 void Game::render() {
 
 	background.render();
+
 	player.render();
-	renderEnemies();
+	mEnemyManager.render();
+	world.render();
 	mBulletManager.render();
 	mEffectManager.render();
 	world.render();
@@ -79,34 +66,4 @@ bool Game::isOver() {
 
 void Game::setGameOver() {
 	isGameOver = true;
-}
-
-void Game::renderEnemies() {
-	for (std::vector<Enemy>::iterator it = enemies.begin(); it != enemies.end();
-			++it) {
-		Enemy & e = *it;
-		e.render();
-	}
-}
-
-void Game::updateEnemies() {
-	for (std::vector<Enemy>::iterator it = enemies.begin(); it != enemies.end();
-			++it) {
-		Enemy & e = *it;
-		e.update();
-	}
-	removeEnemies();
-}
-
-void Game::removeEnemies() { //Same concept as removebullets
-	std::vector<Enemy>::iterator i = enemies.begin();
-	while (i != enemies.end()) {
-		Enemy & e = *i;
-		if (e.isDead()) { //If a bullet is to be deleted, it is swapped with the last element, which is then deleted, since order doesn't matter
-			e = enemies[enemies.size() - 1];
-			enemies.erase(enemies.end());
-		} else {
-			++i;
-		}
-	}
 }

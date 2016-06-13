@@ -4,6 +4,9 @@
 
 #define DEBUG true
 
+#include <vector>
+#include <memory>
+#include <algorithm>
 #include "BackGround.h"
 #include "UI.h"
 #include "Entity.h"
@@ -18,6 +21,7 @@
 #include "enemy.h"
 
 #include "EffectManager.h"
+#include "EnemyManager.h"
 #include "BulletManager.h"
 
 class Game
@@ -36,13 +40,13 @@ protected:
     void renderEnemies();
     void removeEnemies();
 
-
 public:
 
     unsigned int score;
 
     EffectManager mEffectManager;
     BulletManager mBulletManager;
+    EnemyManager mEnemyManager;
 
     Game();
     ~Game();
@@ -54,6 +58,7 @@ public:
     void setGameOver();
 
 };
+
 
 extern Game game;
 #endif

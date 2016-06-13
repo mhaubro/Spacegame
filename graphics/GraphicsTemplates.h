@@ -8,7 +8,9 @@
 #ifndef SRC_GRAPHICS_GRAPHICSTEMPLATES_H_
 #define SRC_GRAPHICS_GRAPHICSTEMPLATES_H_
 
-#include "Graphics.h"
+#include "SpriteTemplate.h"
+#include "AnimationTemplate.h"
+#include "myassets.h"
 
 static SpriteTemplate SpaceShipSprite32 = SpriteTemplate(SPRITESHEET32_HANDLE, 32,	32, 0);
 

@@ -13,6 +13,8 @@ public:
 	float x,y;
 	Vector2f();
 	Vector2f(float x, float y);
+	Vector2f(const Vector2f & v);
+	Vector2f(Vector2f & v);
 	virtual ~Vector2f();
 
 	float length();

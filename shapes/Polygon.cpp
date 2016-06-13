@@ -14,56 +14,82 @@
 
 #define FLOAT_MAX 10000000
 
-Polygon::Polygon(Vector2f &position, float &angle, int numVertex,
-		Vector2f data[]) :
+Polygon::Polygon(Vector2f * position, float * angle, int numVertex,
+		std::vector<Vector2f> data) :
 		Position(position), angle(angle), numVertexs(numVertex) {
-	vertex = new Vector2f[numVertex];
+	vertex.resize(numVertex);
+	vertex = data;
 
 	float d = 0;
 	float length;
-	for (int i = 0; i < numVertex; ++i) {
-		length = data[i].length();
-		if (length > d) {
+	for (std::vector<Vector2f>::iterator it = vertex.begin(); it != vertex.end(); ++it ){
+		Vector2f & vec = *it;
+		length = vec.length();
+		if (length > d){
 			d = length;
 		}
-		vertex[i] = Vector2f(data[i]);
 	}
 	hitRadius = d;
 }
 
+Polygon::Polygon(const Polygon & polygon) : hitRadius(polygon.hitRadius), numVertexs(polygon.numVertexs), angle(polygon.angle), Position(polygon.Position)
+{//MAYBE TODO, Rule of Three.
+	vertex.resize(polygon.vertex.size());//Maybe unnecesary?
+	vertex = polygon.vertex;//Copies all data, no pointer-assignment. Might be trouble if the data is pointers, though
+}
+
+void Polygon::operator=(const Polygon & polygon){
+	this->hitRadius = polygon.hitRadius;
+	this->Position = polygon.Position;
+	this->numVertexs = polygon.numVertexs;
+	this->angle = polygon.angle;
+	vertex.resize(polygon.vertex.size());
+	vertex = polygon.vertex;
+}
+
 Polygon::~Polygon() {
 	// TODO Auto-generated destructor stub
+	//TODO CAUSES PROGRAM CRASH AS OF 07/06
 }
 
 float Polygon::getHitradius() {
 	return hitRadius;
 }
 
-Vector2f Polygon::getVertexTransformed(int index) {
+Vector2f Polygon::getVertexTransformed(std::vector<Vector2f>::iterator index) {
+	Vector2f vec = *index;
 	return Vector2f(
-			FromAngle(1, angle) * vertex[index].x
-					+ FromAngle(1, angle - PI / 2) * vertex[index].y) + Position;
+			FromAngle(1, *angle) * vec.x
+					+ FromAngle(1, *angle - PI / 2) * vec.y) + *Position;
+}
+
+void Polygon::setPosition(Vector2f position){//TODO BAD SOLUTION. WORKAROUND DUE TO THIS.POSITION ISN'T POINTING TO A ph.position.
+	this->Position = &position;
 }
 
 void Polygon::render() {
 	GD.Begin(LINE_STRIP);
-	for (int i = 0; i < numVertexs; ++i) {
+	for (std::vector<Vector2f>::iterator i = vertex.begin(); i != vertex.end(); ++i) {
 		cam.Vertex2f(getVertexTransformed(i));
 	}
-	cam.Vertex2f(getVertexTransformed(0));
+	cam.Vertex2f(getVertexTransformed(vertex.begin() ));
 }
 
 bool Polygon::Collide(Polygon A, Polygon B, Vector2f& MTD) {
 
-	if ((A.Position - B.Position).length() > A.hitRadius + B.hitRadius) return false;
+	if (((*A.Position) - (*B.Position)).length() > A.hitRadius + B.hitRadius) return false;
 
 	Vector2f Axis[32];
 	int iNumAxis = 0;
 
 	//TODO Optimize with direction. no reason to test a normal, that points away.
 	//Vector2f dir = A.Position - B.Position;
-	for (int i = 0; i < A.numVertexs; i++) {
-		Vector2f E = A.getVertexTransformed((i + 1) % A.numVertexs)
+	for (std::vector<Vector2f>::iterator i = A.vertex.begin(); i != A.vertex.end(); ++i) {
+		std::vector<Vector2f>::iterator itcopy = i+=1;
+		if (itcopy == A.vertex.end()){
+			itcopy = A.vertex.begin();
+		}
+		Vector2f E = A.getVertexTransformed(i)
 				- A.getVertexTransformed(i);
 		Vector2f N = Vector2f(-E.y, E.x);
 
@@ -72,11 +98,15 @@ bool Polygon::Collide(Polygon A, Polygon B, Vector2f& MTD) {
 
 		Axis[iNumAxis++] = N;
 	}
-	for (int i = 0; i < B.numVertexs; i++) {
-		Vector2f E = B.getVertexTransformed((i + 1) % B.numVertexs)
-				- B.getVertexTransformed(i);
-		Vector2f N = Vector2f(-E.y, E.x);
+	for (std::vector<Vector2f>::iterator i = B.vertex.begin()+1; i != B.vertex.end(); ++i) {
+		std::vector<Vector2f>::iterator itcopy = i+=1;
+		if (itcopy == B.vertex.end()){
+			itcopy = B.vertex.begin();
+		}
 
+		Vector2f E = B.getVertexTransformed(itcopy)
+			- B.getVertexTransformed(i);
+		Vector2f N = Vector2f(-E.y, E.x);
 		if (AxisSeparatePolygons(N, A, B))
 			return false;
 
@@ -87,7 +117,7 @@ bool Polygon::Collide(Polygon A, Polygon B, Vector2f& MTD) {
 	MTD = FindMTD(Axis, iNumAxis);
 
 	// makes sure the push vector is pushing A away from B
-	Vector2f D = Vector2f() + A.Position - B.Position;
+	Vector2f D = Vector2f() + *A.Position - *B.Position;
 	if (D.dotProduct(MTD) < 0.0f)
 		MTD = -MTD;
 
@@ -96,15 +126,15 @@ bool Polygon::Collide(Polygon A, Polygon B, Vector2f& MTD) {
 
 bool Polygon::TerrainCollide(Polygon& A, Vector2f& MTD, Vector2f& Normal, Vector2f& Point) {
 
-	float height = world.getHeight(A.Position.x);
+	float height = world.getHeight((*A.Position).x);
 
-	if (A.Position.y - height > A.hitRadius * 2) return false;
+	if ((*A.Position).y - height > A.hitRadius * 2) return false;
 
 	bool collision = false;
 	float maxDepth = -1;
 	Vector2f temp;
 
-	for (int i = 0; i < A.numVertexs; i++) {
+	for (std::vector<Vector2f>::iterator i = A.vertex.begin(); i != A.vertex.end(); ++i) {
 		temp = A.getVertexTransformed(i);
 		height = world.getHeight(temp.x);
 		if (height > temp.y) {
@@ -162,9 +192,9 @@ bool Polygon::AxisSeparatePolygons(Vector2f& Axis, Polygon A, Polygon B) {
 
 void Polygon::CalculateInterval(Vector2f Axis, Polygon P, float& min,
 		float& max) {
-	float d = Axis.dotProduct(P.getVertexTransformed(0));
+	float d = Axis.dotProduct(P.getVertexTransformed(P.vertex.begin()));
 	min = max = d;
-	for (int i = 0; i < P.numVertexs; i++) {
+	for (std::vector<Vector2f>::iterator i = P.vertex.begin(); i != P.vertex.end(); ++i) {
 		d = Axis.dotProduct(P.getVertexTransformed(i));
 		if (d < min)
 			min = d;
@@ -199,8 +229,8 @@ bool Polygon::RayCast(Ray ray, Polygon polygon, float &t, Vector2f& normal) {
 	int crossings = 0;
 
 	float distance;
-
-	for (int i = 0; i < polygon.numVertexs; i++) {
+//BROKEN DUE TO CHANGE TO ITERATOR FOCUS. EASILY FIXABLE, BUT UNUSED.
+/*	for (int i = 0; i < polygon.numVertexs; i++) {
 		int j = (i + 1) % polygon.numVertexs;
 		if (RayIntersectsSegment(ray, polygon.getVertexTransformed(i),
 				polygon.getVertexTransformed(j), distance)) {
@@ -210,7 +240,7 @@ bool Polygon::RayCast(Ray ray, Polygon polygon, float &t, Vector2f& normal) {
 				normal = (polygon.getVertexTransformed(j) - polygon.getVertexTransformed(i)).rightNormal();
 			}
 		}
-	}
+	}*/
 
 	return (crossings > 0) && ((crossings % 2) != 0);
 }
@@ -223,15 +253,20 @@ bool Polygon::RayCast(Ray ray, Polygon polygon, float &t, Vector2f& normal) {
 
 bool Polygon::Collide(Polygon A, Vector2f Point, float radius, Vector2f& MTD) {
 
-	if ((Point - A.Position).length() > A.hitRadius + radius) return false;
+	if ((Point - (*A.Position)).length() > A.hitRadius + radius) return false;
 
 	Vector2f Axis[32];
 	int iNumAxis = 0;
 
 	//TODO Optimize with direction. no reason to test a normal, that points away.
 	//Vector2f dir = A.Position - B.Position;
-	for (int i = 0; i < A.numVertexs; i++) {
-		Vector2f E = A.getVertexTransformed((i + 1) % A.numVertexs)
+	for (std::vector<Vector2f>::iterator i = A.vertex.begin(); i != A.vertex.end(); i++) {
+		std::vector<Vector2f>::iterator itcopy = i+=1;
+		if (itcopy == A.vertex.end()){
+			itcopy = A.vertex.begin();
+		}
+
+		Vector2f E = A.getVertexTransformed(itcopy)
 				- A.getVertexTransformed(i);
 		Vector2f N = Vector2f(-E.y, E.x);
 
@@ -242,7 +277,7 @@ bool Polygon::Collide(Polygon A, Vector2f Point, float radius, Vector2f& MTD) {
 	}
 
 
-	for (int i = 0; i < A.numVertexs; i++){
+	for (std::vector<Vector2f>::iterator i = A.vertex.begin(); i != A.vertex.end(); i++){
 		//TODO Fix push-vector
 		float dist = (A.getVertexTransformed(i) - Point).length();
 		if (dist < radius){
@@ -255,7 +290,7 @@ bool Polygon::Collide(Polygon A, Vector2f Point, float radius, Vector2f& MTD) {
 
 	// makes sure the push vector is pushing A away from B
 	//TODO fix pushvector
-	Vector2f D = Vector2f() + A.Position - Point;
+	Vector2f D = Vector2f() + *A.Position - Point;
 	if (D.dotProduct(MTD) < 0.0f)
 		MTD = -MTD;
 
@@ -295,33 +330,3 @@ void Polygon::CalculateInterval(Vector2f Axis, Vector2f Point, float radius, flo
 	min = d - r;
 	max = d + r;
 }
-
-//	//Implemented by making a convex hull, and checking whether this is equal to the former convex hull
-//		Vector2f pointRelative = point - Position;
-//
-//		float miny = Position.y+1000;//Making sure the minimum y is actually the minimum y. The +1000 may be omitted
-//		float minyindex = -1;
-//		Vector2f minyVector;
-//		//Finds lowest point
-//		for (int i = 0; i < numVertexs; i++){
-//			if (miny > (vertex+i)->y){
-//				miny = (vertex+i)->y;
-//				minyindex = (i);
-//				minyVector = (vertex+i);
-//			}
-//		}
-//
-//		for(std::vector<bullet>::iterator it = friendlybullets.begin(); it != friendlybullets.end(); ++it) {
-//		float angles[numVertexs];
-//		Vector2f vectors[numVertexs];
-//		for (int i = 0; i < numVertexs; i++){
-//			if (minyindex == i){
-//				angles[i] = (pointRelative - minyVector).angle();
-//			} else {
-//				Vector2f vec = vertex+i;
-//				angles[i] = (vec - minyVector)->angle();
-//			}
-//		}
-
-
-

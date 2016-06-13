@@ -10,6 +10,7 @@
 #include "Input.h"
 #include "bullet.h"
 #include "StaticAnimationEffect.h"
+#include "world.h"
 
 Player player = Player(Vector2f(2, 10), Vector2f(0, 0));
 
@@ -19,10 +20,13 @@ Player::Player(Vector2f pos, Vector2f vel) :
 				Animation(ExhaustAnimation8, pos, angle, 1)), exhaust2(
 				Animation(ExhaustAnimation8, pos, angle, 1)),shotInterval(.2), lastShot(0),enginesOn(false), height(0), health(MAX_PLAYER_HEALTH), energy(MAX_PLAYER_ENERGY) {
 
-	Vector2f shape1[] = { Vector2f(-1, 0), Vector2f(-.5, .8), Vector2f(1, 0),
-			Vector2f(-.5, -.8) };
+	std::vector<Vector2f> shape;
+	shape.push_back(Vector2f(-1, 0));
+	shape.push_back(Vector2f(-.5, .8));
+	shape.push_back(Vector2f(1, 0));
+	shape.push_back(Vector2f(-.5, -.8));
 
-	collisionBox = new Polygon(position, angle, 4, shape1);
+	collisionBox = new Polygon(&position, &angle, 4, shape);
 }
 
 Player::~Player() {
@@ -38,10 +42,9 @@ void Player::update() {
 
 	player.aVelocity *= .999;
 	addAcceleration(Vector2f(0, -GRAVITY));
-
 	updatePhysics();
 
-	float groundHeight = world.getHeight(position.x);
+	float groundHeight = 2;//world.getHeight(position.x);
 
 	player.height = position.y - groundHeight;
 
@@ -97,12 +100,29 @@ void Player::update() {
 	energy = clamp(energy, 0, MAX_PLAYER_ENERGY);
 
 	health += .01;
+
+	checkHits();//To place here, or maybe before regen?
+
 	if (health <= 0) {
 		mIsDead = true;
 		game.setGameOver();
 	}
 	health = clamp(health, 0, MAX_PLAYER_HEALTH);
 
+}
+
+void Player::checkHits(){
+//	if (startT + 5 > timer.getRunTime()){//Grants invulnerability the first five seconds.
+//		return;
+//	}
+//	for(std::vector<Bullet>::iterator it = foebullets.begin(); it != foebullets.end(); ++it) {
+//		bullet & b = *it;
+//		Vector2f MTD;
+//		if (collisionBox->Collide(*collisionBox, b.getPosition(),  b.radius, MTD) && !b.isDead()){
+//			b.kill();
+//			health -= 100;
+//		}
+//	}
 }
 
 void Player::render() {
@@ -157,7 +177,7 @@ void Player::updateSteering() {
 		addTorque(-3);
 	}
 
-	if (input.getButton1()) {
+	if (input.getLeftTouch()) {
 		Vector2f throttle = FromAngle(getMaxThrottle(), angle); //Tilføjer en kraft på 30 newton i den vinkel
 		addForce(throttle, position);
 		enginesOn = true;
@@ -168,7 +188,7 @@ void Player::updateSteering() {
 }
 
 void Player::updateCannon() {
-	if (input.getButton3() && timer.getRunTime() > lastShot + shotInterval) { //Shooting //&&
+	if (input.getRightTouch() && timer.getRunTime() > lastShot + shotInterval) { //Shooting //&&
 		lastShot = timer.getRunTime();
 		Vector2f bulletpos = player.getShotPos();
 		Vector2f bulletv = player.getShotVel(20); //10 = startvelocity of bullet
@@ -183,6 +203,10 @@ void Player::updateCannon() {
 Vector2f Player::getShotPos() {
 	Vector2f offset = FromAngle(1.2, angle);
 	return position + offset;
+}
+
+void Player::startTime(){
+	startT = timer.getRunTime();
 }
 
 Vector2f Player::getShotVel(float speed) {

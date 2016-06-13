@@ -1,11 +1,7 @@
 #ifndef GRAPHICS_H_
 #define GRAPHICS_H_
 
-#include "mbed.h"
-#include "GD2.h"
 #include "Vector2f.h"
-#include "World.h"
-#include "Game.h"
 
 #define UNIT (float) 16
 #define UNIT16 (float) 16 * UNIT

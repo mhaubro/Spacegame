@@ -24,7 +24,10 @@ bool Entity::collide(Entity entity) {
 	return false;
 }
 
+void Entity::kill(){
+	mIsDead = true;
+}
+
 bool Entity::isDead(){
 	return mIsDead;
 }
-

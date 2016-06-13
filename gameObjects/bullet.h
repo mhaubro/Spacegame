@@ -16,7 +16,8 @@
 class Bullet : public Entity, public PhysicsObject {
 private:
 
-	const double startTime;
+	const double startTime;//Make non-const? - Depends on vector of bullets or bullet *
+	bool mDead;
 	bool mFriendly;
 	float mRadius;
 	Animation mAnimation;
@@ -25,6 +26,10 @@ private:
 
 public:
 
+	bool outOfBounds();
+
+	Bullet& operator=(const Bullet& b);
+
 	Bullet(Vector2f& position, Vector2f& velocity, float radius, bool friendly);
 	void update();
 	void render();
@@ -32,10 +37,11 @@ public:
 	bool isDead();
 	void kill();
 
+
 	bool getFriendly();
 	float getRadius();
 
-	void operator=(const Bullet& b);
+	//void operator=(const Bullet& b);//TODO Probably delete this line
 };
 
 #endif

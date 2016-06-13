@@ -18,7 +18,6 @@ class World {
 protected:
 
 	Chunk ** chunks;
-
 	void decrementIndex();
 	void incrementIndex();
 

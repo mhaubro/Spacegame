@@ -15,6 +15,8 @@
 class Player: public Entity, public RigidBody {
 protected:
 
+	float startT;
+
 	Sprite sprite;
 	Animation exhaust1;
 	Animation exhaust2;
@@ -25,6 +27,8 @@ protected:
 	bool enginesOn;
 
 	Polygon* collisionBox;
+
+	void checkHits();
 
 	float getMaxThrottle();
 	void updateSteering();
@@ -46,6 +50,7 @@ public:
 	void update();
 	void render();
 	void shoot();
+	void startTime();
 
 };
 

@@ -5,6 +5,7 @@
  *      Author: mathi
  */
 
+#include <algorithm>
 #include "BulletManager.h"
 #include "Game.h"
 
