@@ -37,6 +37,9 @@ Polygon::Polygon(const Polygon & polygon) : hitRadius(polygon.hitRadius), numVer
 	vertex.resize(polygon.vertex.size());//Maybe unnecesary?
 	vertex = polygon.vertex;//Copies all data, no pointer-assignment. Might be trouble if the data is pointers, though
 }
+Polygon::Polygon(){
+
+}
 
 void Polygon::operator=(const Polygon & polygon){
 	this->hitRadius = polygon.hitRadius;
@@ -51,6 +54,11 @@ Polygon::~Polygon() {
 	// TODO Auto-generated destructor stub
 	//TODO CAUSES PROGRAM CRASH AS OF 07/06
 }
+
+std::vector<Vector2f> Polygon::getVertex(){
+	return vertex;
+}
+
 
 float Polygon::getHitradius() {
 	return hitRadius;

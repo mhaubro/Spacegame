@@ -31,12 +31,15 @@ protected:
 
 
 public:
-
+	std::vector<Vector2f> getVertex();
 	float getHitradius();
 
 	Polygon(Vector2f * position, float * angle, int numVertex, std::vector<Vector2f> data);
 
 	Polygon(const Polygon & polygon);
+
+	Polygon();
+
 	void operator=(const Polygon & poly);
 	virtual ~Polygon();
 
