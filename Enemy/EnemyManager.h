@@ -25,7 +25,7 @@ protected:
 		virtual void updateAll();
 		virtual void renderAll();
 		virtual bool firstInternalCollisionForTheRest(Node* current, Enemy* collided);
-		virtual void checkBulletCollision(Bullet* bullet);
+		virtual bool checkBulletCollision(Bullet* bullet);
 		virtual bool shouldRemove(Node* node);
 	};
 	EnemyList enemies;
@@ -41,8 +41,8 @@ public:
 	virtual void render();
 	int size();
 
-	void checkBulletCollision(Bullet * _bullet){
-		enemies.checkBulletCollision(_bullet);
+	bool checkBulletCollision(Bullet * _bullet){
+		return enemies.checkBulletCollision(_bullet);
 	}
 };
 

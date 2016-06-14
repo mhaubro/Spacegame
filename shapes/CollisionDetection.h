@@ -18,6 +18,8 @@ bool collide(Polygon * A, Vector2f positionA, float angleA, Polygon * B, Vector2
 bool collide(Polygon * A, Vector2f positionA, float angleA, Vector2f positionSphere, float radius, Vector2f& Normal, Vector2f& Point, Vector2f & MTD );
 //Collision between two circles.
 bool collide(Vector2f positionACircle, float radiusA, Vector2f positionBCircle, float radiusB, Vector2f& Normal, Vector2f& Point, Vector2f & MTD);
+bool collide(Vector2f positionACircle, float radiusA, Vector2f positionBCircle, float radiusB);
+
 
 //Terraincollisio
 //Polygon
