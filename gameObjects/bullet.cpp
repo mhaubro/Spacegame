@@ -1,14 +1,13 @@
+#include <vector>
+#include <algorithm>
 #include "bullet.h"
 #include "Vector2f.h"
 #include "GraphicsTemplates.h"
 #include "game.h"
 #include "PhysicsConstants.h"
-
-
-#include <vector>
-#include <algorithm>
-
 #include "StaticAnimationEffect.h"
+
+#include "CollisionDetection.h"
 
 std::vector<Bullet> friendlybullets;
 std::vector<Bullet> foebullets;
@@ -43,7 +42,7 @@ void Bullet::update() {
 
 	game.mEnemyManager.checkBulletCollision(this);
 
-	if (checkEarthCollision()) {
+	if (TerrainCollide(position, mRadius)) {//Doesn't return the angle//TODO Maybe consider if bullet detection function is overkill in comp. power? - CollisionDetection ->TerrainCollide
 		Vector2f normal;
 		world.getNormal(position.x, normal);
 
@@ -54,10 +53,6 @@ void Bullet::update() {
 		kill();
 	}
 
-}
-
-bool Bullet::checkEarthCollision() {	//Simplified
-	return (position.y < world.getHeight(position.x) + mRadius);
 }
 
 

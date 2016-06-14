@@ -10,6 +10,7 @@
 #include "Polygon.h"
 #include "Graphics.h"
 #include "GD2.h"
+#include "Mathematics.h"
 
 //Empty namespace, file-only.
 namespace {
@@ -19,7 +20,7 @@ bool AxisSeparatePolygons(Vector2f& Axis, Polygon * A, Vector2f PositionA,
 		float angleA, Polygon * B, Vector2f PositionB, float angleB);
 bool AxisSeparatePolygons(Vector2f Axis, Polygon * A, Vector2f positionA,
 		float angleA, Vector2f positionB, float radius);
-Vector2f FindMTD(Vector2f* PushVectors, int iNumVectors);
+Vector2f FindData(Vector2f* PushVectors, int iNumVectors, Vector2f & Normal, Vector2f & Point, Vector2f & MTD);
 void CalculateInterval(Vector2f & Axis, Polygon * P, Vector2f positionP,
 		float angleP, float& min, float& max);
 void CalculateInterval(Vector2f & Axis, Vector2f & Point, float radius,
@@ -27,7 +28,7 @@ void CalculateInterval(Vector2f & Axis, Vector2f & Point, float radius,
 }
 
 bool collide(Polygon * A, Vector2f positionA, float angleA, Polygon * B,
-		Vector2f positionB, float angleB, Vector2f & MTD) {
+		Vector2f positionB, float angleB, Vector2f& Normal, Vector2f& Point, Vector2f & MTD) {
 	return false;
 
 	if (((positionA) - (positionB)).length()
@@ -71,7 +72,7 @@ bool collide(Polygon * A, Vector2f positionA, float angleA, Polygon * B,
 	}
 
 	// find the MTD among all the separation vectors
-	MTD = FindMTD(Axis, iNumAxis);
+	MTD = FindData(Axis, iNumAxis, Normal, Point, MTD);
 
 	// makes sure the push vector is pushing A away from B
 	Vector2f D = positionA - positionB;
@@ -83,7 +84,7 @@ bool collide(Polygon * A, Vector2f positionA, float angleA, Polygon * B,
 
 //COLLISION BETWEEN POLYGON AND CIRCLE
 bool collide(Polygon * A, Vector2f positionA, float angleA,
-		Vector2f positionCircle, float radius, Vector2f &MTD) {
+		Vector2f positionCircle, float radius, Vector2f& Normal, Vector2f& Point, Vector2f &MTD) {
 
 	if ((positionCircle - positionA).length() > A->getHitradius() + radius) return false;
 
@@ -124,7 +125,7 @@ bool collide(Polygon * A, Vector2f positionA, float angleA,
 	}
 
 	// find the MTD among all the separation vectors
-	MTD = FindMTD(Axis, iNumAxis);
+	MTD = FindData(Axis, iNumAxis, Normal, Point, MTD);
 
 	// makes sure the push vector is pushing A away from B
 	//TODO fix pushvector
@@ -137,7 +138,7 @@ bool collide(Polygon * A, Vector2f positionA, float angleA,
 
 //COLLISION BETWEEN THROUGH CIRCLES WITH RADIA.
 bool collide(Vector2f positionACircle, float radiusA, Vector2f positionBCircle,
-		float radiusB, Vector2f & MTD) {
+		float radiusB, Vector2f& Normal, Vector2f& Point, Vector2f & MTD) {
 	//TODO Edit MTD maybe?
 	MTD = FromAngle(
 			(radiusA + radiusB) - (positionACircle - positionBCircle).length(),
@@ -175,6 +176,22 @@ bool TerrainCollide(Polygon * A, Vector2f positionA, float angleA,
 
 	MTD = Vector2f(0, maxDepth);
 	return collision;
+}
+
+bool TerrainCollide(Vector2f positionA, float radiusA){
+	//Tests against five locations - 0 degrees, 180 degrees, 235 degrees, 270 degrees and 315 degrees (All classical degrees).
+	if (positionA.y < world.getHeight(positionA.x) + 2){//May give a false result, but is very highly unlikely.
+		return false;
+	}
+
+	if (positionA.y < world.getHeight(positionA.x+radiusA) or //0 degrees
+			positionA.y < world.getHeight(positionA.x - radiusA) or//180 degrees
+			positionA.y - radiusA < world.getHeight(positionA.x) or//270 degrees (Straight down)
+			positionA.y - radiusA*SQRT2HALF < world.getHeight(positionA.x - radiusA*SQRT2HALF) or//235 degrees
+			positionA.y - radiusA*SQRT2HALF < world.getHeight(positionA.x + radiusA*SQRT2HALF)){//315 degrees
+		return true;
+	}
+	return false;
 }
 
 //PRIVATE FUNCTIONS, INTERNAL
@@ -239,8 +256,8 @@ bool AxisSeparatePolygons(Vector2f Axis, Polygon * A, Vector2f positionA,
 	return false;
 }
 
-Vector2f FindMTD(Vector2f* PushVectors, int iNumVectors) {
-	Vector2f MTD = PushVectors[0];
+Vector2f FindData(Vector2f* PushVectors, int iNumVectors, Vector2f & Normal, Vector2f & point, Vector2f & MTD) {
+	MTD = PushVectors[0];
 	float mind2 = PushVectors[0].dotProduct(PushVectors[0]);
 	for (int i = 1; i < iNumVectors; i++) {
 		float d2 = PushVectors[i].dotProduct(PushVectors[i]);
