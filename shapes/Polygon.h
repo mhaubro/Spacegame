@@ -11,7 +11,7 @@
 #include <vector>
 #include "Vector2f.h"
 #include "Ray.h"
-#include "World.h"
+//#include "World.h"
 
 class Polygon {
 protected:
@@ -33,7 +33,7 @@ public:
 
 	int getNumberVertexes();
 
-	void render();
+	void render(Vector2f position);
 };
 
 #endif /* SRC_SHAPES_POLYGON_H_ */

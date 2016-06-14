@@ -41,6 +41,8 @@ public:
 
 	float height;
 
+	Polygon * getPolygon();
+
 	float health;
 	float energy;
 

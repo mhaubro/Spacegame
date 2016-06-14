@@ -73,6 +73,7 @@ protected:
 	void shotAction(float angle);
 	void bestMove();
 	void updatePosition();
+	void checkCollision();
 
 	virtual Vector2f getShotPos();
 	virtual void moveAction(Vector2f vectorToPlayer);
@@ -83,6 +84,8 @@ protected:
 public:
 
 	Enemy(Polygon * collisionBox, Vector2f pos, Vector2f vel = Vector2f());
+
+	Polygon * getPolygon();
 
 	Enemy& operator=(const Enemy & enemy);
 	virtual ~Enemy();
