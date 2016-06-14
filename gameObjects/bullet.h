@@ -22,8 +22,6 @@ private:
 	float mRadius;
 	Animation mAnimation;
 
-	bool checkEarthCollision();
-
 public:
 
 	bool outOfBounds();

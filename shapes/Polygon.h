@@ -18,7 +18,6 @@ protected:
 
 	int numVertexs;
 	std::vector<Vector2f> vertex;
-
 	float hitRadius;
 
 public:
@@ -29,7 +28,10 @@ public:
 	void operator=(const Polygon & poly);
 
 	std::vector<Vector2f> getVertex();
+	Vector2f getVertexIndex(int i);
 	float getHitradius();
+
+	int getNumberVertexes();
 
 	void render();
 };

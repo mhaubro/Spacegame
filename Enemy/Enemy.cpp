@@ -257,8 +257,10 @@ Enemy& Enemy::operator=(const Enemy & enemy) {//TODO MAYBE DELETE THIS? Easily e
 //}
 
 bool Enemy::checkHit(Bullet* _bullet) {
+	Vector2f Normal = Vector2f();
+	Vector2f Point = Vector2f();
 	Vector2f MTD = Vector2f();
-	if (collide(collisionBox, position, angle, _bullet->getPosition(), _bullet->getRadius(), MTD)) {
+	if (collide(collisionBox, position, angle, _bullet->getPosition(), _bullet->getRadius(), Point, Normal, MTD)) {
 		_bullet->kill();
 		game.score += 100;
 		health -= 50;

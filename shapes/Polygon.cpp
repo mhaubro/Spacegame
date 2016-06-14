@@ -31,6 +31,9 @@ Polygon::Polygon(int numVertex,
 	hitRadius = d;
 }
 
+int Polygon::getNumberVertexes(){
+	return numVertexs;
+}
 
 void Polygon::operator=(const Polygon & polygon){
 	this->hitRadius = polygon.hitRadius;
@@ -51,6 +54,10 @@ std::vector<Vector2f> Polygon::getVertex(){
 
 float Polygon::getHitradius() {
 	return hitRadius;
+}
+
+Vector2f Polygon::getVertexIndex(int index){
+	return vertex[index];
 }
 
 void Polygon::render() {

@@ -1,3 +1,5 @@
+#include <vector>
+#include <algorithm>
 #include "bullet.h"
 #include "Vector2f.h"
 #include "GraphicsTemplates.h"
@@ -6,11 +8,8 @@
 
 #include <vector>
 #include <algorithm>
-
 #include "StaticAnimationEffect.h"
-
-std::vector<Bullet> friendlybullets;
-std::vector<Bullet> foebullets;
+#include "CollisionDetection.h"
 
 Bullet::Bullet(Vector2f& pos, Vector2f& vel, float radius, bool _friendly) :
 		Entity(), PhysicsObject(BULLET_MASS, pos, vel), startTime(
@@ -46,7 +45,7 @@ void Bullet::update() {
 						BulletCollisionAnimation32, velocity.angle(), 1));
 
 	}else if (!mFriendly){//player collision
-	}else if (checkEarthCollision()) {
+	}else if (TerrainCollide(position, mRadius)) {
 		Vector2f normal;
 		world.getNormal(position.x, normal);
 
@@ -60,16 +59,12 @@ void Bullet::update() {
 
 }
 
-bool Bullet::checkEarthCollision() {	//Simplified
-	return (position.y < world.getHeight(position.x) + mRadius);
-}
-
-Vector2f getShortestDiffVectorBullet(Vector2f v1, Vector2f v2) {//Shortest vector that points from v1 to v2, with respect to the world construction
-	Vector2f dv = v2 - v1;	//Difference vector from v1 to v2.
-	if (dv.x < -CHUNK_SIZE * WORLD_SIZE / 2) {
-		dv.x += CHUNK_SIZE * WORLD_SIZE;
-	} else if (dv.x > CHUNK_SIZE * WORLD_SIZE / 2) {
-		dv.x -= CHUNK_SIZE * WORLD_SIZE;
+Vector2f getShortestDiffVectorBullet(Vector2f v1, Vector2f v2){//Shortest vector that points from v1 to v2, with respect to the world construction
+	Vector2f dv = v2-v1;//Difference vector from v1 to v2.
+	if (dv.x < -CHUNK_SIZE*WORLD_SIZE/2){
+		dv.x += CHUNK_SIZE*WORLD_SIZE;
+	} else if(dv.x > CHUNK_SIZE*WORLD_SIZE/2){
+		dv.x -= CHUNK_SIZE*WORLD_SIZE;
 	}
 	return dv;
 }
