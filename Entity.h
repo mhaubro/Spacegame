@@ -15,7 +15,6 @@ protected:
 
 	bool mIsDead;
 	Entity();
-	bool isEDead;//is Entity Dead.
 
 public:
 	virtual ~Entity();

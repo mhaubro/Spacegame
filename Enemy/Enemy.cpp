@@ -230,7 +230,6 @@ void Enemy::updatePh() {
 }
 
 Enemy& Enemy::operator=(const Enemy & enemy) {//TODO MAYBE DELETE THIS? Easily editable, but still useless code atm.
-	isEDead = enemy.isEDead;
 	height = enemy.height;
 	shotOffset = enemy.shotOffset;
 	health = enemy.health;

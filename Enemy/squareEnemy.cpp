@@ -106,7 +106,6 @@ void squareEnemy::moveAction(Vector2f vectorToPlayer){//Maybe use defined vector
 }
 
 squareEnemy& squareEnemy::operator=(const squareEnemy & enemy){//TODO MAYBE DELETE THIS? Easily editable, but still useless code atm.
-	isEDead = enemy.isEDead;
 	height = enemy.height;
 	shotOffset = enemy.shotOffset;
 	health = enemy.health;
