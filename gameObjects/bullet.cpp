@@ -48,13 +48,17 @@ void Bullet::update() {
 				new StaticAnimationEffect(position, .4,
 						BulletCollisionAnimation32, velocity.angle(), 1));
 		kill();
-	} else if (!mFriendly
+		return;
+	}
+	if (!mFriendly
 			&& player.checkBulletCollision(this, Normal, CollisionPoint, MTD)) { //player collision
 		game.mEffectManager.addEffect(
 				new StaticAnimationEffect(position, .4,
 						BulletCollisionAnimation32, velocity.angle(), 1));
 		kill();
-	} else if (TerrainCollide(position, mRadius)) {
+		return;
+	}
+	if (TerrainCollide(position, mRadius)) {
 
 		Vector2f normal;
 		world.getNormal(position.x, normal);
@@ -67,17 +71,6 @@ void Bullet::update() {
 		kill();
 		return;
 	}
-
-
-	if (mFriendly && game.mEnemyManager.checkBulletCollision(this)) {
-		game.mEffectManager.addEffect(
-				new StaticAnimationEffect(position, .4,
-						BulletCollisionAnimation32, velocity.angle(), 1));
-
-	}else if (!mFriendly){//player collision
-
-	}
-
 }
 
 Vector2f getShortestDiffVectorBullet(Vector2f v1, Vector2f v2) { //Shortest vector that points from v1 to v2, with respect to the world construction
