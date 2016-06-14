@@ -7,6 +7,7 @@
 
 #include "EnemyManager.h"
 #include "Graphics.h"
+#include "CollisionDetection.h"
 
 EnemyManager::EnemyManager() :
 		enemies(), enemy_number(3) {
@@ -65,9 +66,16 @@ void EnemyManager::EnemyList::renderAll() {
 
 bool EnemyManager::EnemyList::firstInternalCollisionForTheRest(Node* current, Enemy* collided) {
 	Node* tmp = current->mNext;
+	Vector2f Normal;
+	Vector2f Point;
+	Vector2f MTD;
 	while (tmp) {
+		if (collide(current->mData, tmp->mData, Normal, Point, MTD)){
+			return true;
+		}
 		tmp = tmp->mNext;
 	}
+	return false;
 }
 
 bool EnemyManager::EnemyList::checkBulletCollision(Bullet* bullet) {

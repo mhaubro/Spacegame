@@ -60,13 +60,23 @@ Vector2f Polygon::getVertexIndex(int index){
 	return vertex[index];
 }
 
-void Polygon::render() {
+void Polygon::render(Vector2f position) {
+	GD.ColorRGB(GREEN);
+	GD.Begin(LINE_STRIP);
+
+	for (std::vector<Vector2f>::iterator i = vertex.begin(); i != vertex.end(); i++){
+		cam.Vertex2f(*i+position);
+	}
+	cam.Vertex2f(*vertex.begin()+position);
+	GD.ColorRGB(0xffffff);
+}
+
 //	GD.Begin(LINE_STRIP);
 //	for (std::vector<Vector2f>::iterator i = vertex.begin(); i != vertex.end(); ++i) {
 //		cam.Vertex2f(getVertexTransformed(i));
 //	}
 //	cam.Vertex2f(getVertexTransformed(vertex.begin() ));
-}
+
 
 //bool Polygon::Collide(Polygon A, Polygon B, Vector2f& MTD) {
 //

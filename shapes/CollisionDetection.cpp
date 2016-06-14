@@ -11,6 +11,8 @@
 #include "Graphics.h"
 #include "GD2.h"
 #include "Mathematics.h"
+#include "player.h"
+
 
 //Empty namespace, file-only.
 namespace {
@@ -20,17 +22,98 @@ bool AxisSeparatePolygons(Vector2f& Axis, Polygon * A, Vector2f PositionA,
 		float angleA, Polygon * B, Vector2f PositionB, float angleB);
 bool AxisSeparatePolygons(Vector2f Axis, Polygon * A, Vector2f positionA,
 		float angleA, Vector2f positionB, float radius);
-void FindData(Vector2f* PushVectors, int iNumVectors, Vector2f & Normal, Vector2f & Point, Vector2f & MTD, Polygon * A, Vector2f positionA, Polygon * B, Vector2f positionB);
+void FindData(Vector2f* Axis, int iNumVectors, Vector2f & Normal, Vector2f & Point, Vector2f & MTD, Polygon * A, Vector2f positionA, Polygon * B, Vector2f positionB);
 void FindData(Vector2f* PushVectors, int iNumVectors, Vector2f & Normal, Vector2f & Point, Vector2f & MTD, Polygon * A, Vector2f positionA);
 void CalculateInterval(Vector2f & Axis, Polygon * P, Vector2f positionP,
 		float angleP, float& min, float& max);
 void CalculateInterval(Vector2f & Axis, Vector2f & Point, float radius,
 		float& min, float& max);
+//Polygon
+bool TerrainCollide(Polygon * A, Vector2f positionA, float angleA, Vector2f& Normal, Vector2f& Point, Vector2f& MTD);
+
+
+//#######################################
+//###########COLLIDING METHODS###########
+
+
+//Collision between two polygons
+bool collide(Polygon * A, Vector2f positionA, float angleA, Polygon * B, Vector2f positionB, float angleB, Vector2f& Normal, Vector2f& Point, Vector2f & MTD);
+//Collision between polygon and circle
+bool collide(Polygon * A, Vector2f positionA, float angleA, Vector2f positionSphere, float radius, Vector2f& Normal, Vector2f& Point, Vector2f & MTD );
+//Collision between two circles.
+bool collide(Vector2f positionACircle, float radiusA, Vector2f positionBCircle, float radiusB, Vector2f& Normal, Vector2f& Point, Vector2f & MTD);
+bool collide(Vector2f positionACircle, float radiusA, Vector2f positionBCircle, float radiusB);
 }
 
+
+
+
+
+//PLAYER-ENEMY COLLISION and ENEMY-ENEMY-COLLISION
+//############################################
+//############################################
+//############################################
+bool collide(Enemy * e1, Enemy * e2, Vector2f & Normal, Vector2f & Point, Vector2f & MTD){
+	return collide(e1->getPolygon(), e1->getPosition(), e1->getAngle(), e2->getPolygon(), e2->getPosition(), e2->getAngle(), Normal, Point, MTD);
+}
+
+bool playerCollide (Enemy * e1, Vector2f & Normal, Vector2f & Point, Vector2f & MTD){
+	return collide(player.getPolygon(), player.getPosition(), player.getAngle(), e1->getPolygon(), e1->getPosition(), e1->getAngle(), Normal, Point, MTD);
+}
+
+//PLAYER-BULLET COLLISION
+bool collidePlayerBullet(Bullet * b, Vector2f & Normal, Vector2f & Point, Vector2f & MTD){
+	return collide(player.getPolygon(), player.getPosition(), player.getAngle(), b->getPosition(), b->getRadius(), Normal, Point, MTD);
+}
+
+//ENEMY-BULLET COLLISION
+bool collide(Enemy * e, Bullet * b, Vector2f & Normal, Vector2f & Point, Vector2f & MTD){
+	return collide(e->getPolygon(), e->getPosition(), e->getAngle(), b->getPosition(), b->getRadius(), Normal, Point, MTD);
+}
+
+//###########################################
+//#######TERRAINCOLLISION####################
+
+//Enemy
+bool TerrainCollide(Enemy * e, Vector2f& Normal, Vector2f& Point, Vector2f& MTD){
+	return TerrainCollide(e->getPolygon(), e->getPosition(), e->getAngle(), Normal, Point, MTD);
+}
+//Player
+bool TerrainCollidePlayer(Vector2f& Normal, Vector2f& Point, Vector2f& MTD){
+	return TerrainCollide(player.getPolygon(), player.getPosition(), player.getAngle(), Normal, Point, MTD);
+}
+//Bullet
+bool TerrainCollide(Bullet * b, Vector2f & Normal, Vector2f & Point, Vector2f & MTD){
+	return TerrainCollide(b->getPosition(), b->getRadius());//TODO Maybe add Point/MTD for this?
+}
+
+
+
+
+
+bool TerrainCollide(Vector2f positionA, float radiusA){
+	//Tests against five locations - 0 degrees, 180 degrees, 235 degrees, 270 degrees and 315 degrees (All classical degrees).
+	if (positionA.y > world.getHeight(positionA.x) + 2){//May give a false result, but is very highly unlikely.
+		return false;
+	}
+
+	if (positionA.y < world.getHeight(positionA.x+radiusA) or //0 degrees
+			positionA.y < world.getHeight(positionA.x - radiusA) or//180 degrees
+			positionA.y - radiusA < world.getHeight(positionA.x) or//270 degrees (Straight down)
+			positionA.y - radiusA*SQRT2HALF < world.getHeight(positionA.x - radiusA*SQRT2HALF) or//235 degrees
+			positionA.y - radiusA*SQRT2HALF < world.getHeight(positionA.x + radiusA*SQRT2HALF)){//315 degrees
+		return true;
+	}
+	return false;
+}
+
+
+
+//PRIVATE FUNCTIONS, INTERNAL
+namespace {
+//POLYGON-POLYGON COLLISION AS WELL AS HELPING FUNCTIONS
 bool collide(Polygon * A, Vector2f positionA, float angleA, Polygon * B,
 		Vector2f positionB, float angleB, Vector2f& Normal, Vector2f& Point, Vector2f & MTD) {
-	return false;
 
 	if (((positionA) - (positionB)).length()
 			> A->getHitradius() + B->getHitradius())
@@ -42,7 +125,8 @@ bool collide(Polygon * A, Vector2f positionA, float angleA, Polygon * B,
 
 	for (std::vector<Vector2f>::iterator i = A->getVertex().begin();
 			i != A->getVertex().end(); ++i) {
-		std::vector<Vector2f>::iterator itcopy = i += 1;
+		std::vector<Vector2f>::iterator itcopy = i;
+		itcopy++;
 		if (itcopy == A->getVertex().end()) {
 			itcopy = A->getVertex().begin();
 		}
@@ -58,7 +142,8 @@ bool collide(Polygon * A, Vector2f positionA, float angleA, Polygon * B,
 
 	for (std::vector<Vector2f>::iterator i = B->getVertex().begin() + 1;
 			i != B->getVertex().end(); ++i) {
-		std::vector<Vector2f>::iterator itcopy = i += 1;
+		std::vector<Vector2f>::iterator itcopy = i;
+		itcopy++;
 		if (itcopy == B->getVertex().end()) {
 			itcopy = B->getVertex().begin();
 		}
@@ -193,24 +278,10 @@ bool TerrainCollide(Polygon * A, Vector2f positionA, float angleA,
 	return collision;
 }
 
-bool TerrainCollide(Vector2f positionA, float radiusA){
-	//Tests against five locations - 0 degrees, 180 degrees, 235 degrees, 270 degrees and 315 degrees (All classical degrees).
-	if (positionA.y < world.getHeight(positionA.x) + 2){//May give a false result, but is very highly unlikely.
-		return false;
-	}
 
-	if (positionA.y < world.getHeight(positionA.x+radiusA) or //0 degrees
-			positionA.y < world.getHeight(positionA.x - radiusA) or//180 degrees
-			positionA.y - radiusA < world.getHeight(positionA.x) or//270 degrees (Straight down)
-			positionA.y - radiusA*SQRT2HALF < world.getHeight(positionA.x - radiusA*SQRT2HALF) or//235 degrees
-			positionA.y - radiusA*SQRT2HALF < world.getHeight(positionA.x + radiusA*SQRT2HALF)){//315 degrees
-		return true;
-	}
-	return false;
-}
 
-//PRIVATE FUNCTIONS, INTERNAL
-namespace {
+
+
 //Head
 
 //Function bodies
@@ -271,16 +342,16 @@ bool AxisSeparatePolygons(Vector2f Axis, Polygon * A, Vector2f positionA,
 	return false;
 }
 
-void FindData(Vector2f* PushVectors, int iNumVectors, Vector2f & Normal, Vector2f & point, Vector2f & MTD, Polygon * A, Vector2f positionA, Polygon * B, Vector2f positionB) {
-	MTD = PushVectors[0];
-	float mind2 = PushVectors[0].dotProduct(PushVectors[0]);
+void FindData(Vector2f* Axis, int iNumVectors, Vector2f & Normal, Vector2f & point, Vector2f & MTD, Polygon * A, Vector2f positionA, Polygon * B, Vector2f positionB) {
+	MTD = Axis[0];
+	float mind2 = Axis[0].dotProduct(Axis[0]);
 	point = A->getVertexIndex(0) + positionA;
 	int aNumVertexes = A->getNumberVertexes();
 	for (int i = 1; i < iNumVectors; i++) {
-		float d2 = PushVectors[i].dotProduct(PushVectors[i]);
+		float d2 = Axis[i].dotProduct(Axis[i]);
 		if (d2 < mind2) {
 			mind2 = d2;
-			MTD = PushVectors[i];
+			MTD = Axis[i];
 			if (i < aNumVertexes){
 				point = A->getVertexIndex(i) + positionA;
 			} else {

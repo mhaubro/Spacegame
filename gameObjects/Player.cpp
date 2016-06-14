@@ -31,6 +31,10 @@ Player::~Player() {
 
 }
 
+Polygon * Player::getPolygon(){
+	return collisionBox;
+}
+
 void Player::update() {
 
 	if (!mIsDead) {
@@ -52,7 +56,7 @@ void Player::update() {
 	Vector2f tangent = Vector2f();
 	Vector2f collisionPoint = Vector2f(10, 10);
 
-	if (TerrainCollide(collisionBox, position, angle, normal, collisionPoint, mtd)) {
+	if (TerrainCollidePlayer(normal, collisionPoint, mtd)) {
 		normal = normal.normalized();
 		tangent = normal.rightNormal();
 

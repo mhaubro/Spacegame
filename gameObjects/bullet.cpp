@@ -37,15 +37,7 @@ void Bullet::update() {
 	this->PhysicsObject::updatePhysics();
 	if (timer.getRunTime() > startTime + Lifespan) {
 		mIsDead = true;
-	}
-
-	if (mFriendly && game.mEnemyManager.checkBulletCollision(this)) {
-		game.mEffectManager.addEffect(
-				new StaticAnimationEffect(position, .4,
-						BulletCollisionAnimation32, velocity.angle(), 1));
-
-	}else if (!mFriendly){//player collision
-	}else if (TerrainCollide(position, mRadius)) {
+	}	else if (TerrainCollide(position, mRadius)) {
 		Vector2f normal;
 		world.getNormal(position.x, normal);
 
@@ -55,6 +47,17 @@ void Bullet::update() {
 								+ normal, .8, GroundCollisionAnimation32,
 						normal.angle() + PI / 2, 1));
 		kill();
+		return;
+	}
+
+
+	if (mFriendly && game.mEnemyManager.checkBulletCollision(this)) {
+		game.mEffectManager.addEffect(
+				new StaticAnimationEffect(position, .4,
+						BulletCollisionAnimation32, velocity.angle(), 1));
+
+	}else if (!mFriendly){//player collision
+
 	}
 
 }
