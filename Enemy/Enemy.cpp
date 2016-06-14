@@ -12,6 +12,7 @@
 #include "World.h"
 #include "GraphicsTemplates.h"
 #include "CollisionDetection.h"
+#include "StaticAnimationEffect.h"
 
 #define ENEMYACCELERATION 1.5
 //Enemies are only randomly generated. Outcomment this if it is wished they are not.
@@ -109,6 +110,8 @@ Vector2f Enemy::getShotVel(float velocity, float angle) {//Makes sure shots are 
 void Enemy::checkAlive() {
 	if (health <= 0) {
 		kill();
+		game.mEffectManager.addEffect(new StaticAnimationEffect(position, .4,
+						BulletCollisionAnimation32, velocity.angle(), 2));
 		//game.score += enemyValue;
 	}
 	checkBounds();	//Checks if the enemy is far away.

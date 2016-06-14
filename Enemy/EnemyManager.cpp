@@ -70,14 +70,15 @@ bool EnemyManager::EnemyList::firstInternalCollisionForTheRest(Node* current, En
 	}
 }
 
-void EnemyManager::EnemyList::checkBulletCollision(Bullet* bullet) {
+bool EnemyManager::EnemyList::checkBulletCollision(Bullet* bullet) {
 	Node* tmp = mHead;
 	while (tmp) {
 		if (tmp->mData->checkHit(bullet)) {
-			return;
+			return true;
 		}
 		tmp = tmp->mNext;
 	}
+	return false;
 }
 
 Vector2f EnemyManager::generatePosition() {
