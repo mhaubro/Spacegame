@@ -40,12 +40,13 @@ void Bullet::update() {
 		mIsDead = true;
 	}
 
-	if (game.mEnemyManager.checkBulletCollision(this)) {
+	if (mFriendly && game.mEnemyManager.checkBulletCollision(this)) {
 		game.mEffectManager.addEffect(
 				new StaticAnimationEffect(position, .4,
 						BulletCollisionAnimation32, velocity.angle(), 1));
 
-	} else if (checkEarthCollision()) {
+	}else if (!mFriendly){//player collision
+	}else if (checkEarthCollision()) {
 		Vector2f normal;
 		world.getNormal(position.x, normal);
 
