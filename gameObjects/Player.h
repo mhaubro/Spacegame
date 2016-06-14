@@ -1,13 +1,13 @@
 #ifndef PLAYER_H_
 #define PLAYER_H_
 
-
 #include "Vector2f.h"
 #include "Entity.h"
 #include "RigidBody.h"
 #include "Polygon.h"
 #include "Sprite.h"
 #include "Animation.h"
+#include "Bullet.h"
 
 #define MAX_PLAYER_HEALTH 1000
 #define MAX_PLAYER_ENERGY 1000
@@ -51,6 +51,9 @@ public:
 	void render();
 	void shoot();
 	void startTime();
+
+	bool checkBulletCollision(Bullet * _bullet, Vector2f& _normal,
+			Vector2f& _collisionPoint, Vector2f& _MTD);
 
 };
 

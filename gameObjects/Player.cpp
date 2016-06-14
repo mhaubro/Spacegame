@@ -210,3 +210,7 @@ void Player::startTime(){
 Vector2f Player::getShotVel(float speed) {
 	return FromAngle(speed, angle) + velocity * 0.5;
 }
+
+bool Player::checkBulletCollision(Bullet* _bullet,Vector2f& _normal, Vector2f& _collisionPoint, Vector2f& _MTD){
+	return collide(collisionBox, position,angle, _bullet->getPosition(), _bullet->getRadius(), _normal, _collisionPoint, _MTD);
+}
