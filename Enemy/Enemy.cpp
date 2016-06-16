@@ -60,6 +60,7 @@ void Enemy::render() {
 void Enemy::update() {
 	//Check if being hit/dead
 	checkAlive();
+	checkCollision();
 
 	//Moving and shooting
 	bestMove();
@@ -77,11 +78,11 @@ void Enemy::checkCollision(){
 	Vector2f MTD = Vector2f();
 
 	if (playerCollide(this, Normal, Point, MTD)){
-//		GD.Clear(); //Used for debugging and checking points as well as normal-vectors for collisions.
-//		player.render();
-//		render();
-//		//PRINT VECTORS
-//
+		GD.Clear(); //Used for debugging and checking points as well as normal-vectors for collisions.
+		player.render();
+		render();
+		//PRINT VECTORS
+
 //		GD.ColorRGB(WHITE);
 //		GD.cmd_text(50, 50, 16, OPT_SIGNED, "MTD-LENGTH*1000:");
 //		GD.cmd_number(50, 70, 16, OPT_SIGNED, MTD.length()*1000);
