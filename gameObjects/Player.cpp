@@ -151,6 +151,9 @@ void Player::render() {
 	sprite.setAngle(angle);
 	sprite.render();
 
+//	GD.ColorRGB(GREEN);
+//	collisionBox->render(position, angle);
+//	GD.ColorRGB(0xffffff);
 }
 
 float Player::getMaxThrottle() {

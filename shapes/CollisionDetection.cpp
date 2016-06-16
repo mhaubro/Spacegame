@@ -13,7 +13,6 @@
 #include "Mathematics.h"
 #include "player.h"
 
-
 //Empty namespace, file-only.
 namespace {
 Vector2f getVertexTransformed(Vector2f positionA, float angleA,
@@ -22,98 +21,114 @@ bool AxisSeparatePolygons(Vector2f& Axis, Polygon * A, Vector2f PositionA,
 		float angleA, Polygon * B, Vector2f PositionB, float angleB);
 bool AxisSeparatePolygons(Vector2f Axis, Polygon * A, Vector2f positionA,
 		float angleA, Vector2f positionB, float radius);
-void FindData(Vector2f* Axis, int iNumVectors, Vector2f & Normal, Vector2f & Point, Vector2f & MTD, Polygon * A, Vector2f positionA, Polygon * B, Vector2f positionB);
-void FindData(Vector2f* PushVectors, int iNumVectors, Vector2f & Normal, Vector2f & Point, Vector2f & MTD, Polygon * A, Vector2f positionA);
+void FindData(Vector2f* Axis, int iNumVectors, Vector2f & Normal,
+		Vector2f & point, Vector2f & MTD, Polygon * A, Vector2f positionA,
+		Polygon * B, Vector2f positionB);
+void FindData(Vector2f* PushVectors, int iNumVectors, Vector2f & Normal,
+		Vector2f & point, Vector2f & MTD, Polygon * A, Vector2f positionA,
+		Vector2f positionB, float radiusB);
 void CalculateInterval(Vector2f & Axis, Polygon * P, Vector2f positionP,
 		float angleP, float& min, float& max);
 void CalculateInterval(Vector2f & Axis, Vector2f & Point, float radius,
 		float& min, float& max);
 //Polygon
-bool TerrainCollide(Polygon * A, Vector2f positionA, float angleA, Vector2f& Normal, Vector2f& Point, Vector2f& MTD);
-
+bool TerrainCollide(Polygon * A, Vector2f positionA, float angleA,
+		Vector2f& Normal, Vector2f& Point, Vector2f& MTD);
 
 //#######################################
 //###########COLLIDING METHODS###########
 
-
 //Collision between two polygons
-bool collide(Polygon * A, Vector2f positionA, float angleA, Polygon * B, Vector2f positionB, float angleB, Vector2f& Normal, Vector2f& Point, Vector2f & MTD);
+bool collide(Polygon * A, Vector2f positionA, float angleA, Polygon * B,
+		Vector2f positionB, float angleB, Vector2f& Normal, Vector2f& Point,
+		Vector2f & MTD);
 //Collision between polygon and circle
-bool collide(Polygon * A, Vector2f positionA, float angleA, Vector2f positionSphere, float radius, Vector2f& Normal, Vector2f& Point, Vector2f & MTD );
+bool collide(Polygon * A, Vector2f positionA, float angleA,
+		Vector2f positionSphere, float radius, Vector2f& Normal,
+		Vector2f& Point, Vector2f & MTD);
 //Collision between two circles.
-bool collide(Vector2f positionACircle, float radiusA, Vector2f positionBCircle, float radiusB, Vector2f& Normal, Vector2f& Point, Vector2f & MTD);
-bool collide(Vector2f positionACircle, float radiusA, Vector2f positionBCircle, float radiusB);
+bool collide(Vector2f positionACircle, float radiusA, Vector2f positionBCircle,
+		float radiusB, Vector2f& Normal, Vector2f& Point, Vector2f & MTD);
+bool collide(Vector2f positionACircle, float radiusA, Vector2f positionBCircle,
+		float radiusB);
 }
-
-
-
-
 
 //PLAYER-ENEMY COLLISION and ENEMY-ENEMY-COLLISION
 //############################################
 //############################################
 //############################################
-bool collide(Enemy * e1, Enemy * e2, Vector2f & Normal, Vector2f & Point, Vector2f & MTD){
-	return collide(e1->getPolygon(), e1->getPosition(), e1->getAngle(), e2->getPolygon(), e2->getPosition(), e2->getAngle(), Normal, Point, MTD);
+bool collide(Enemy * e1, Enemy * e2, Vector2f & Normal, Vector2f & Point,
+		Vector2f & MTD) {
+	return collide(e1->getPolygon(), e1->getPosition(), e1->getAngle(),
+			e2->getPolygon(), e2->getPosition(), e2->getAngle(), Normal, Point,
+			MTD);
 }
 
-bool playerCollide (Enemy * e1, Vector2f & Normal, Vector2f & Point, Vector2f & MTD){
-	return collide(player.getPolygon(), player.getPosition(), player.getAngle(), e1->getPolygon(), e1->getPosition(), e1->getAngle(), Normal, Point, MTD);
+bool playerCollide(Enemy * e1, Vector2f & Normal, Vector2f & Point,
+		Vector2f & MTD) {
+	return collide(player.getPolygon(), player.getPosition(), player.getAngle(),
+			e1->getPolygon(), e1->getPosition(), e1->getAngle(), Normal, Point,
+			MTD);
 }
 
 //PLAYER-BULLET COLLISION
-bool collidePlayerBullet(Bullet * b, Vector2f & Normal, Vector2f & Point, Vector2f & MTD){
-	return collide(player.getPolygon(), player.getPosition(), player.getAngle(), b->getPosition(), b->getRadius(), Normal, Point, MTD);
+bool collidePlayerBullet(Bullet * b, Vector2f & Normal, Vector2f & Point,
+		Vector2f & MTD) {
+	return collide(player.getPolygon(), player.getPosition(), player.getAngle(),
+			b->getPosition(), b->getRadius(), Normal, Point, MTD);
 }
 
 //ENEMY-BULLET COLLISION
-bool collide(Enemy * e, Bullet * b, Vector2f & Normal, Vector2f & Point, Vector2f & MTD){
-	return collide(e->getPolygon(), e->getPosition(), e->getAngle(), b->getPosition(), b->getRadius(), Normal, Point, MTD);
+bool collide(Enemy * e, Bullet * b, Vector2f & Normal, Vector2f & Point,
+		Vector2f & MTD) {
+	return collide(e->getPolygon(), e->getPosition(), e->getAngle(),
+			b->getPosition(), b->getRadius(), Normal, Point, MTD);
 }
 
 //###########################################
 //#######TERRAINCOLLISION####################
 
 //Enemy
-bool TerrainCollide(Enemy * e, Vector2f& Normal, Vector2f& Point, Vector2f& MTD){
-	return TerrainCollide(e->getPolygon(), e->getPosition(), e->getAngle(), Normal, Point, MTD);
+bool TerrainCollide(Enemy * e, Vector2f& Normal, Vector2f& Point,
+		Vector2f& MTD) {
+	return TerrainCollide(e->getPolygon(), e->getPosition(), e->getAngle(),
+			Normal, Point, MTD);
 }
 //Player
-bool TerrainCollidePlayer(Vector2f& Normal, Vector2f& Point, Vector2f& MTD){
-	return TerrainCollide(player.getPolygon(), player.getPosition(), player.getAngle(), Normal, Point, MTD);
+bool TerrainCollidePlayer(Vector2f& Normal, Vector2f& Point, Vector2f& MTD) {
+	return TerrainCollide(player.getPolygon(), player.getPosition(),
+			player.getAngle(), Normal, Point, MTD);
 }
 //Bullet
-bool TerrainCollide(Bullet * b, Vector2f & Normal, Vector2f & Point, Vector2f & MTD){
-	return TerrainCollide(b->getPosition(), b->getRadius());//TODO Maybe add Point/MTD for this?
+bool TerrainCollide(Bullet * b, Vector2f & Normal, Vector2f & Point,
+		Vector2f & MTD) {
+	return TerrainCollide(b->getPosition(), b->getRadius()); //TODO Maybe add Point/MTD for this?
 }
 
-
-
-
-
-bool TerrainCollide(Vector2f positionA, float radiusA){
+bool TerrainCollide(Vector2f positionA, float radiusA) {
 	//Tests against five locations - 0 degrees, 180 degrees, 235 degrees, 270 degrees and 315 degrees (All classical degrees).
-	if (positionA.y > world.getHeight(positionA.x) + 2){//May give a false result, but is very highly unlikely.
+	if (positionA.y > world.getHeight(positionA.x) + 2) { //May give a false result, but is very highly unlikely.
 		return false;
 	}
 
-	if (positionA.y < world.getHeight(positionA.x+radiusA) or //0 degrees
-			positionA.y < world.getHeight(positionA.x - radiusA) or//180 degrees
-			positionA.y - radiusA < world.getHeight(positionA.x) or//270 degrees (Straight down)
-			positionA.y - radiusA*SQRT2HALF < world.getHeight(positionA.x - radiusA*SQRT2HALF) or//235 degrees
-			positionA.y - radiusA*SQRT2HALF < world.getHeight(positionA.x + radiusA*SQRT2HALF)){//315 degrees
+	if (positionA.y < world.getHeight(positionA.x + radiusA) or //0 degrees
+			positionA.y < world.getHeight(positionA.x - radiusA) or //180 degrees
+			positionA.y - radiusA < world.getHeight(positionA.x) or //270 degrees (Straight down)
+			positionA.y - radiusA * SQRT2HALF
+					< world.getHeight(positionA.x - radiusA * SQRT2HALF) or //235 degrees
+			positionA.y - radiusA * SQRT2HALF
+					< world.getHeight(positionA.x + radiusA * SQRT2HALF)) { //315 degrees
 		return true;
 	}
 	return false;
 }
 
-
-
 //PRIVATE FUNCTIONS, INTERNAL
 namespace {
 //POLYGON-POLYGON COLLISION AS WELL AS HELPING FUNCTIONS
 bool collide(Polygon * A, Vector2f positionA, float angleA, Polygon * B,
-		Vector2f positionB, float angleB, Vector2f& Normal, Vector2f& Point, Vector2f & MTD) {
+		Vector2f positionB, float angleB, Vector2f& Normal, Vector2f& Point,
+		Vector2f & MTD) {
 
 	if (((positionA) - (positionB)).length()
 			> A->getHitradius() + B->getHitradius())
@@ -151,7 +166,7 @@ bool collide(Polygon * A, Vector2f positionA, float angleA, Polygon * B,
 		Vector2f E = getVertexTransformed(positionB, angleB, (*itcopy))
 				- getVertexTransformed(positionB, angleB, (*i));
 		Vector2f N = Vector2f(-E.y, E.x);
-		if (AxisSeparatePolygons(N, A, positionA, angleA, B, positionB, angleB))
+		if (AxisSeparatePolygons(N, B, positionB, angleB, A, positionA, angleA))
 			return false;
 
 		Axis[iNumAxis++] = N;
@@ -161,20 +176,18 @@ bool collide(Polygon * A, Vector2f positionA, float angleA, Polygon * B,
 	FindData(Axis, iNumAxis, Normal, Point, MTD, A, positionA, B, positionB);
 
 	// makes sure the push vector is pushing A away from B
-	Vector2f D = positionA - positionB;
-	if (D.dotProduct(MTD) < 0.0f){
-		MTD = -MTD;
-		Normal = -Normal;
-	}
+
 
 	return true;
 }
 
 //COLLISION BETWEEN POLYGON AND CIRCLE
 bool collide(Polygon * A, Vector2f positionA, float angleA,
-		Vector2f positionCircle, float radius, Vector2f& Normal, Vector2f& Point, Vector2f &MTD) {
+		Vector2f positionCircle, float radius, Vector2f& Normal,
+		Vector2f& Point, Vector2f &MTD) {
 
-	if ((positionCircle - positionA).length() > A->getHitradius() + radius) return false;
+	if ((positionCircle - positionA).length() > A->getHitradius() + radius)
+		return false;
 
 	Vector2f Axis[32];
 	int iNumAxis = 0;
@@ -213,13 +226,12 @@ bool collide(Polygon * A, Vector2f positionA, float angleA,
 	}
 
 	// find the MTD among all the separation vectors
-	FindData(Axis, iNumAxis, Normal, Point, MTD, A, positionA);
+	FindData(Axis, iNumAxis, Normal, Point, MTD, A, positionA, positionCircle,
+			radius);
 
 	// makes sure the push vector is pushing A away from B
 	//TODO fix pushvector
 	Vector2f D = Vector2f() + positionA - positionCircle;
-	if (D.dotProduct(MTD) < 0.0f)
-		MTD = -MTD;
 
 	return true;
 }
@@ -233,7 +245,8 @@ bool collide(Vector2f positionACircle, float radiusA, Vector2f positionBCircle,
 			(positionACircle - positionBCircle).angle());
 
 	//Pointet i cirkel A, hvor cirkel B går ind.
-	Point = (positionACircle-positionBCircle)*radiusA/(positionACircle-positionBCircle).length();
+	Point = (positionACircle - positionBCircle) * radiusA
+			/ (positionACircle - positionBCircle).length();
 
 	Normal = MTD.normalized();
 
@@ -244,7 +257,6 @@ bool collide(Vector2f positionACircle, float radiusA, Vector2f positionBCircle,
 		float radiusB) {
 	return (((positionACircle - positionBCircle).length()) < (radiusA + radiusB));
 }
-
 
 bool TerrainCollide(Polygon * A, Vector2f positionA, float angleA,
 		Vector2f& Normal, Vector2f& Point, Vector2f& MTD) {
@@ -277,10 +289,6 @@ bool TerrainCollide(Polygon * A, Vector2f positionA, float angleA,
 	MTD = Vector2f(0, maxDepth);
 	return collision;
 }
-
-
-
-
 
 //Head
 
@@ -342,26 +350,72 @@ bool AxisSeparatePolygons(Vector2f Axis, Polygon * A, Vector2f positionA,
 	return false;
 }
 
-void FindData(Vector2f* Axis, int iNumVectors, Vector2f & Normal, Vector2f & point, Vector2f & MTD, Polygon * A, Vector2f positionA, Polygon * B, Vector2f positionB) {
+void FindData(Vector2f* Axis, int iNumVectors, Vector2f & Normal,
+		Vector2f & point, Vector2f & MTD, Polygon * A, Vector2f positionA,
+		Polygon * B, Vector2f positionB) {
 	MTD = Axis[0];
 	float mind2 = Axis[0].dotProduct(Axis[0]);
-	point = A->getVertexIndex(0) + positionA;
+	point = A->getVertexIndex(0) + positionA + MTD;
 	int aNumVertexes = A->getNumberVertexes();
+	int index = 0;
+	bool AinB = false;
 	for (int i = 1; i < iNumVectors; i++) {
 		float d2 = Axis[i].dotProduct(Axis[i]);
 		if (d2 < mind2) {
+			index = i;
 			mind2 = d2;
 			MTD = Axis[i];
-			if (i < aNumVertexes){
-				point = A->getVertexIndex(i) + positionA;
+			if (i < aNumVertexes) {
+				AinB = false;
 			} else {
-				point = B->getVertexIndex(i-aNumVertexes) + positionB;
+				AinB = true;
 			}
 		}
 	}
+
+//	Vector2f D = positionB - positionA;
+	if (AinB){
+		MTD *= -1;
+	}
+
+
 	Normal = (MTD.normalized());
+
+	//Finding point, linear time. Done by iterating through the opposing polygon, the one "inside" (Which a pushvector will push out)
+	//http://elancev.name/oliver/2D%20polygon_files/image006a.gif -> Done by iterating through the
+	//Equivalent of Vertex A. The correct point is the point where the dotproduct of the normal
+	//And the point-coordinate is the smallest.
+	Polygon * pushOutPoly = 0;
+	Vector2f pushOutPos;
+
+	//Selects the right polygon, the one "inside" the other.
+	if (index < aNumVertexes) {
+		pushOutPoly = B;
+		pushOutPos = positionB;
+	} else {
+		pushOutPoly = A;
+		pushOutPos = positionA;
+	}
+
+	float minDot = Normal.dotProduct(pushOutPoly->getVertex()[0]);
+	point = pushOutPos + pushOutPoly->getVertex()[0] + MTD;
+
+	for (std::vector<Vector2f>::iterator i = pushOutPoly->getVertex().begin()
+			+ 1;//TODO Make more safe (Starting at begin + 1 may be ill advised if the vector only has 1 vertex. This should not be possible, though.
+	i != pushOutPoly->getVertex().end(); ++i) {
+		float val = Normal.dotProduct(*i);
+		if (val < minDot) {
+			minDot = val;
+			point = pushOutPos + *i + MTD;
+		}
+	}
+
 }
-void FindData(Vector2f* PushVectors, int iNumVectors, Vector2f & Normal, Vector2f & point, Vector2f & MTD, Polygon * A, Vector2f positionA) {
+
+
+void FindData(Vector2f* PushVectors, int iNumVectors, Vector2f & Normal,
+		Vector2f & point, Vector2f & MTD, Polygon * A, Vector2f positionA,
+		Vector2f positionB, float radiusB) {
 	MTD = PushVectors[0];
 	float mind2 = PushVectors[0].dotProduct(PushVectors[0]);
 	point = A->getVertexIndex(0) + positionA;
@@ -371,10 +425,18 @@ void FindData(Vector2f* PushVectors, int iNumVectors, Vector2f & Normal, Vector2
 			mind2 = d2;
 			MTD = PushVectors[i];
 			//Since
-			point = A->getVertexIndex(i) + positionA;
 		}
 	}
+
+	Vector2f D = positionA - positionB;
+
+	if (D.dotProduct(MTD) < 0.0f)
+		MTD = -MTD;
+
+
 	Normal = (MTD.normalized());
+	point = positionB + ((positionA - positionB).normalized()) * radiusB;
+
 }
 
 void CalculateInterval(Vector2f & Axis, Polygon * P, Vector2f positionP,

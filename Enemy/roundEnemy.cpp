@@ -78,7 +78,6 @@ void RoundEnemy::moveAction(Vector2f vectorToPlayer){//Maybe use defined vector 
 }
 
 RoundEnemy& RoundEnemy::operator=(const RoundEnemy & enemy){//TODO MAYBE DELETE THIS? Easily editable, but still useless code atm.
-	isEDead = enemy.isEDead;
 	height = enemy.height;
 	shotOffset = enemy.shotOffset;
 	health = enemy.health;

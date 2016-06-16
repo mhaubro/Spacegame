@@ -60,15 +60,19 @@ Vector2f Polygon::getVertexIndex(int index){
 	return vertex[index];
 }
 
-void Polygon::render(Vector2f position) {
+void Polygon::render(Vector2f position, float angle) {
 	GD.ColorRGB(GREEN);
 	GD.Begin(LINE_STRIP);
 
 	for (std::vector<Vector2f>::iterator i = vertex.begin(); i != vertex.end(); i++){
-		cam.Vertex2f(*i+position);
+		Vector2f v = FromAngle(i->length(), i->angle() + angle);
+
+
+		cam.Vertex2f(v + position);
 	}
-	cam.Vertex2f(*vertex.begin()+position);
-	GD.ColorRGB(0xffffff);
+	Vector2f v = FromAngle(vertex.begin()->length(), vertex.begin()->angle() + angle);
+
+	cam.Vertex2f(v+position);	GD.ColorRGB(0xffffff);
 }
 
 //	GD.Begin(LINE_STRIP);

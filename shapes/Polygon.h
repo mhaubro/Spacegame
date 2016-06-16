@@ -33,7 +33,7 @@ public:
 
 	int getNumberVertexes();
 
-	void render(Vector2f position);
+	void render(Vector2f position, float angle);
 };
 
 #endif /* SRC_SHAPES_POLYGON_H_ */

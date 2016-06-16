@@ -53,7 +53,7 @@ void Enemy::render() {
 	sprite.setPosition(position);
 	sprite.setAngle(angle);
 	sprite.render();
-	collisionBox->render(position);
+	collisionBox->render(position, angle);
 }
 
 void Enemy::update() {
@@ -77,26 +77,26 @@ void Enemy::checkCollision(){
 	Vector2f MTD = Vector2f();
 
 	if (playerCollide(this, Normal, Point, MTD)){
-		GD.Clear();
-		player.render();
-		render();
-		//PRINT VECTORS
-
-		GD.ColorRGB(BLUE);
-		GD.cmd_text(50, 50, 16, OPT_SIGNED, "MTD-LENGTH*1000:");
-		GD.cmd_number(50, 70, 16, OPT_SIGNED, MTD.length()*1000);
-		GD.cmd_text(50, 100, 16, OPT_SIGNED, "NORMAL-LENGTH*1000:");
-		GD.cmd_number(50, 120, 16, OPT_SIGNED, Normal.length()*1000);
-		renderVector2f(MTD, Point.x, Point.y, 1);
-		renderVector2f(Normal, Point.x, Point.y, 1);
-
-		GD.Begin(POINTS);
-		GD.ColorRGB(RED);
-		GD.PointSize(16*2);
-		cam.Vertex2f(Point);
-
-		GD.swap();
-		wait_ms(4000);
+//		GD.Clear(); //Used for debugging and checking points as well as normal-vectors for collisions.
+//		player.render();
+//		render();
+//		//PRINT VECTORS
+//
+//		GD.ColorRGB(WHITE);
+//		GD.cmd_text(50, 50, 16, OPT_SIGNED, "MTD-LENGTH*1000:");
+//		GD.cmd_number(50, 70, 16, OPT_SIGNED, MTD.length()*1000);
+//		GD.cmd_text(50, 100, 16, OPT_SIGNED, "NORMAL-LENGTH*1000:");
+//		GD.cmd_number(50, 120, 16, OPT_SIGNED, Normal.length()*1000);
+//		renderVector2f(MTD, Point.x, Point.y, 1);
+//		renderVector2f(Normal, Point.x, Point.y, 1);
+//
+//		GD.Begin(POINTS);
+//		GD.ColorRGB(RED);
+//		GD.PointSize(16*2);
+//		cam.Vertex2f(Point);
+//
+//		GD.swap();
+//		wait_ms(4000);
 	}
 
 
@@ -262,7 +262,6 @@ void Enemy::updatePh() {
 }
 
 Enemy& Enemy::operator=(const Enemy & enemy) {//TODO MAYBE DELETE THIS? Easily editable, but still useless code atm.
-	isEDead = enemy.isEDead;
 	height = enemy.height;
 	shotOffset = enemy.shotOffset;
 	health = enemy.health;
