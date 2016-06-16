@@ -11,7 +11,7 @@
 #include <vector>
 #include "Vector2f.h"
 #include "Ray.h"
-//#include "World.h"
+#include "World.h"
 
 class Polygon {
 protected:

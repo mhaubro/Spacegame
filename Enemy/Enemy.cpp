@@ -46,18 +46,18 @@ Enemy::~Enemy() {
 }
 
 void Enemy::render() {
-	GD.Begin(BITMAPS);
+
 	exhaust.setPosition(Vector2f(0, -1).vertexTransformed(position, angle));
 	exhaust.setAngle(angle);
 	exhaust.render();
+
 	sprite.setPosition(position);
 	sprite.setAngle(angle);
 	sprite.render();
-	collisionBox->render(position, angle);
+	//collisionBox->render(position, angle);
 }
 
 void Enemy::update() {
-	checkCollision();
 	//Check if being hit/dead
 	checkAlive();
 
@@ -98,9 +98,6 @@ void Enemy::checkCollision(){
 //		GD.swap();
 //		wait_ms(4000);
 	}
-
-
-
 }
 
 bool Enemy::enemyOnScreen() {
@@ -281,6 +278,11 @@ Enemy& Enemy::operator=(const Enemy & enemy) {//TODO MAYBE DELETE THIS? Easily e
 
 	return *this;
 }
+
+//getPolySize is used for debugging, to test the collisionbox object.
+//int Enemy::getPolySize(){
+//	return collisionBox.getHitradius();
+//}
 
 bool Enemy::checkHit(Bullet* _bullet) {
 	Vector2f Normal = Vector2f();

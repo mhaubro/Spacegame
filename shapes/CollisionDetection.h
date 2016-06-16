@@ -14,6 +14,7 @@
 #include "Bullet.h"
 
 ////Collision between objects
+
 bool collide(Enemy * e1, Enemy * e2, Vector2f & Normal, Vector2f & Point, Vector2f & MTD);
 bool playerCollide(Enemy * e1, Vector2f & Normal, Vector2f & Point, Vector2f & MTD);
 bool collidePlayerBullet(Bullet * b, Vector2f & Normal, Vector2f & Point, Vector2f & MTD);
@@ -25,6 +26,5 @@ bool TerrainCollide(Enemy * enemy, Vector2f& Normal, Vector2f& Point, Vector2f& 
 bool TerrainCollidePlayer(Vector2f& Normal, Vector2f& Point, Vector2f& MTD);
 //point
 bool TerrainCollide(Vector2f positionA, float radiusA);
-
 
 #endif /* SRC_SHAPES_COLLISIONDETECTION_H_ */

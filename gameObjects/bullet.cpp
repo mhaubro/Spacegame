@@ -37,7 +37,29 @@ void Bullet::update() {
 	this->PhysicsObject::updatePhysics();
 	if (timer.getRunTime() > startTime + Lifespan) {
 		mIsDead = true;
-	}	else if (TerrainCollide(position, mRadius)) {
+	}
+
+	static Vector2f Normal;
+	static Vector2f CollisionPoint;
+	static Vector2f MTD;
+
+	if (mFriendly && game.mEnemyManager.checkBulletCollision(this)) {
+		game.mEffectManager.addEffect(
+				new StaticAnimationEffect(position, .4,
+						BulletCollisionAnimation32, velocity.angle(), 1));
+		kill();
+		return;
+	}
+	if (!mFriendly
+			&& player.checkBulletCollision(this, Normal, CollisionPoint, MTD)) { //player collision
+		game.mEffectManager.addEffect(
+				new StaticAnimationEffect(position, .4,
+						BulletCollisionAnimation32, velocity.angle(), 1));
+		kill();
+		return;
+	}
+	if (TerrainCollide(position, mRadius)) {
+
 		Vector2f normal;
 		world.getNormal(position.x, normal);
 
@@ -49,25 +71,14 @@ void Bullet::update() {
 		kill();
 		return;
 	}
-
-
-	if (mFriendly && game.mEnemyManager.checkBulletCollision(this)) {
-		game.mEffectManager.addEffect(
-				new StaticAnimationEffect(position, .4,
-						BulletCollisionAnimation32, velocity.angle(), 1));
-
-	}else if (!mFriendly){//player collision
-
-	}
-
 }
 
-Vector2f getShortestDiffVectorBullet(Vector2f v1, Vector2f v2){//Shortest vector that points from v1 to v2, with respect to the world construction
-	Vector2f dv = v2-v1;//Difference vector from v1 to v2.
-	if (dv.x < -CHUNK_SIZE*WORLD_SIZE/2){
-		dv.x += CHUNK_SIZE*WORLD_SIZE;
-	} else if(dv.x > CHUNK_SIZE*WORLD_SIZE/2){
-		dv.x -= CHUNK_SIZE*WORLD_SIZE;
+Vector2f getShortestDiffVectorBullet(Vector2f v1, Vector2f v2) { //Shortest vector that points from v1 to v2, with respect to the world construction
+	Vector2f dv = v2 - v1; //Difference vector from v1 to v2.
+	if (dv.x < -CHUNK_SIZE * WORLD_SIZE / 2) {
+		dv.x += CHUNK_SIZE * WORLD_SIZE;
+	} else if (dv.x > CHUNK_SIZE * WORLD_SIZE / 2) {
+		dv.x -= CHUNK_SIZE * WORLD_SIZE;
 	}
 	return dv;
 }

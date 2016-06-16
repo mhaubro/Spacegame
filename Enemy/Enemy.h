@@ -85,8 +85,6 @@ public:
 
 	Enemy(Polygon * collisionBox, Vector2f pos, Vector2f vel = Vector2f());
 
-	Polygon * getPolygon();
-
 	Enemy& operator=(const Enemy & enemy);
 	virtual ~Enemy();
 
@@ -94,6 +92,8 @@ public:
 	void render();
 	//int getPolySize();//USED FOR DEBUGGING
 	bool checkHit(Bullet * _bullet);
+
+	Polygon * getPolygon();
 };
 
 #endif /* SRC_ENEMY_ENEMY_H_ */

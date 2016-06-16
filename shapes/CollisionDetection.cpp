@@ -289,7 +289,25 @@ bool TerrainCollide(Polygon * A, Vector2f positionA, float angleA,
 	MTD = Vector2f(0, maxDepth);
 	return collision;
 }
-
+//
+//bool TerrainCollide(Vector2f positionA, float radiusA){
+//	//Tests against five locations - 0 degrees, 180 degrees, 235 degrees, 270 degrees and 315 degrees (All classical degrees).
+//	if (positionA.y < world.getHeight(positionA.x) + 2){//May give a false result, but is very highly unlikely.
+//		return false;
+//	}
+//
+//	if (positionA.y < world.getHeight(positionA.x+radiusA) or //0 degrees
+//			positionA.y < world.getHeight(positionA.x - radiusA) or//180 degrees
+//			positionA.y - radiusA < world.getHeight(positionA.x) or//270 degrees (Straight down)
+//			positionA.y - radiusA*SQRT2HALF < world.getHeight(positionA.x - radiusA*SQRT2HALF) or//235 degrees
+//			positionA.y - radiusA*SQRT2HALF < world.getHeight(positionA.x + radiusA*SQRT2HALF)){//315 degrees
+//		return true;
+//	}
+//	return false;
+//}
+//
+////PRIVATE FUNCTIONS, INTERNAL
+//namespace {
 //Head
 
 //Function bodies
@@ -389,7 +407,7 @@ void FindData(Vector2f* Axis, int iNumVectors, Vector2f & Normal,
 	Vector2f pushOutPos;
 
 	//Selects the right polygon, the one "inside" the other.
-	if (index < aNumVertexes) {
+	if (!AinB) {
 		pushOutPoly = B;
 		pushOutPos = positionB;
 	} else {
