@@ -31,6 +31,10 @@ Player::~Player() {
 
 }
 
+Polygon * Player::getPolygon(){
+	return collisionBox;
+}
+
 void Player::update() {
 
 	if (!mIsDead) {
@@ -52,7 +56,7 @@ void Player::update() {
 	Vector2f tangent = Vector2f();
 	Vector2f collisionPoint = Vector2f(10, 10);
 
-	if (TerrainCollide(collisionBox, position, angle, normal, collisionPoint, mtd)) {
+	if (TerrainCollidePlayer(normal, collisionPoint, mtd)) {
 		normal = normal.normalized();
 		tangent = normal.rightNormal();
 
@@ -147,6 +151,9 @@ void Player::render() {
 	sprite.setAngle(angle);
 	sprite.render();
 
+//	GD.ColorRGB(GREEN);
+//	collisionBox->render(position, angle);
+//	GD.ColorRGB(0xffffff);
 }
 
 float Player::getMaxThrottle() {
@@ -212,5 +219,5 @@ Vector2f Player::getShotVel(float speed) {
 }
 
 bool Player::checkBulletCollision(Bullet* _bullet,Vector2f& _normal, Vector2f& _collisionPoint, Vector2f& _MTD){
-	return collide(collisionBox, position,angle, _bullet->getPosition(), _bullet->getRadius(), _normal, _collisionPoint, _MTD);
+	return collidePlayerBullet(_bullet, _normal, _collisionPoint, _MTD);
 }

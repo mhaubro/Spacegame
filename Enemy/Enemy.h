@@ -73,6 +73,7 @@ protected:
 	void shotAction(float angle);
 	void bestMove();
 	void updatePosition();
+	void checkCollision();
 
 	virtual Vector2f getShotPos();
 	virtual void moveAction(Vector2f vectorToPlayer);
@@ -91,6 +92,8 @@ public:
 	void render();
 	//int getPolySize();//USED FOR DEBUGGING
 	bool checkHit(Bullet * _bullet);
+
+	Polygon * getPolygon();
 };
 
 #endif /* SRC_ENEMY_ENEMY_H_ */

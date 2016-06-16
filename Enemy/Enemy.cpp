@@ -54,12 +54,13 @@ void Enemy::render() {
 	sprite.setPosition(position);
 	sprite.setAngle(angle);
 	sprite.render();
-
+	//collisionBox->render(position, angle);
 }
 
 void Enemy::update() {
 	//Check if being hit/dead
 	checkAlive();
+	checkCollision();
 
 	//Moving and shooting
 	bestMove();
@@ -69,6 +70,35 @@ void Enemy::update() {
 
 bool Enemy::shotInRange(Vector2f shotVector) {
 	return false; //Virtual function
+}
+
+void Enemy::checkCollision(){
+	Vector2f Normal = Vector2f();
+	Vector2f Point = Vector2f();
+	Vector2f MTD = Vector2f();
+
+	if (playerCollide(this, Normal, Point, MTD)){
+		GD.Clear(); //Used for debugging and checking points as well as normal-vectors for collisions.
+		player.render();
+		render();
+		//PRINT VECTORS
+
+//		GD.ColorRGB(WHITE);
+//		GD.cmd_text(50, 50, 16, OPT_SIGNED, "MTD-LENGTH*1000:");
+//		GD.cmd_number(50, 70, 16, OPT_SIGNED, MTD.length()*1000);
+//		GD.cmd_text(50, 100, 16, OPT_SIGNED, "NORMAL-LENGTH*1000:");
+//		GD.cmd_number(50, 120, 16, OPT_SIGNED, Normal.length()*1000);
+//		renderVector2f(MTD, Point.x, Point.y, 1);
+//		renderVector2f(Normal, Point.x, Point.y, 1);
+//
+//		GD.Begin(POINTS);
+//		GD.ColorRGB(RED);
+//		GD.PointSize(16*2);
+//		cam.Vertex2f(Point);
+//
+//		GD.swap();
+//		wait_ms(4000);
+	}
 }
 
 bool Enemy::enemyOnScreen() {
@@ -259,11 +289,15 @@ bool Enemy::checkHit(Bullet* _bullet) {
 	Vector2f Normal = Vector2f();
 	Vector2f Point = Vector2f();
 	Vector2f MTD = Vector2f();
-	if (collide(collisionBox, position, angle, _bullet->getPosition(), _bullet->getRadius(), Point, Normal, MTD)) {
+	if (collide(this, _bullet, Point, Normal, MTD)) {
 		_bullet->kill();
 		game.score += 100;
 		health -= 50;
 		return true;
 	}
 	return false;
+}
+
+Polygon * Enemy::getPolygon(){
+	return collisionBox;
 }

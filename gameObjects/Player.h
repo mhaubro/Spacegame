@@ -7,7 +7,7 @@
 #include "Polygon.h"
 #include "Sprite.h"
 #include "Animation.h"
-#include "Bullet.h"
+#include "bullet.h"
 
 #define MAX_PLAYER_HEALTH 1000
 #define MAX_PLAYER_ENERGY 1000
@@ -40,6 +40,8 @@ protected:
 public:
 
 	float height;
+
+	Polygon * getPolygon();
 
 	float health;
 	float energy;

@@ -10,22 +10,21 @@
 
 #include "Vector2f.h"
 #include "Polygon.h"
+#include "Enemy.h"
+#include "Bullet.h"
 
-//PUBLIC FUNCTIONS
-//Collision between two polygons
-bool collide(Polygon * A, Vector2f positionA, float angleA, Polygon * B, Vector2f positionB, float angleB, Vector2f& Normal, Vector2f& Point, Vector2f & MTD);
-//Collision between polygon and circle
-bool collide(Polygon * A, Vector2f positionA, float angleA, Vector2f positionSphere, float radius, Vector2f& Normal, Vector2f& Point, Vector2f & MTD );
-//Collision between two circles.
-bool collide(Vector2f positionACircle, float radiusA, Vector2f positionBCircle, float radiusB, Vector2f& Normal, Vector2f& Point, Vector2f & MTD);
-bool collide(Vector2f positionACircle, float radiusA, Vector2f positionBCircle, float radiusB);
+////Collision between objects
 
+bool collide(Enemy * e1, Enemy * e2, Vector2f & Normal, Vector2f & Point, Vector2f & MTD);
+bool playerCollide(Enemy * e1, Vector2f & Normal, Vector2f & Point, Vector2f & MTD);
+bool collidePlayerBullet(Bullet * b, Vector2f & Normal, Vector2f & Point, Vector2f & MTD);
+bool collide(Enemy * e, Bullet * b, Vector2f & Normal, Vector2f & Point, Vector2f & MTD);
 
-//Terraincollisio
-//Polygon
-bool TerrainCollide(Polygon * A, Vector2f positionA, float angleA, Vector2f& Normal, Vector2f& Point, Vector2f& MTD);
+//Terraincollision
+bool TerrainCollide(Enemy * enemy, Vector2f& Normal, Vector2f& Point, Vector2f& MTD);
+//Player
+bool TerrainCollidePlayer(Vector2f& Normal, Vector2f& Point, Vector2f& MTD);
 //point
 bool TerrainCollide(Vector2f positionA, float radiusA);
-
 
 #endif /* SRC_SHAPES_COLLISIONDETECTION_H_ */
