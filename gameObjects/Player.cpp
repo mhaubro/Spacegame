@@ -196,7 +196,8 @@ void Player::updateSteering() {
 }
 
 void Player::updateCannon() {
-	if (input.getButton3() && timer.getRunTime() > lastShot + shotInterval) { //Shooting //&&
+	if (input.getButton3() && energy > 5 && timer.getRunTime() > lastShot + shotInterval) { //Shooting //&&
+		energy -= 5;
 		lastShot = timer.getRunTime();
 		Vector2f bulletpos = player.getShotPos();
 		Vector2f bulletv = player.getShotVel(20); //10 = startvelocity of bullet

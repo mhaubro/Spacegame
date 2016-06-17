@@ -57,6 +57,7 @@ void Bullet::update() {
 		game.mEffectManager.addEffect(
 				new StaticAnimationEffect(position, .4,
 						BulletCollisionAnimation32, velocity.angle(), 1));
+		player.health -= 25;
 		kill();
 		return;
 	}
