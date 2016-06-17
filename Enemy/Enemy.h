@@ -29,7 +29,7 @@ protected:
 	Vector2f shotOffset;//Marks offset from center of object to shooting mound. Both positive as well as negativ//TODO Maybe delete? - Or make float?
 	Vector2f aimVector;
 
-	double lastShot = 0;
+	double lastShot;
 
 	bool braking;
 	bool aiming;

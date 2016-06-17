@@ -3,7 +3,7 @@
 #ifndef GAME_H_
 #define GAME_H_
 
-#define DEBUG true
+#define DEBUG false
 
 #include <vector>
 #include <memory>

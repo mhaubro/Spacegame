@@ -18,6 +18,8 @@ protected:
 	void turn();//Turns the orientation of the enemy ship
 	void moveAction(Vector2f vectorToPlayer);//Maybe use defined vector as the ones in the top of the file.
 
+	float randtime = 0;
+	float rand;
 
 public:
 	squareEnemy(Vector2f _position, Vector2f _velocity = Vector2f());

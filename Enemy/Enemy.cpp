@@ -27,10 +27,10 @@
 
 Enemy::Enemy(Polygon * _collisionBox, Vector2f _position, Vector2f _velocity) :
 		Entity(), RigidBody(1, .5, _position, 0, _velocity), sprite(
-				Enemy2Sprite32, _position, angle, 1), exhaust(
+				Enemy2Sprite32, _position, 0, 1), exhaust(
 				Animation(ExhaustAnimation8, _position, angle, 1)), height(0), health(
-				100), collisionBox(_collisionBox), lastShot(0), birthTime(timer.getRunTime()), braking(
-				false), aiming(false), shooting(false) {
+				100), enemyValue(250), collisionBox(_collisionBox), lastShot(0), birthTime(timer.getRunTime()), braking(
+				false), aiming(false), shooting(false), angle(0) {
 }
 
 Enemy::~Enemy() {
@@ -137,27 +137,29 @@ void Enemy::checkAlive() {
 		kill();
 		game.mEffectManager.addEffect(new StaticAnimationEffect(position, .4,
 						BulletCollisionAnimation32, velocity.angle(), 2));
-		//game.score += enemyValue;
+		game.score += enemyValue;
 	}
 	checkBounds();	//Checks if the enemy is far away.
 }
 
 void Enemy::bestMove() {
 	//Considers what to do:
+	Vector2f VectorToPlayer = player.getPosition() - position;
 
 	if (braking) {	//If the enemy is braking.
 		hitBrake();
 	}
 	if (aiming) {	//If the enemy is aiming.
 		aim();
+		moveAction(VectorToPlayer);
 		return;
 	}
 	if (shooting) {
 		shoot();
+		moveAction(VectorToPlayer);
 		return;
 	}
 
-	Vector2f VectorToPlayer = player.getPosition() - position;
 
 	//Checks whether it's possible to start a shot.
 	if (checkShot(VectorToPlayer)) {//It's possible, checkshot will start it.
@@ -286,8 +288,8 @@ bool Enemy::checkHit(Bullet* _bullet) {
 	Vector2f MTD = Vector2f();
 	if (collide(this, _bullet, Point, Normal, MTD)) {
 		_bullet->kill();
-		game.score += 100;
-		health -= 50;
+		game.score += 50;
+		health -= 25;
 		return true;
 	}
 	return false;
