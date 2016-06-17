@@ -1,9 +1,5 @@
-/*
- * World.cpp
- *
- *  Created on: Apr 18, 2016
- *      Author: mathi
- */
+//Author: MH
+
 #include <vector>
 #include "World.h"
 #include "GD2.h"

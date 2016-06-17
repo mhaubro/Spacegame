@@ -1,9 +1,4 @@
-/*
- * BulletManager.h
- *
- *  Created on: Jun 10, 2016
- *      Author: mathi
- */
+//Author: MH
 
 #ifndef SRC_GAMEOBJECTS_BULLETMANAGER_H_
 #define SRC_GAMEOBJECTS_BULLETMANAGER_H_

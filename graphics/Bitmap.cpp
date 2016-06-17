@@ -1,9 +1,4 @@
-/*
- * Bitmap.cpp
- *
- *  Created on: May 24, 2016
- *      Author: mathi
- */
+//Author: MH
 
 #include "Bitmap.h"
 

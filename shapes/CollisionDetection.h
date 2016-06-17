@@ -1,9 +1,4 @@
-/*
- * CollisionDetection.h
- *
- *  Created on: 13/06/2016
- *      Author: Martin
- */
+//Author: MH
 
 #ifndef SRC_SHAPES_COLLISIONDETECTION_H_
 #define SRC_SHAPES_COLLISIONDETECTION_H_

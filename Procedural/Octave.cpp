@@ -1,9 +1,4 @@
-/*
- * Octave.cpp
- *
- *  Created on: Apr 25, 2016
- *      Author: mathi
- */
+//Author: MH
 
 #include "Octave.h"
 

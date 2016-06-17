@@ -1,9 +1,4 @@
-/*
- * BulletManager.cpp
- *
- *  Created on: Jun 10, 2016
- *      Author: mathi
- */
+//Author: MH
 
 #include <algorithm>
 #include "BulletManager.h"

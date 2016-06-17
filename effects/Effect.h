@@ -1,9 +1,4 @@
-/*
- * Effect.h
- *
- *  Created on: Jun 9, 2016
- *      Author: mathi
- */
+//Author: MG
 
 #ifndef SRC_EFFECT_H_
 #define SRC_EFFECT_H_

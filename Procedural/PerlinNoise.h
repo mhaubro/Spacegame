@@ -1,9 +1,4 @@
-/*
- * PerlinNoise.h
- *
- *  Created on: Apr 25, 2016
- *      Author: mathi
- */
+//Author: MG
 
 #ifndef SRC_PROCEDURAL_PERLINNOISE_H_
 #define SRC_PROCEDURAL_PERLINNOISE_H_

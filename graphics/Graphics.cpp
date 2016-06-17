@@ -1,3 +1,5 @@
+//Author: MG
+
 #include "Graphics.h"
 #include "mbed.h"
 #include "GD2.h"

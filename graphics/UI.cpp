@@ -1,3 +1,5 @@
+//Author: MH
+
 #include "UI.h"
 #include "Game.h"
 #include "GD2.h"

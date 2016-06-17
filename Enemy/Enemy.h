@@ -1,9 +1,4 @@
-/*
- * Enemy.h
- *
- *  Created on: 06/06/2016
- *      Author: Martin
- */
+//Author: MH
 
 #ifndef SRC_ENEMY_ENEMY_H_
 #define SRC_ENEMY_ENEMY_H_

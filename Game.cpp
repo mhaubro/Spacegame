@@ -1,3 +1,4 @@
+//Author: MG
 
 #include "Game.h"
 

@@ -1,9 +1,4 @@
-/*
- * Ray.cpp
- *
- *  Created on: May 11, 2016
- *      Author: mathi
- */
+//Author: MH
 
 #include "Ray.h"
 

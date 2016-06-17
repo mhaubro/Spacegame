@@ -1,9 +1,4 @@
-/*
- * EffectManager.h
- *
- *  Created on: Jun 9, 2016
- *      Author: mathi
- */
+//Author: MH
 
 #ifndef SRC_EFFECTS_EFFECTMANAGER_H_
 #define SRC_EFFECTS_EFFECTMANAGER_H_

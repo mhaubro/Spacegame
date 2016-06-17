@@ -1,9 +1,4 @@
-/*
- * Vector2f.h
- *
- *  Created on: Apr 19, 2016
- *      Author: mathi
- */
+//Author: MG
 
 #ifndef SRC_MATH_VECTOR2F_H_
 #define SRC_MATH_VECTOR2F_H_

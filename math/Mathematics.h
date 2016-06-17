@@ -1,9 +1,4 @@
-/*
- * Mathmatics.h
- *
- *  Created on: Apr 26, 2016
- *      Author: mathi
- */
+//Author: MH
 
 #ifndef SRC_MATH_MATHEMATICS_H_
 #define SRC_MATH_MATHEMATICS_H_

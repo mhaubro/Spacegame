@@ -1,9 +1,4 @@
-/*
- * Vector2f.cpp
- *
- *  Created on: Apr 19, 2016
- *      Author: mathi
- */
+//Author: MG
 
 #include "Vector2f.h"
 #include "math.h"

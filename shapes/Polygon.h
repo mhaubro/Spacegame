@@ -1,9 +1,4 @@
-/*
- * Polygon.h
- *
- *  Created on: May 2, 2016
- *      Author: mathi
- */
+//Author: MG
 
 #ifndef SRC_SHAPES_POLYGON_H_
 #define SRC_SHAPES_POLYGON_H_

@@ -1,9 +1,4 @@
-/*
- * Animation.cpp
- *
- *  Created on: Jun 9, 2016
- *      Author: mathi
- */
+//Author: MH
 
 #include "Animation.h"
 #include "GameTimer.h"

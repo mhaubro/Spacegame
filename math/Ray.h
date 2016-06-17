@@ -1,9 +1,4 @@
-/*
- * Ray.h
- *
- *  Created on: May 11, 2016
- *      Author: mathi
- */
+//Author: MH
 
 #ifndef SRC_MATH_RAY_H_
 #define SRC_MATH_RAY_H_

@@ -1,9 +1,4 @@
-/*
- * Octave.h
- *
- *  Created on: Apr 25, 2016
- *      Author: mathi
- */
+//Author: MH
 
 #ifndef SRC_PROCEDURAL_OCTAVE_H_
 #define SRC_PROCEDURAL_OCTAVE_H_

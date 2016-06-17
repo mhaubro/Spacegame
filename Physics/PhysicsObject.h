@@ -1,3 +1,4 @@
+//Author: MH
 
 #ifndef PHYSICSOBJECT_H
 #define PHYSICSOBJECT_H

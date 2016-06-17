@@ -1,9 +1,13 @@
-/*
- * CollisionDetection.cpp
- *
- *  Created on: 13/06/2016
- *      Author: Martin
- */
+//Author: MH
+//
+//This particular source-file is heavily inspired by the source-code on
+//http://elancev.name/oliver/2D%20polygon.htm#tut1, which gave C++-code on
+//solving the separation axis collision problem. The code has then been modified
+//To include Polygon/Circle and Circle/Circle collisions, as well as returning
+//Point-vectors and Normal-vectors, taking the wrapper-functions and using
+//Anonymous namespaces. Besides this, the code has been modified to fit our
+//Data-structures.
+
 #include <vector>
 #include "CollisionDetection.h"
 #include "arduino.h"

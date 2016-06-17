@@ -1,9 +1,4 @@
-/*
- * Chunk.h
- *
- *  Created on: Apr 18, 2016
- *      Author: mathi
- */
+//Author: MG
 
 #ifndef SRC_ENVIRONMENT_CHUNK_H_
 #define SRC_ENVIRONMENT_CHUNK_H_

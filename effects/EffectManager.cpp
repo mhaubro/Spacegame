@@ -1,9 +1,4 @@
-/*
- * EffectManager.cpp
- *
- *  Created on: Jun 9, 2016
- *      Author: mathi
- */
+//Author: MH
 
 #include "EffectManager.h"
 #include "GD2.h"

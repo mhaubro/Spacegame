@@ -1,9 +1,4 @@
-/*
- * Entity.h
- *
- *  Created on: May 17, 2016
- *      Author: mathi
- */
+//Author: MH
 
 #ifndef SRC_ENTITY_H_
 #define SRC_ENTITY_H_

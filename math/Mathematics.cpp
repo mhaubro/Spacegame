@@ -1,9 +1,4 @@
-/*
- * Mathmatics.cpp
- *
- *  Created on: Apr 26, 2016
- *      Author: mathi
- */
+//Author: MH
 
 #include "Mathematics.h"
 

@@ -1,3 +1,5 @@
+//Author: MH
+
 #include "Button.h"
 
 Button::Button(const PinName pin)

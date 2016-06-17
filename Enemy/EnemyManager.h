@@ -1,9 +1,4 @@
-/*
- * EnemyManager.h
- *
- *  Created on: 10/06/2016
- *      Author: Martin
- */
+//Author: MG
 
 #ifndef SRC_ENEMY_ENEMYMANAGER_H_
 #define SRC_ENEMY_ENEMYMANAGER_H_
