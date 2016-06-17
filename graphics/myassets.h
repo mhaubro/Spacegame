@@ -1,3 +1,5 @@
+//Author: MG
+
 #pragma once
 #include "Utils.h"
 

@@ -1,9 +1,4 @@
-/*
- * squareEnemy.h
- *
- *  Created on: 12/06/2016
- *      Author: Martin
- */
+//Author: MG
 
 #ifndef SRC_ENEMY_SQUAREENEMY_H_
 #define SRC_ENEMY_SQUAREENEMY_H_

@@ -1,3 +1,4 @@
+//Author: MG
 
 #include "SpriteTemplate.h"
 #include "GD2.h"

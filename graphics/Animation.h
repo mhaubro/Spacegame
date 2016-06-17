@@ -1,9 +1,4 @@
-/*
- * Animation.h
- *
- *  Created on: Jun 9, 2016
- *      Author: mathi
- */
+//Author: MH
 
 #ifndef SRC_GRAPHICS_ANIMATION_H_
 #define SRC_GRAPHICS_ANIMATION_H_

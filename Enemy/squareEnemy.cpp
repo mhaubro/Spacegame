@@ -1,9 +1,4 @@
-/*
- * SquareEnemy.cpp
- *
- *  Created on: 06/06/2016
- *      Author: Martin
- *///TODO MAKE ANGULAR TESTS IN SHOTINRANGE + MORE INTELLIGENT MOVEMENT
+//Author: MG
 
 #include "SquareEnemy.h"
 #include "Game.h"

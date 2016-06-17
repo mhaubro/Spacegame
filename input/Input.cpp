@@ -1,9 +1,4 @@
-/*
- * Input.cpp
- *
- *  Created on: Apr 19, 2016
- *      Author: mathias
- */
+//Author: MG
 
 #include "Input.h"
 

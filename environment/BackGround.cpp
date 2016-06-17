@@ -1,3 +1,5 @@
+//Author: MH
+
 #include "BackGround.h"
 #include "GD2.h"
 #include "utils.h"

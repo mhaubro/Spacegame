@@ -1,9 +1,4 @@
-/*
- * RoundEnemy.cpp
- *
- *  Created on: 06/06/2016
- *      Author: Martin
- */
+//Author: MH
 
 #include "RoundEnemy.h"
 #include "Game.h"

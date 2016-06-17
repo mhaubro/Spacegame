@@ -1,9 +1,4 @@
-/*
- * EnemyManager.cpp
- *
- *  Created on: 10/06/2016
- *      Author: Martin
- */
+//Author: MG
 
 #include "EnemyManager.h"
 #include "Graphics.h"

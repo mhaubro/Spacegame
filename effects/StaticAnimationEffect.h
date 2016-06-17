@@ -1,9 +1,4 @@
-/*
- * StaticAnimationEffect.h
- *
- *  Created on: Jun 9, 2016
- *      Author: mathi
- */
+//Author: MG
 
 #ifndef SRC_EFFECTS_STATICANIMATIONEFFECT_H_
 #define SRC_EFFECTS_STATICANIMATIONEFFECT_H_

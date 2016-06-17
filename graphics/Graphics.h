@@ -1,3 +1,5 @@
+//Author: MG
+
 #ifndef GRAPHICS_H_
 #define GRAPHICS_H_
 

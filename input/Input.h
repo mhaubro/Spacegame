@@ -1,9 +1,4 @@
-/*
- * Input.h
- *
- *  Created on: Apr 19, 2016
- *      Author: mathias
- */
+//Author: MG
 
 #ifndef SRC_INPUT_INPUT_H_
 #define SRC_INPUT_INPUT_H_

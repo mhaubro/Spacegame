@@ -1,9 +1,5 @@
-/*
- * CollisionDetection.cpp
- *
- *  Created on: 13/06/2016
- *      Author: Martin
- */
+//Author: MH
+
 #include <vector>
 #include "CollisionDetection.h"
 #include "arduino.h"

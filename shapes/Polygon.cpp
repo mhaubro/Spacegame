@@ -1,9 +1,4 @@
-/*
- * Polygon.cpp
- *
- *  Created on: May 2, 2016
- *      Author: mathi
- */
+//Author: MG
 
 #include <math.h>
 

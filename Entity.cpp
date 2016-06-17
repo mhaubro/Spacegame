@@ -1,9 +1,4 @@
-/*
- * Entity.cpp
- *
- *  Created on: May 17, 2016
- *      Author: mathi
- */
+//Author: MH
 
 #include "Entity.h"
 

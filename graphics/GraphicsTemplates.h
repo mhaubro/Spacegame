@@ -1,9 +1,4 @@
-/*
- * GraphicsTemplates.h
- *
- *  Created on: Jun 10, 2016
- *      Author: mathi
- */
+//Author: MH
 
 #ifndef SRC_GRAPHICS_GRAPHICSTEMPLATES_H_
 #define SRC_GRAPHICS_GRAPHICSTEMPLATES_H_

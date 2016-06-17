@@ -1,3 +1,5 @@
+//Author: MH
+
 #include "PhysicsObject.h"
 #include "PhysicsConstants.h"
 #include "GD2.h"

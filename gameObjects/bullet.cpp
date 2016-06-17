@@ -1,3 +1,5 @@
+//Author: MG
+
 #include <vector>
 #include <algorithm>
 #include "bullet.h"

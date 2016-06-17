@@ -1,9 +1,4 @@
-/*
- * Chunk.cpp
- *
- *  Created on: Apr 18, 2016
- *      Author: mathi
- */
+//Author: MG
 
 #include "Chunk.h"
 #include "GD2.h"

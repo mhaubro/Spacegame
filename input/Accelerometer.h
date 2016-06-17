@@ -1,3 +1,5 @@
+//Author: MG
+
 #ifndef ACCELEROMETER_H_
 #define ACCELEROMETER_H_
 

@@ -1,9 +1,4 @@
-/*
- * LinkedList.h
- *
- *  Created on: Jun 13, 2016
- *      Author: mathi
- */
+//Author: MG
 
 #ifndef SRC_LINKEDLIST_LINKEDLIST_H_
 #define SRC_LINKEDLIST_LINKEDLIST_H_

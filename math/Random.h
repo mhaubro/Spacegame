@@ -1,9 +1,4 @@
-/*
- * Random.h
- *
- *  Created on: Apr 20, 2016
- *      Author: mathi
- */
+//Author: MG
 
 #ifndef SRC_MATH_RANDOM_H_
 #define SRC_MATH_RANDOM_H_

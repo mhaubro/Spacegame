@@ -1,9 +1,4 @@
-/*
- * World.h
- *
- *  Created on: Apr 18, 2016
- *      Author: mathi
- */
+//Author: MH
 
 #ifndef SRC_WORLD_H_
 #define SRC_WORLD_H_

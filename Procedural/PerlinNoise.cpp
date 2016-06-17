@@ -1,9 +1,4 @@
-/*
- * PerlinNoise.cpp
- *
- *  Created on: Apr 25, 2016
- *      Author: mathi
- */
+//Author: MG
 
 #include "PerlinNoise.h"
 

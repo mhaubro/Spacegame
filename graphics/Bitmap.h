@@ -1,9 +1,4 @@
-/*
- * Bitmap.h
- *
- *  Created on: May 24, 2016
- *      Author: mathi
- */
+//Author: MH
 
 #ifndef SRC_GRAPHICS_BITMAP_H_
 #define SRC_GRAPHICS_BITMAP_H_

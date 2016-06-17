@@ -1,3 +1,5 @@
+//Author: MG
+
 #include "Accelerometer.h"
 
 
