@@ -33,6 +33,7 @@ protected:
 	void checkHits();
 
 	float getMaxThrottle();
+	Vector2f getDragForce();
 	void updateSteering();
 	void updateCannon();
 

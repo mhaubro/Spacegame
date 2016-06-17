@@ -46,6 +46,7 @@ void Player::update() {
 
 	player.aVelocity *= .999;
 	addAcceleration(Vector2f(0, -GRAVITY));
+	addForce(getDragForce(), position);
 	updatePhysics();
 
 	float groundHeight = 2;//world.getHeight(position.x);
@@ -222,4 +223,13 @@ Vector2f Player::getShotVel(float speed) {
 
 bool Player::checkBulletCollision(Bullet* _bullet,Vector2f& _normal, Vector2f& _collisionPoint, Vector2f& _MTD){
 	return collidePlayerBullet(_bullet, _normal, _collisionPoint, _MTD);
+}
+
+Vector2f Player::getDragForce(){
+	float force = velocity.length();
+	force *= force;
+
+	float factor = (100 - position.y)/100;
+	factor = factor * factor * factor;
+	return Vector2f(-velocity.normalized() * force * .1 * factor);
 }
