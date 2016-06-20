@@ -52,12 +52,12 @@ void Game::render() {
 	background.render();
 
 	player.render();
-	mEnemyManager.render();
 	world.render();
 	mBulletManager.render();
 	mEffectManager.render();
 	world.render();
 	ui.render();
+	mEnemyManager.render();
 
 }
 

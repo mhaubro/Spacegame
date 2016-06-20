@@ -4,9 +4,10 @@
 #define SRC_ENEMY_ENEMYMANAGER_H_
 
 #include "Enemy.h"
-#include "SquareEnemy.h"
-#include "RoundEnemy.h"
+//#include "SquareEnemy.h"
+//#include "RoundEnemy.h"
 #include "LinkedList.h"
+#include "Bullet.h"
 
 class EnemyManager {
 

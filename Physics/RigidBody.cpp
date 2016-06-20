@@ -87,3 +87,7 @@ float RigidBody::getTorque() {
 	return aTorque;
 }
 
+void RigidBody::setAngle(float _angle){
+	angle = _angle;
+}
+
