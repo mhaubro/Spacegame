@@ -1,94 +1,47 @@
-//Author: MH
+/*
+ * Enemy.h
+ *
+ *  Created on: 20/06/2016
+ *      Author: Martin
+ */
 
 #ifndef SRC_ENEMY_ENEMY_H_
 #define SRC_ENEMY_ENEMY_H_
 
-#define FIRERATE (float) 1.5
 #include "Entity.h"
 #include "RigidBody.h"
 #include "Polygon.h"
-#include "myassets.h"
-#include "bullet.h"
-#include "random.h"
-#include "Sprite.h"
-#include "Animation.h"
+#include "Behavior.h"
+#include "Vector2f.h"
 
-//TODO CLEAN UP IN METHODS AS WELL AS MEMBER-VALUES.
-class Enemy : public Entity, public RigidBody{
+class Enemy: public Entity, public RigidBody {
+private:
+	float health;
+	void kill();
+
 protected:
-
-	Sprite sprite;
-	Animation exhaust;
-
-	int height;
-	int health;
-	int enemyValue;
-
+	Behavior * behavior;
 	Polygon * collisionBox;
-
-	Vector2f shotOffset;//Marks offset from center of object to shooting mound. Both positive as well as negativ//TODO Maybe delete? - Or make float?
-	Vector2f aimVector;
-
-	double lastShot;
-
-	bool braking;
-	bool aiming;
-	bool shooting;
-
-	float maxV;//Sets the units max velocity in units.
-
-	float angle;
-	float birthTime;
-	float brakeStart;
-	float aimStart;
-	float shotStart;
-	float shotAngle;
-	float brakeTime;//D
-	float aimTime;
-	float shotDT;
-	float shotTime;//Sends out bullets every shotDT in a time of shotTime (DT = .2 & time = .3 -> 2 shots with .2 sec between).
-
-	Vector2f getShortestDiffVector(Vector2f v1, Vector2f v2);
-	Vector2f getShotVel(float velocity, float angle);
-
-	float getHeight();
 
 	bool enemyOnScreen();
 
-	void checkBounds();//Checks if the enemy is more than 1.6 chunk-length away. If yes, it's killed.
-	void shoot();
-	void aim();
-	void turn();
-	void brake();
-	void hitBrake();
-	void aimAction();
-	void enemyShot();
-	void updatePh();
-	void checkAlive();
-	void shotAction(float angle);
-	void bestMove();
-	void updatePosition();
-	void checkCollision();
+	virtual void onDeath();
+	void applyDamage(float damage);
 
-	virtual Vector2f getShotPos();
-	virtual void moveAction(Vector2f vectorToPlayer);
-	virtual float calcAngleToPlayer();
-	virtual bool shotInRange(Vector2f shotVector);
-	virtual bool checkShot(Vector2f VectorToPlayer);
-
+	virtual void makeDesicion();
 public:
 
-	Enemy(Polygon * collisionBox, Vector2f pos, Vector2f vel = Vector2f());
-
-	Enemy& operator=(const Enemy & enemy);
+	Enemy(float _health, Polygon * _collisionBox, Behavior * _behavior,
+			Vector2f _position, float mass = 1, float inertia = .5,
+			float angle = 0, Vector2f Velocity = Vector2f(0, 0));
 	virtual ~Enemy();
-
 	void update();
 	void render();
-	//int getPolySize();//USED FOR DEBUGGING
-	bool checkHit(Bullet * _bullet);
 
 	Polygon * getPolygon();
+
+	Vector2f targetAngle;//TODO Remove;
+
 };
 
 #endif /* SRC_ENEMY_ENEMY_H_ */

@@ -2,9 +2,12 @@
 
 #include "EnemyManager.h"
 #include "Graphics.h"
+#include "GD2.h"
+#include "Bullet.h"
+#include "Missile.h"
 
 EnemyManager::EnemyManager() :
-		enemies(), enemy_number(3) {
+		enemies(), enemy_number(5) {
 }
 
 EnemyManager::~EnemyManager() {
@@ -16,8 +19,8 @@ void EnemyManager::update() {
 	enemies.clean();
 
 	if (enemies.size() < enemy_number + 1) {
-		squareEnemy * e = new squareEnemy(generatePosition());
-		enemies.add(e);
+		Missile * m = new Missile(generatePosition(), Vector2f());
+		enemies.add(m);
 	}
 }
 void EnemyManager::render() {
@@ -68,9 +71,9 @@ bool EnemyManager::EnemyList::firstInternalCollisionForTheRest(Node* current, En
 bool EnemyManager::EnemyList::checkBulletCollision(Bullet* bullet) {
 	Node* tmp = mHead;
 	while (tmp) {
-		if (tmp->mData->checkHit(bullet)) {
-			return true;
-		}
+//		if (tmp->mData->checkHit(bullet)) {
+//			return true;
+//		}
 		tmp = tmp->mNext;
 	}
 	return false;
@@ -80,7 +83,7 @@ Vector2f EnemyManager::generatePosition() {
 	Vector2f startV = Vector2f(cam.getX(), cam.getY());
 	int maxX = WORLD_SIZE * CHUNK_SIZE;
 
-	int x = (rand() % (CHUNK_SIZE + CHUNK_SIZE / 2)) + CHUNK_SIZE + cam.getX();
+	int x = (rand() % (CHUNK_SIZE + CHUNK_SIZE / 2)) + cam.getX();//+ CHUNK_SIZE
 
 	if (rand() % 2 == 0) { //Approx 50 % chance
 		x = x * (-1);

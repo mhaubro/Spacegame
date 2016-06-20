@@ -15,7 +15,7 @@
 #include "world.h"
 #include "CollisionDetection.h"
 
-Player player = Player(Vector2f(2, 10), Vector2f(0, 0));
+Player player = Player(Vector2f(512, 12), Vector2f(0, 0));
 
 static Vector2f arr[] = {Vector2f(-1, 0),Vector2f(-.5, .8), Vector2f(1, 0), Vector2f(-.5, -.8)};
 static std::vector<Vector2f> shape(arr, arr + 4);

@@ -28,6 +28,8 @@ public:
 	virtual void addTorque(float torque);
 	virtual void updatePhysics();
 
+	void setAngle(float _angle);
+
 	float getInertia();
 	float getAngle();
 	float getAngularVelocity();
